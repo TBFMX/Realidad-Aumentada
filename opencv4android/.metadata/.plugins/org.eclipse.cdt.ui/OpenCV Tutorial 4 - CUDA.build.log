@@ -1,0 +1,6 @@
+15:21:45 **** Auto Build of configuration Default for project OpenCV Tutorial 4 - CUDA ****
+/ndk-build.cmd 
+Cannot run program "/ndk-build.cmd": Unknown reason
+
+15:21:45 Build Finished (took 1ms)
+

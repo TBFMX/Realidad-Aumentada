@@ -1,0 +1,10 @@
+12:35:26 **** Clean-only build of configuration Default for project NativeEglExample ****
+ndk-build clean 
+[armeabi] Clean          : gnustl_shared [armeabi]
+[armeabi] Clean          : gnustl_static [armeabi]
+[armeabi] Clean          : mixed_sample [armeabi]
+12:35:38 **** Build of configuration Default for project NativeEglExample ****
+ndk-build all 
+[armeabi] Compile++ thumb: mixed_sample <= code.cc
+[armeabi] SharedLibrary  : libmixed_sample.so
+[armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so

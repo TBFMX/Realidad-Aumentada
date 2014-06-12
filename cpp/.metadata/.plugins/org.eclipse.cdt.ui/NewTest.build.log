@@ -1,0 +1,835 @@
+19:14:51 **** Incremental Build of configuration Debug for project NewTest ****
+make pre-build main-build 
+`pkg-config --cflags --libs opencv `
+/bin/sh: 1: -I/usr/include/opencv: not found
+make: [pre-build] Error 127 (no tiene efecto)
+ 
+Building file: ../src/HomographyFinder.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/HomographyFinder.d" -MT"src/HomographyFinder.d" -o "src/HomographyFinder.o" "../src/HomographyFinder.cpp"
+In file included from /usr/include/c++/4.8/bits/stl_algo.h:59:0,
+                 from /usr/include/c++/4.8/algorithm:62,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cstdlib:118:11: error: ‘::div_t’ has not been declared
+   using ::div_t;
+           ^
+/usr/include/c++/4.8/cstdlib:119:11: error: ‘::ldiv_t’ has not been declared
+   using ::ldiv_t;
+           ^
+/usr/include/c++/4.8/cstdlib:121:11: error: ‘::abort’ has not been declared
+   using ::abort;
+           ^
+/usr/include/c++/4.8/cstdlib:122:11: error: ‘::abs’ has not been declared
+   using ::abs;
+           ^
+/usr/include/c++/4.8/cstdlib:123:11: error: ‘::atexit’ has not been declared
+   using ::atexit;
+           ^
+/usr/include/c++/4.8/cstdlib:129:11: error: ‘::atof’ has not been declared
+   using ::atof;
+           ^
+/usr/include/c++/4.8/cstdlib:130:11: error: ‘::atoi’ has not been declared
+   using ::atoi;
+           ^
+/usr/include/c++/4.8/cstdlib:131:11: error: ‘::atol’ has not been declared
+   using ::atol;
+           ^
+/usr/include/c++/4.8/cstdlib:132:11: error: ‘::bsearch’ has not been declared
+   using ::bsearch;
+           ^
+/usr/include/c++/4.8/cstdlib:133:11: error: ‘::calloc’ has not been declared
+   using ::calloc;
+           ^
+/usr/include/c++/4.8/cstdlib:134:11: error: ‘::div’ has not been declared
+   using ::div;
+           ^
+/usr/include/c++/4.8/cstdlib:135:11: error: ‘::exit’ has not been declared
+   using ::exit;
+           ^
+/usr/include/c++/4.8/cstdlib:136:11: error: ‘::free’ has not been declared
+   using ::free;
+           ^
+/usr/include/c++/4.8/cstdlib:137:11: error: ‘::getenv’ has not been declared
+   using ::getenv;
+           ^
+/usr/include/c++/4.8/cstdlib:138:11: error: ‘::labs’ has not been declared
+   using ::labs;
+           ^
+/usr/include/c++/4.8/cstdlib:139:11: error: ‘::ldiv’ has not been declared
+   using ::ldiv;
+           ^
+/usr/include/c++/4.8/cstdlib:140:11: error: ‘::malloc’ has not been declared
+   using ::malloc;
+           ^
+/usr/include/c++/4.8/cstdlib:142:11: error: ‘::mblen’ has not been declared
+   using ::mblen;
+           ^
+/usr/include/c++/4.8/cstdlib:143:11: error: ‘::mbstowcs’ has not been declared
+   using ::mbstowcs;
+           ^
+/usr/include/c++/4.8/cstdlib:144:11: error: ‘::mbtowc’ has not been declared
+   using ::mbtowc;
+           ^
+/usr/include/c++/4.8/cstdlib:146:11: error: ‘::qsort’ has not been declared
+   using ::qsort;
+           ^
+/usr/include/c++/4.8/cstdlib:152:11: error: ‘::rand’ has not been declared
+   using ::rand;
+           ^
+/usr/include/c++/4.8/cstdlib:153:11: error: ‘::realloc’ has not been declared
+   using ::realloc;
+           ^
+/usr/include/c++/4.8/cstdlib:154:11: error: ‘::srand’ has not been declared
+   using ::srand;
+           ^
+/usr/include/c++/4.8/cstdlib:155:11: error: ‘::strtod’ has not been declared
+   using ::strtod;
+           ^
+/usr/include/c++/4.8/cstdlib:156:11: error: ‘::strtol’ has not been declared
+   using ::strtol;
+           ^
+/usr/include/c++/4.8/cstdlib:157:11: error: ‘::strtoul’ has not been declared
+   using ::strtoul;
+           ^
+/usr/include/c++/4.8/cstdlib:158:11: error: ‘::system’ has not been declared
+   using ::system;
+           ^
+/usr/include/c++/4.8/cstdlib:160:11: error: ‘::wcstombs’ has not been declared
+   using ::wcstombs;
+           ^
+/usr/include/c++/4.8/cstdlib:161:11: error: ‘::wctomb’ has not been declared
+   using ::wctomb;
+           ^
+/usr/include/c++/4.8/cstdlib:201:11: error: ‘::lldiv_t’ has not been declared
+   using ::lldiv_t;
+           ^
+/usr/include/c++/4.8/cstdlib:207:11: error: ‘::_Exit’ has not been declared
+   using ::_Exit;
+           ^
+/usr/include/c++/4.8/cstdlib:211:11: error: ‘::llabs’ has not been declared
+   using ::llabs;
+           ^
+/usr/include/c++/4.8/cstdlib:217:11: error: ‘::lldiv’ has not been declared
+   using ::lldiv;
+           ^
+/usr/include/c++/4.8/cstdlib:228:11: error: ‘::atoll’ has not been declared
+   using ::atoll;
+           ^
+/usr/include/c++/4.8/cstdlib:229:11: error: ‘::strtoll’ has not been declared
+   using ::strtoll;
+           ^
+/usr/include/c++/4.8/cstdlib:230:11: error: ‘::strtoull’ has not been declared
+   using ::strtoull;
+           ^
+/usr/include/c++/4.8/cstdlib:232:11: error: ‘::strtof’ has not been declared
+   using ::strtof;
+           ^
+/usr/include/c++/4.8/cstdlib:233:11: error: ‘::strtold’ has not been declared
+   using ::strtold;
+           ^
+/usr/include/c++/4.8/cstdlib:241:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::lldiv_t;
+           ^
+/usr/include/c++/4.8/cstdlib:243:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::_Exit;
+           ^
+/usr/include/c++/4.8/cstdlib:245:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::llabs;
+           ^
+/usr/include/c++/4.8/cstdlib:246:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::div;
+           ^
+/usr/include/c++/4.8/cstdlib:247:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::lldiv;
+           ^
+/usr/include/c++/4.8/cstdlib:249:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::atoll;
+           ^
+/usr/include/c++/4.8/cstdlib:250:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::strtof;
+           ^
+/usr/include/c++/4.8/cstdlib:251:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::strtoll;
+           ^
+/usr/include/c++/4.8/cstdlib:252:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::strtoull;
+           ^
+/usr/include/c++/4.8/cstdlib:253:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::strtold;
+           ^
+In file included from /usr/include/c++/4.8/bits/stl_construct.h:59:0,
+                 from /usr/include/c++/4.8/bits/stl_tempbuf.h:60,
+                 from /usr/include/c++/4.8/bits/stl_algo.h:62,
+                 from /usr/include/c++/4.8/algorithm:62,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/new:92:41: error: ‘void* Homography::operator new(Homography::std::size_t)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:94:41: error: ‘void* Homography::operator new [](Homography::std::size_t)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:96:41: error: ‘void Homography::operator delete(void*)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:98:41: error: ‘void Homography::operator delete [](void*)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:100:41: error: ‘void* Homography::operator new(Homography::std::size_t, const Homography::std::nothrow_t&)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:102:41: error: ‘void* Homography::operator new [](Homography::std::size_t, const Homography::std::nothrow_t&)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:104:41: error: ‘void Homography::operator delete(void*, const Homography::std::nothrow_t&)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+/usr/include/c++/4.8/new:106:41: error: ‘void Homography::operator delete [](void*, const Homography::std::nothrow_t&)’ may not be declared within a namespace
+   __attribute__((__externally_visible__));
+                                         ^
+In file included from /usr/include/c++/4.8/utility:68:0,
+                 from /usr/include/c++/4.8/algorithm:60,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/new:109:51: error: ‘void* Homography::operator new(Homography::std::size_t, void*)’ may not be declared within a namespace
+ inline void* operator new(std::size_t, void* __p) _GLIBCXX_USE_NOEXCEPT
+                                                   ^
+/usr/include/c++/4.8/new:111:53: error: ‘void* Homography::operator new [](Homography::std::size_t, void*)’ may not be declared within a namespace
+ inline void* operator new[](std::size_t, void* __p) _GLIBCXX_USE_NOEXCEPT
+                                                     ^
+/usr/include/c++/4.8/new:115:45: error: ‘void Homography::operator delete(void*, void*)’ may not be declared within a namespace
+ inline void operator delete  (void*, void*) _GLIBCXX_USE_NOEXCEPT { }
+                                             ^
+/usr/include/c++/4.8/new:116:45: error: ‘void Homography::operator delete [](void*, void*)’ may not be declared within a namespace
+ inline void operator delete[](void*, void*) _GLIBCXX_USE_NOEXCEPT { }
+                                             ^
+In file included from /usr/include/c++/4.8/bits/stl_algo.h:62:0,
+                 from /usr/include/c++/4.8/algorithm:62,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/bits/stl_tempbuf.h: In function ‘Homography::std::pair<_Tp*, long int> Homography::std::get_temporary_buffer(Homography::std::ptrdiff_t)’:
+/usr/include/c++/4.8/bits/stl_tempbuf.h:95:20: error: too many arguments to function ‘void* operator new(long unsigned int)’
+        std::nothrow));
+                    ^
+<built-in>:0:0: note: declared here
+In file included from /usr/include/c++/4.8/algorithm:62:0,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/bits/stl_algo.h: In function ‘void Homography::std::random_shuffle(_RAIter, _RAIter)’:
+/usr/include/c++/4.8/bits/stl_algo.h:5196:35: error: ‘rand’ is not a member of ‘Homography::std’
+    std::iter_swap(__i, __first + (std::rand() % ((__i - __first) + 1)));
+                                   ^
+/usr/include/c++/4.8/bits/stl_algo.h:5196:35: note: suggested alternative:
+In file included from /usr/include/opencv2/core/types_c.h:56:0,
+                 from /usr/include/opencv2/core/core_c.h:47,
+                 from /usr/include/opencv2/opencv.hpp:46,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/stdlib.h:374:12: note:   ‘Homography::rand’
+ extern int rand (void) __THROW;
+            ^
+In file included from /usr/include/opencv2/core/core.hpp:57:0,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cmath: At global scope:
+/usr/include/c++/4.8/cmath:102:11: error: ‘::acos’ has not been declared
+   using ::acos;
+           ^
+/usr/include/c++/4.8/cmath:121:11: error: ‘::asin’ has not been declared
+   using ::asin;
+           ^
+/usr/include/c++/4.8/cmath:140:11: error: ‘::atan’ has not been declared
+   using ::atan;
+           ^
+/usr/include/c++/4.8/cmath:159:11: error: ‘::atan2’ has not been declared
+   using ::atan2;
+           ^
+/usr/include/c++/4.8/cmath:180:11: error: ‘::ceil’ has not been declared
+   using ::ceil;
+           ^
+/usr/include/c++/4.8/cmath:199:11: error: ‘::cos’ has not been declared
+   using ::cos;
+           ^
+/usr/include/c++/4.8/cmath:218:11: error: ‘::cosh’ has not been declared
+   using ::cosh;
+           ^
+/usr/include/c++/4.8/cmath:237:11: error: ‘::exp’ has not been declared
+   using ::exp;
+           ^
+/usr/include/c++/4.8/cmath:256:11: error: ‘::fabs’ has not been declared
+   using ::fabs;
+           ^
+/usr/include/c++/4.8/cmath:275:11: error: ‘::floor’ has not been declared
+   using ::floor;
+           ^
+/usr/include/c++/4.8/cmath:294:11: error: ‘::fmod’ has not been declared
+   using ::fmod;
+           ^
+/usr/include/c++/4.8/cmath:315:11: error: ‘::frexp’ has not been declared
+   using ::frexp;
+           ^
+/usr/include/c++/4.8/cmath:334:11: error: ‘::ldexp’ has not been declared
+   using ::ldexp;
+           ^
+/usr/include/c++/4.8/cmath:353:11: error: ‘::log’ has not been declared
+   using ::log;
+           ^
+/usr/include/c++/4.8/cmath:372:11: error: ‘::log10’ has not been declared
+   using ::log10;
+           ^
+/usr/include/c++/4.8/cmath:391:11: error: ‘::modf’ has not been declared
+   using ::modf;
+           ^
+/usr/include/c++/4.8/cmath:403:11: error: ‘::pow’ has not been declared
+   using ::pow;
+           ^
+/usr/include/c++/4.8/cmath:440:11: error: ‘::sin’ has not been declared
+   using ::sin;
+           ^
+/usr/include/c++/4.8/cmath:459:11: error: ‘::sinh’ has not been declared
+   using ::sinh;
+           ^
+/usr/include/c++/4.8/cmath:478:11: error: ‘::sqrt’ has not been declared
+   using ::sqrt;
+           ^
+/usr/include/c++/4.8/cmath:497:11: error: ‘::tan’ has not been declared
+   using ::tan;
+           ^
+/usr/include/c++/4.8/cmath:516:11: error: ‘::tanh’ has not been declared
+   using ::tanh;
+           ^
+In file included from /usr/include/c++/4.8/bits/postypes.h:40:0,
+                 from /usr/include/c++/4.8/iosfwd:40,
+                 from /usr/include/c++/4.8/ios:38,
+                 from /usr/include/c++/4.8/istream:38,
+                 from /usr/include/c++/4.8/sstream:38,
+                 from /usr/include/c++/4.8/complex:45,
+                 from /usr/include/opencv2/core/core.hpp:59,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cwchar:64:11: error: ‘::mbstate_t’ has not been declared
+   using ::mbstate_t;
+           ^
+/usr/include/c++/4.8/cwchar:139:11: error: ‘::wint_t’ has not been declared
+   using ::wint_t;
+           ^
+/usr/include/c++/4.8/cwchar:141:11: error: ‘::btowc’ has not been declared
+   using ::btowc;
+           ^
+/usr/include/c++/4.8/cwchar:142:11: error: ‘::fgetwc’ has not been declared
+   using ::fgetwc;
+           ^
+/usr/include/c++/4.8/cwchar:143:11: error: ‘::fgetws’ has not been declared
+   using ::fgetws;
+           ^
+/usr/include/c++/4.8/cwchar:144:11: error: ‘::fputwc’ has not been declared
+   using ::fputwc;
+           ^
+/usr/include/c++/4.8/cwchar:145:11: error: ‘::fputws’ has not been declared
+   using ::fputws;
+           ^
+/usr/include/c++/4.8/cwchar:146:11: error: ‘::fwide’ has not been declared
+   using ::fwide;
+           ^
+/usr/include/c++/4.8/cwchar:147:11: error: ‘::fwprintf’ has not been declared
+   using ::fwprintf;
+           ^
+/usr/include/c++/4.8/cwchar:148:11: error: ‘::fwscanf’ has not been declared
+   using ::fwscanf;
+           ^
+/usr/include/c++/4.8/cwchar:149:11: error: ‘::getwc’ has not been declared
+   using ::getwc;
+           ^
+/usr/include/c++/4.8/cwchar:150:11: error: ‘::getwchar’ has not been declared
+   using ::getwchar;
+           ^
+/usr/include/c++/4.8/cwchar:151:11: error: ‘::mbrlen’ has not been declared
+   using ::mbrlen;
+           ^
+/usr/include/c++/4.8/cwchar:152:11: error: ‘::mbrtowc’ has not been declared
+   using ::mbrtowc;
+           ^
+/usr/include/c++/4.8/cwchar:153:11: error: ‘::mbsinit’ has not been declared
+   using ::mbsinit;
+           ^
+/usr/include/c++/4.8/cwchar:154:11: error: ‘::mbsrtowcs’ has not been declared
+   using ::mbsrtowcs;
+           ^
+/usr/include/c++/4.8/cwchar:155:11: error: ‘::putwc’ has not been declared
+   using ::putwc;
+           ^
+/usr/include/c++/4.8/cwchar:156:11: error: ‘::putwchar’ has not been declared
+   using ::putwchar;
+           ^
+/usr/include/c++/4.8/cwchar:158:11: error: ‘::swprintf’ has not been declared
+   using ::swprintf;
+           ^
+/usr/include/c++/4.8/cwchar:160:11: error: ‘::swscanf’ has not been declared
+   using ::swscanf;
+           ^
+/usr/include/c++/4.8/cwchar:161:11: error: ‘::ungetwc’ has not been declared
+   using ::ungetwc;
+           ^
+/usr/include/c++/4.8/cwchar:162:11: error: ‘::vfwprintf’ has not been declared
+   using ::vfwprintf;
+           ^
+/usr/include/c++/4.8/cwchar:164:11: error: ‘::vfwscanf’ has not been declared
+   using ::vfwscanf;
+           ^
+/usr/include/c++/4.8/cwchar:167:11: error: ‘::vswprintf’ has not been declared
+   using ::vswprintf;
+           ^
+/usr/include/c++/4.8/cwchar:170:11: error: ‘::vswscanf’ has not been declared
+   using ::vswscanf;
+           ^
+/usr/include/c++/4.8/cwchar:172:11: error: ‘::vwprintf’ has not been declared
+   using ::vwprintf;
+           ^
+/usr/include/c++/4.8/cwchar:174:11: error: ‘::vwscanf’ has not been declared
+   using ::vwscanf;
+           ^
+/usr/include/c++/4.8/cwchar:176:11: error: ‘::wcrtomb’ has not been declared
+   using ::wcrtomb;
+           ^
+/usr/include/c++/4.8/cwchar:177:11: error: ‘::wcscat’ has not been declared
+   using ::wcscat;
+           ^
+/usr/include/c++/4.8/cwchar:178:11: error: ‘::wcscmp’ has not been declared
+   using ::wcscmp;
+           ^
+/usr/include/c++/4.8/cwchar:179:11: error: ‘::wcscoll’ has not been declared
+   using ::wcscoll;
+           ^
+/usr/include/c++/4.8/cwchar:180:11: error: ‘::wcscpy’ has not been declared
+   using ::wcscpy;
+           ^
+/usr/include/c++/4.8/cwchar:181:11: error: ‘::wcscspn’ has not been declared
+   using ::wcscspn;
+           ^
+/usr/include/c++/4.8/cwchar:182:11: error: ‘::wcsftime’ has not been declared
+   using ::wcsftime;
+           ^
+/usr/include/c++/4.8/cwchar:183:11: error: ‘::wcslen’ has not been declared
+   using ::wcslen;
+           ^
+/usr/include/c++/4.8/cwchar:184:11: error: ‘::wcsncat’ has not been declared
+   using ::wcsncat;
+           ^
+/usr/include/c++/4.8/cwchar:185:11: error: ‘::wcsncmp’ has not been declared
+   using ::wcsncmp;
+           ^
+/usr/include/c++/4.8/cwchar:186:11: error: ‘::wcsncpy’ has not been declared
+   using ::wcsncpy;
+           ^
+/usr/include/c++/4.8/cwchar:187:11: error: ‘::wcsrtombs’ has not been declared
+   using ::wcsrtombs;
+           ^
+/usr/include/c++/4.8/cwchar:188:11: error: ‘::wcsspn’ has not been declared
+   using ::wcsspn;
+           ^
+/usr/include/c++/4.8/cwchar:189:11: error: ‘::wcstod’ has not been declared
+   using ::wcstod;
+           ^
+/usr/include/c++/4.8/cwchar:191:11: error: ‘::wcstof’ has not been declared
+   using ::wcstof;
+           ^
+/usr/include/c++/4.8/cwchar:193:11: error: ‘::wcstok’ has not been declared
+   using ::wcstok;
+           ^
+/usr/include/c++/4.8/cwchar:194:11: error: ‘::wcstol’ has not been declared
+   using ::wcstol;
+           ^
+/usr/include/c++/4.8/cwchar:195:11: error: ‘::wcstoul’ has not been declared
+   using ::wcstoul;
+           ^
+/usr/include/c++/4.8/cwchar:196:11: error: ‘::wcsxfrm’ has not been declared
+   using ::wcsxfrm;
+           ^
+/usr/include/c++/4.8/cwchar:197:11: error: ‘::wctob’ has not been declared
+   using ::wctob;
+           ^
+/usr/include/c++/4.8/cwchar:198:11: error: ‘::wmemcmp’ has not been declared
+   using ::wmemcmp;
+           ^
+/usr/include/c++/4.8/cwchar:199:11: error: ‘::wmemcpy’ has not been declared
+   using ::wmemcpy;
+           ^
+/usr/include/c++/4.8/cwchar:200:11: error: ‘::wmemmove’ has not been declared
+   using ::wmemmove;
+           ^
+/usr/include/c++/4.8/cwchar:201:11: error: ‘::wmemset’ has not been declared
+   using ::wmemset;
+           ^
+/usr/include/c++/4.8/cwchar:202:11: error: ‘::wprintf’ has not been declared
+   using ::wprintf;
+           ^
+/usr/include/c++/4.8/cwchar:203:11: error: ‘::wscanf’ has not been declared
+   using ::wscanf;
+           ^
+/usr/include/c++/4.8/cwchar:204:11: error: ‘::wcschr’ has not been declared
+   using ::wcschr;
+           ^
+/usr/include/c++/4.8/cwchar:205:11: error: ‘::wcspbrk’ has not been declared
+   using ::wcspbrk;
+           ^
+/usr/include/c++/4.8/cwchar:206:11: error: ‘::wcsrchr’ has not been declared
+   using ::wcsrchr;
+           ^
+/usr/include/c++/4.8/cwchar:207:11: error: ‘::wcsstr’ has not been declared
+   using ::wcsstr;
+           ^
+/usr/include/c++/4.8/cwchar:208:11: error: ‘::wmemchr’ has not been declared
+   using ::wmemchr;
+           ^
+/usr/include/c++/4.8/cwchar:248:11: error: ‘::wcstold’ has not been declared
+   using ::wcstold;
+           ^
+/usr/include/c++/4.8/cwchar:257:11: error: ‘::wcstoll’ has not been declared
+   using ::wcstoll;
+           ^
+/usr/include/c++/4.8/cwchar:258:11: error: ‘::wcstoull’ has not been declared
+   using ::wcstoull;
+           ^
+/usr/include/c++/4.8/cwchar:264:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::wcstold;
+           ^
+/usr/include/c++/4.8/cwchar:265:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::wcstoll;
+           ^
+/usr/include/c++/4.8/cwchar:266:11: error: ‘::__gnu_cxx’ has not been declared
+   using ::__gnu_cxx::wcstoull;
+           ^
+In file included from /usr/include/c++/4.8/ios:40:0,
+                 from /usr/include/c++/4.8/istream:38,
+                 from /usr/include/c++/4.8/sstream:38,
+                 from /usr/include/c++/4.8/complex:45,
+                 from /usr/include/opencv2/core/core.hpp:59,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/bits/char_traits.h:63:15: error: ‘mbstate_t’ in namespace ‘Homography::std’ does not name a type
+       typedef std::mbstate_t  state_type;
+               ^
+In file included from /usr/include/x86_64-linux-gnu/c++/4.8/bits/c++locale.h:41:0,
+                 from /usr/include/c++/4.8/bits/localefwd.h:40,
+                 from /usr/include/c++/4.8/ios:41,
+                 from /usr/include/c++/4.8/istream:38,
+                 from /usr/include/c++/4.8/sstream:38,
+                 from /usr/include/c++/4.8/complex:45,
+                 from /usr/include/opencv2/core/core.hpp:59,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/clocale:53:11: error: ‘::lconv’ has not been declared
+   using ::lconv;
+           ^
+/usr/include/c++/4.8/clocale:54:11: error: ‘::setlocale’ has not been declared
+   using ::setlocale;
+           ^
+/usr/include/c++/4.8/clocale:55:11: error: ‘::localeconv’ has not been declared
+   using ::localeconv;
+           ^
+In file included from /usr/include/c++/4.8/bits/localefwd.h:42:0,
+                 from /usr/include/c++/4.8/ios:41,
+                 from /usr/include/c++/4.8/istream:38,
+                 from /usr/include/c++/4.8/sstream:38,
+                 from /usr/include/c++/4.8/complex:45,
+                 from /usr/include/opencv2/core/core.hpp:59,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cctype:64:11: error: ‘::isalnum’ has not been declared
+   using ::isalnum;
+           ^
+/usr/include/c++/4.8/cctype:65:11: error: ‘::isalpha’ has not been declared
+   using ::isalpha;
+           ^
+/usr/include/c++/4.8/cctype:66:11: error: ‘::iscntrl’ has not been declared
+   using ::iscntrl;
+           ^
+/usr/include/c++/4.8/cctype:67:11: error: ‘::isdigit’ has not been declared
+   using ::isdigit;
+           ^
+/usr/include/c++/4.8/cctype:68:11: error: ‘::isgraph’ has not been declared
+   using ::isgraph;
+           ^
+/usr/include/c++/4.8/cctype:69:11: error: ‘::islower’ has not been declared
+   using ::islower;
+           ^
+/usr/include/c++/4.8/cctype:70:11: error: ‘::isprint’ has not been declared
+   using ::isprint;
+           ^
+/usr/include/c++/4.8/cctype:71:11: error: ‘::ispunct’ has not been declared
+   using ::ispunct;
+           ^
+/usr/include/c++/4.8/cctype:72:11: error: ‘::isspace’ has not been declared
+   using ::isspace;
+           ^
+/usr/include/c++/4.8/cctype:73:11: error: ‘::isupper’ has not been declared
+   using ::isupper;
+           ^
+/usr/include/c++/4.8/cctype:74:11: error: ‘::isxdigit’ has not been declared
+   using ::isxdigit;
+           ^
+/usr/include/c++/4.8/cctype:75:11: error: ‘::tolower’ has not been declared
+   using ::tolower;
+           ^
+/usr/include/c++/4.8/cctype:76:11: error: ‘::toupper’ has not been declared
+   using ::toupper;
+           ^
+In file included from /usr/include/c++/4.8/bits/locale_facets.h:39:0,
+                 from /usr/include/c++/4.8/bits/basic_ios.h:37,
+                 from /usr/include/c++/4.8/ios:44,
+                 from /usr/include/c++/4.8/istream:38,
+                 from /usr/include/c++/4.8/sstream:38,
+                 from /usr/include/c++/4.8/complex:45,
+                 from /usr/include/opencv2/core/core.hpp:59,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cwctype:82:11: error: ‘::wctrans_t’ has not been declared
+   using ::wctrans_t;
+           ^
+/usr/include/c++/4.8/cwctype:83:11: error: ‘::wctype_t’ has not been declared
+   using ::wctype_t;
+           ^
+/usr/include/c++/4.8/cwctype:84:11: error: ‘::wint_t’ has not been declared
+   using ::wint_t;
+           ^
+/usr/include/c++/4.8/cwctype:86:11: error: ‘::iswalnum’ has not been declared
+   using ::iswalnum;
+           ^
+/usr/include/c++/4.8/cwctype:87:11: error: ‘::iswalpha’ has not been declared
+   using ::iswalpha;
+           ^
+/usr/include/c++/4.8/cwctype:89:11: error: ‘::iswblank’ has not been declared
+   using ::iswblank;
+           ^
+/usr/include/c++/4.8/cwctype:91:11: error: ‘::iswcntrl’ has not been declared
+   using ::iswcntrl;
+           ^
+/usr/include/c++/4.8/cwctype:92:11: error: ‘::iswctype’ has not been declared
+   using ::iswctype;
+           ^
+/usr/include/c++/4.8/cwctype:93:11: error: ‘::iswdigit’ has not been declared
+   using ::iswdigit;
+           ^
+/usr/include/c++/4.8/cwctype:94:11: error: ‘::iswgraph’ has not been declared
+   using ::iswgraph;
+           ^
+/usr/include/c++/4.8/cwctype:95:11: error: ‘::iswlower’ has not been declared
+   using ::iswlower;
+           ^
+/usr/include/c++/4.8/cwctype:96:11: error: ‘::iswprint’ has not been declared
+   using ::iswprint;
+           ^
+/usr/include/c++/4.8/cwctype:97:11: error: ‘::iswpunct’ has not been declared
+   using ::iswpunct;
+           ^
+/usr/include/c++/4.8/cwctype:98:11: error: ‘::iswspace’ has not been declared
+   using ::iswspace;
+           ^
+/usr/include/c++/4.8/cwctype:99:11: error: ‘::iswupper’ has not been declared
+   using ::iswupper;
+           ^
+/usr/include/c++/4.8/cwctype:100:11: error: ‘::iswxdigit’ has not been declared
+   using ::iswxdigit;
+           ^
+/usr/include/c++/4.8/cwctype:101:11: error: ‘::towctrans’ has not been declared
+   using ::towctrans;
+           ^
+/usr/include/c++/4.8/cwctype:102:11: error: ‘::towlower’ has not been declared
+   using ::towlower;
+           ^
+/usr/include/c++/4.8/cwctype:103:11: error: ‘::towupper’ has not been declared
+   using ::towupper;
+           ^
+/usr/include/c++/4.8/cwctype:104:11: error: ‘::wctrans’ has not been declared
+   using ::wctrans;
+           ^
+/usr/include/c++/4.8/cwctype:105:11: error: ‘::wctype’ has not been declared
+   using ::wctype;
+           ^
+In file included from /usr/include/opencv2/core/core.hpp:4854:0,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/opencv2/core/operations.hpp: In function ‘double Homography::cv::norm(const Homography::cv::Matx<_Tp, m, n>&, int)’:
+/usr/include/opencv2/core/operations.hpp:1089:88: error: call of overloaded ‘sqrt(double&)’ is ambiguous
+         std::sqrt((double)normL2Sqr<_Tp, typename DataType<_Tp>::work_type>(M.val, m*n));
+                                                                                        ^
+/usr/include/opencv2/core/operations.hpp:1089:88: note: candidates are:
+In file included from /usr/include/opencv2/core/core.hpp:57:0,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cmath:482:3: note: float Homography::std::sqrt(float)
+   sqrt(float __x)
+   ^
+/usr/include/c++/4.8/cmath:486:3: note: long double Homography::std::sqrt(long double)
+   sqrt(long double __x)
+   ^
+In file included from /usr/include/opencv2/opencv.hpp:53:0,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/opencv2/features2d/features2d.hpp: In member function ‘Homography::cv::L2<T>::ResultType Homography::cv::L2<T>::operator()(const T*, const T*, int) const’:
+/usr/include/opencv2/features2d/features2d.hpp:980:85: error: call of overloaded ‘sqrt(double&)’ is ambiguous
+         return (ResultType)sqrt((double)normL2Sqr<ValueType, ResultType>(a, b, size));
+                                                                                     ^
+/usr/include/opencv2/features2d/features2d.hpp:980:85: note: candidates are:
+In file included from /usr/include/opencv2/core/core.hpp:57:0,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/cmath:486:3: note: long double Homography::std::sqrt(long double)
+   sqrt(long double __x)
+   ^
+/usr/include/c++/4.8/cmath:482:3: note: float Homography::std::sqrt(float)
+   sqrt(float __x)
+   ^
+../src/HomographyFinder.cpp: In member function ‘bool Homography::HomographyFinder::isGoodHomographyMatrix()’:
+../src/HomographyFinder.cpp:77:51: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  return (M.cols > 0 && (abs(M.at<double>(0,2)) <= gbFrameImgRows) && (abs(M.at<double>(1,2)) <= gbFrameImgCols)
+                                                   ^
+../src/HomographyFinder.cpp:77:97: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  return (M.cols > 0 && (abs(M.at<double>(0,2)) <= gbFrameImgRows) && (abs(M.at<double>(1,2)) <= gbFrameImgCols)
+                                                                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/4.8/bits/c++allocator.h:33:0,
+                 from /usr/include/c++/4.8/bits/allocator.h:46,
+                 from /usr/include/c++/4.8/ext/alloc_traits.h:38,
+                 from /usr/include/c++/4.8/bits/stl_construct.h:61,
+                 from /usr/include/c++/4.8/bits/stl_tempbuf.h:60,
+                 from /usr/include/c++/4.8/bits/stl_algo.h:62,
+                 from /usr/include/c++/4.8/algorithm:62,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/ext/new_allocator.h: In instantiation of ‘void Homography::__gnu_cxx::new_allocator<_Tp>::construct(Homography::__gnu_cxx::new_allocator<_Tp>::pointer, const _Tp&) [with _Tp = Homography::cv::DMatch; Homography::__gnu_cxx::new_allocator<_Tp>::pointer = Homography::cv::DMatch*]’:
+/usr/include/c++/4.8/ext/alloc_traits.h:216:9:   required from ‘static void Homography::__gnu_cxx::__alloc_traits<_Alloc>::construct(_Alloc&, Homography::__gnu_cxx::__alloc_traits<_Alloc>::pointer, const _Tp&) [with _Tp = Homography::cv::DMatch; _Alloc = Homography::std::allocator<Homography::cv::DMatch>; Homography::__gnu_cxx::__alloc_traits<_Alloc>::pointer = Homography::cv::DMatch*]’
+/usr/include/c++/4.8/bits/stl_vector.h:906:34:   required from ‘void Homography::std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = Homography::cv::DMatch; _Alloc = Homography::std::allocator<Homography::cv::DMatch>; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::cv::DMatch]’
+../src/HomographyFinder.cpp:62:29:   required from here
+/usr/include/c++/4.8/ext/new_allocator.h:130:9: error: no matching function for call to ‘operator new(sizetype, void*)’
+       { ::new((void *)__p) _Tp(__val); }
+         ^
+/usr/include/c++/4.8/ext/new_allocator.h:130:9: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+/usr/include/c++/4.8/ext/new_allocator.h: In instantiation of ‘void Homography::__gnu_cxx::new_allocator<_Tp>::construct(Homography::__gnu_cxx::new_allocator<_Tp>::pointer, const _Tp&) [with _Tp = Homography::cv::Point_<float>; Homography::__gnu_cxx::new_allocator<_Tp>::pointer = Homography::cv::Point_<float>*]’:
+/usr/include/c++/4.8/ext/alloc_traits.h:216:9:   required from ‘static void Homography::__gnu_cxx::__alloc_traits<_Alloc>::construct(_Alloc&, Homography::__gnu_cxx::__alloc_traits<_Alloc>::pointer, const _Tp&) [with _Tp = Homography::cv::Point_<float>; _Alloc = Homography::std::allocator<Homography::cv::Point_<float> >; Homography::__gnu_cxx::__alloc_traits<_Alloc>::pointer = Homography::cv::Point_<float>*]’
+/usr/include/c++/4.8/bits/stl_vector.h:906:34:   required from ‘void Homography::std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = Homography::cv::Point_<float>; _Alloc = Homography::std::allocator<Homography::cv::Point_<float> >; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::cv::Point_<float>]’
+../src/HomographyFinder.cpp:63:41:   required from here
+/usr/include/c++/4.8/ext/new_allocator.h:130:9: error: no matching function for call to ‘operator new(sizetype, void*)’
+/usr/include/c++/4.8/ext/new_allocator.h:130:9: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+In file included from /usr/include/c++/4.8/bits/stl_tempbuf.h:60:0,
+                 from /usr/include/c++/4.8/bits/stl_algo.h:62,
+                 from /usr/include/c++/4.8/algorithm:62,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/bits/stl_construct.h: In instantiation of ‘void Homography::std::_Construct(_T1*, const _T2&) [with _T1 = Homography::cv::KeyPoint; _T2 = Homography::cv::KeyPoint]’:
+/usr/include/c++/4.8/bits/stl_uninitialized.h:75:53:   required from ‘static _ForwardIterator Homography::std::__uninitialized_copy<_TrivialValueTypes>::__uninit_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::cv::KeyPoint*; _ForwardIterator = Homography::cv::KeyPoint*; bool _TrivialValueTypes = false]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:117:41:   required from ‘_ForwardIterator Homography::std::uninitialized_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::cv::KeyPoint*; _ForwardIterator = Homography::cv::KeyPoint*]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:258:63:   required from ‘_ForwardIterator Homography::std::__uninitialized_copy_a(_InputIterator, _InputIterator, _ForwardIterator, Homography::std::allocator<_Tp>&) [with _InputIterator = Homography::cv::KeyPoint*; _ForwardIterator = Homography::cv::KeyPoint*; _Tp = Homography::cv::KeyPoint]’
+/usr/include/c++/4.8/bits/vector.tcc:209:29:   required from ‘Homography::std::vector<_Tp, _Alloc>& Homography::std::vector<_Tp, _Alloc>::operator=(const Homography::std::vector<_Tp, _Alloc>&) [with _Tp = Homography::cv::KeyPoint; _Alloc = Homography::std::allocator<Homography::cv::KeyPoint>]’
+/usr/include/opencv2/legacy/legacy.hpp:2584:81:   required from here
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: error: no matching function for call to ‘operator new(sizetype, void*)’
+       ::new(static_cast<void*>(__p)) _T1(__value);
+       ^
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+/usr/include/c++/4.8/bits/stl_construct.h: In instantiation of ‘void Homography::std::_Construct(_T1*, const _T2&) [with _T1 = Homography::cv::detail::CameraParams; _T2 = Homography::cv::detail::CameraParams]’:
+/usr/include/c++/4.8/bits/stl_uninitialized.h:75:53:   required from ‘static _ForwardIterator Homography::std::__uninitialized_copy<_TrivialValueTypes>::__uninit_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::__gnu_cxx::__normal_iterator<const Homography::cv::detail::CameraParams*, Homography::std::vector<Homography::cv::detail::CameraParams> >; _ForwardIterator = Homography::cv::detail::CameraParams*; bool _TrivialValueTypes = false]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:117:41:   required from ‘_ForwardIterator Homography::std::uninitialized_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::__gnu_cxx::__normal_iterator<const Homography::cv::detail::CameraParams*, Homography::std::vector<Homography::cv::detail::CameraParams> >; _ForwardIterator = Homography::cv::detail::CameraParams*]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:258:63:   required from ‘_ForwardIterator Homography::std::__uninitialized_copy_a(_InputIterator, _InputIterator, _ForwardIterator, Homography::std::allocator<_Tp>&) [with _InputIterator = Homography::__gnu_cxx::__normal_iterator<const Homography::cv::detail::CameraParams*, Homography::std::vector<Homography::cv::detail::CameraParams> >; _ForwardIterator = Homography::cv::detail::CameraParams*; _Tp = Homography::cv::detail::CameraParams]’
+/usr/include/c++/4.8/bits/stl_vector.h:316:32:   required from ‘Homography::std::vector<_Tp, _Alloc>::vector(const Homography::std::vector<_Tp, _Alloc>&) [with _Tp = Homography::cv::detail::CameraParams; _Alloc = Homography::std::allocator<Homography::cv::detail::CameraParams>]’
+/usr/include/opencv2/stitching/stitcher.hpp:134:64:   required from here
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: error: no matching function for call to ‘operator new(sizetype, void*)’
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+/usr/include/c++/4.8/bits/stl_construct.h: In instantiation of ‘void Homography::std::_Construct(_T1*, const _T2&) [with _T1 = Homography::std::list<Homography::cv::detail::GraphEdge>; _T2 = Homography::std::list<Homography::cv::detail::GraphEdge>]’:
+/usr/include/c++/4.8/bits/stl_uninitialized.h:187:48:   required from ‘static void Homography::std::__uninitialized_fill_n<_TrivialValueType>::__uninit_fill_n(_ForwardIterator, _Size, const _Tp&) [with _ForwardIterator = Homography::std::list<Homography::cv::detail::GraphEdge>*; _Size = long unsigned int; _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; bool _TrivialValueType = false]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:224:35:   required from ‘void Homography::std::uninitialized_fill_n(_ForwardIterator, _Size, const _Tp&) [with _ForwardIterator = Homography::std::list<Homography::cv::detail::GraphEdge>*; _Size = long unsigned int; _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:334:50:   required from ‘void Homography::std::__uninitialized_fill_n_a(_ForwardIterator, _Size, const _Tp&, Homography::std::allocator<_Tp2>&) [with _ForwardIterator = Homography::std::list<Homography::cv::detail::GraphEdge>*; _Size = long unsigned int; _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; _Tp2 = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/vector.tcc:231:27:   required from ‘void Homography::std::vector<_Tp, _Alloc>::_M_fill_assign(Homography::std::size_t, const value_type&) [with _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; _Alloc = Homography::std::allocator<Homography::std::list<Homography::cv::detail::GraphEdge> >; Homography::std::size_t = long unsigned int; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/stl_vector.h:480:34:   required from ‘void Homography::std::vector<_Tp, _Alloc>::assign(Homography::std::vector<_Tp, _Alloc>::size_type, const value_type&) [with _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; _Alloc = Homography::std::allocator<Homography::std::list<Homography::cv::detail::GraphEdge> >; Homography::std::vector<_Tp, _Alloc>::size_type = long unsigned int; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/opencv2/stitching/detail/util.hpp:133:87:   required from here
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: error: no matching function for call to ‘operator new(sizetype, void*)’
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+/usr/include/c++/4.8/bits/stl_construct.h: In instantiation of ‘void Homography::std::_Construct(_T1*, const _T2&) [with _T1 = Homography::cv::DMatch; _T2 = Homography::cv::DMatch]’:
+/usr/include/c++/4.8/bits/stl_uninitialized.h:75:53:   required from ‘static _ForwardIterator Homography::std::__uninitialized_copy<_TrivialValueTypes>::__uninit_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::cv::DMatch*; _ForwardIterator = Homography::cv::DMatch*; bool _TrivialValueTypes = false]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:117:41:   required from ‘_ForwardIterator Homography::std::uninitialized_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::cv::DMatch*; _ForwardIterator = Homography::cv::DMatch*]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:258:63:   required from ‘_ForwardIterator Homography::std::__uninitialized_copy_a(_InputIterator, _InputIterator, _ForwardIterator, Homography::std::allocator<_Tp>&) [with _InputIterator = Homography::cv::DMatch*; _ForwardIterator = Homography::cv::DMatch*; _Tp = Homography::cv::DMatch]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:281:69:   required from ‘_ForwardIterator Homography::std::__uninitialized_move_if_noexcept_a(_InputIterator, _InputIterator, _ForwardIterator, _Allocator&) [with _InputIterator = Homography::cv::DMatch*; _ForwardIterator = Homography::cv::DMatch*; _Allocator = Homography::std::allocator<Homography::cv::DMatch>]’
+/usr/include/c++/4.8/bits/vector.tcc:365:38:   required from ‘void Homography::std::vector<_Tp, _Alloc>::_M_insert_aux(Homography::std::vector<_Tp, _Alloc>::iterator, const _Tp&) [with _Tp = Homography::cv::DMatch; _Alloc = Homography::std::allocator<Homography::cv::DMatch>; Homography::std::vector<_Tp, _Alloc>::iterator = Homography::__gnu_cxx::__normal_iterator<Homography::cv::DMatch*, Homography::std::vector<Homography::cv::DMatch> >; typename Homography::std::_Vector_base<_Tp, _Alloc>::pointer = Homography::cv::DMatch*]’
+/usr/include/c++/4.8/bits/stl_vector.h:913:28:   required from ‘void Homography::std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = Homography::cv::DMatch; _Alloc = Homography::std::allocator<Homography::cv::DMatch>; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::cv::DMatch]’
+../src/HomographyFinder.cpp:62:29:   required from here
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: error: no matching function for call to ‘operator new(sizetype, void*)’
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+/usr/include/c++/4.8/bits/stl_construct.h: In instantiation of ‘void Homography::std::_Construct(_T1*, const _T2&) [with _T1 = Homography::cv::Point_<float>; _T2 = Homography::cv::Point_<float>]’:
+/usr/include/c++/4.8/bits/stl_uninitialized.h:75:53:   required from ‘static _ForwardIterator Homography::std::__uninitialized_copy<_TrivialValueTypes>::__uninit_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::cv::Point_<float>*; _ForwardIterator = Homography::cv::Point_<float>*; bool _TrivialValueTypes = false]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:117:41:   required from ‘_ForwardIterator Homography::std::uninitialized_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = Homography::cv::Point_<float>*; _ForwardIterator = Homography::cv::Point_<float>*]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:258:63:   required from ‘_ForwardIterator Homography::std::__uninitialized_copy_a(_InputIterator, _InputIterator, _ForwardIterator, Homography::std::allocator<_Tp>&) [with _InputIterator = Homography::cv::Point_<float>*; _ForwardIterator = Homography::cv::Point_<float>*; _Tp = Homography::cv::Point_<float>]’
+/usr/include/c++/4.8/bits/stl_uninitialized.h:281:69:   required from ‘_ForwardIterator Homography::std::__uninitialized_move_if_noexcept_a(_InputIterator, _InputIterator, _ForwardIterator, _Allocator&) [with _InputIterator = Homography::cv::Point_<float>*; _ForwardIterator = Homography::cv::Point_<float>*; _Allocator = Homography::std::allocator<Homography::cv::Point_<float> >]’
+/usr/include/c++/4.8/bits/vector.tcc:365:38:   required from ‘void Homography::std::vector<_Tp, _Alloc>::_M_insert_aux(Homography::std::vector<_Tp, _Alloc>::iterator, const _Tp&) [with _Tp = Homography::cv::Point_<float>; _Alloc = Homography::std::allocator<Homography::cv::Point_<float> >; Homography::std::vector<_Tp, _Alloc>::iterator = Homography::__gnu_cxx::__normal_iterator<Homography::cv::Point_<float>*, Homography::std::vector<Homography::cv::Point_<float> > >; typename Homography::std::_Vector_base<_Tp, _Alloc>::pointer = Homography::cv::Point_<float>*]’
+/usr/include/c++/4.8/bits/stl_vector.h:913:28:   required from ‘void Homography::std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = Homography::cv::Point_<float>; _Alloc = Homography::std::allocator<Homography::cv::Point_<float> >; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::cv::Point_<float>]’
+../src/HomographyFinder.cpp:63:41:   required from here
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: error: no matching function for call to ‘operator new(sizetype, void*)’
+/usr/include/c++/4.8/bits/stl_construct.h:83:7: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+In file included from /usr/include/x86_64-linux-gnu/c++/4.8/bits/c++allocator.h:33:0,
+                 from /usr/include/c++/4.8/bits/allocator.h:46,
+                 from /usr/include/c++/4.8/ext/alloc_traits.h:38,
+                 from /usr/include/c++/4.8/bits/stl_construct.h:61,
+                 from /usr/include/c++/4.8/bits/stl_tempbuf.h:60,
+                 from /usr/include/c++/4.8/bits/stl_algo.h:62,
+                 from /usr/include/c++/4.8/algorithm:62,
+                 from /usr/include/opencv2/core/core.hpp:56,
+                 from /usr/include/opencv2/opencv.hpp:47,
+                 from ../src/HomographyFinder.h:13,
+                 from ../src/HomographyFinder.cpp:8:
+/usr/include/c++/4.8/ext/new_allocator.h: In instantiation of ‘void Homography::__gnu_cxx::new_allocator<_Tp>::construct(Homography::__gnu_cxx::new_allocator<_Tp>::pointer, const _Tp&) [with _Tp = Homography::cv::detail::GraphEdge; Homography::__gnu_cxx::new_allocator<_Tp>::pointer = Homography::cv::detail::GraphEdge*]’:
+/usr/include/c++/4.8/bits/stl_list.h:487:6:   required from ‘Homography::std::list<_Tp, _Alloc>::_Node* Homography::std::list<_Tp, _Alloc>::_M_create_node(const value_type&) [with _Tp = Homography::cv::detail::GraphEdge; _Alloc = Homography::std::allocator<Homography::cv::detail::GraphEdge>; Homography::std::list<_Tp, _Alloc>::_Node = Homography::std::_List_node<Homography::cv::detail::GraphEdge>; Homography::std::list<_Tp, _Alloc>::value_type = Homography::cv::detail::GraphEdge]’
+/usr/include/c++/4.8/bits/stl_list.h:1553:42:   required from ‘void Homography::std::list<_Tp, _Alloc>::_M_insert(Homography::std::list<_Tp, _Alloc>::iterator, const value_type&) [with _Tp = Homography::cv::detail::GraphEdge; _Alloc = Homography::std::allocator<Homography::cv::detail::GraphEdge>; Homography::std::list<_Tp, _Alloc>::iterator = Homography::std::_List_iterator<Homography::cv::detail::GraphEdge>; Homography::std::list<_Tp, _Alloc>::value_type = Homography::cv::detail::GraphEdge]’
+/usr/include/c++/4.8/bits/stl_list.h:1016:9:   required from ‘void Homography::std::list<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = Homography::cv::detail::GraphEdge; _Alloc = Homography::std::allocator<Homography::cv::detail::GraphEdge>; Homography::std::list<_Tp, _Alloc>::value_type = Homography::cv::detail::GraphEdge]’
+/usr/include/c++/4.8/bits/stl_list.h:1493:24:   required from ‘void Homography::std::list<_Tp, _Alloc>::_M_initialize_dispatch(_InputIterator, _InputIterator, Homography::std::__false_type) [with _InputIterator = Homography::std::_List_const_iterator<Homography::cv::detail::GraphEdge>; _Tp = Homography::cv::detail::GraphEdge; _Alloc = Homography::std::allocator<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/stl_list.h:636:55:   [ skipping 2 instantiation contexts, use -ftemplate-backtrace-limit=0 to disable ]
+/usr/include/c++/4.8/bits/list.tcc:199:39:   required from ‘Homography::std::list<_Tp, _Alloc>& Homography::std::list<_Tp, _Alloc>::operator=(const Homography::std::list<_Tp, _Alloc>&) [with _Tp = Homography::cv::detail::GraphEdge; _Alloc = Homography::std::allocator<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/stl_algobase.h:682:11:   required from ‘typename Homography::__gnu_cxx::__enable_if<(! Homography::std::__is_scalar<_Tp>::__value), void>::__type Homography::std::__fill_a(_ForwardIterator, _ForwardIterator, const _Tp&) [with _ForwardIterator = Homography::std::list<Homography::cv::detail::GraphEdge>*; _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; typename Homography::__gnu_cxx::__enable_if<(! Homography::std::__is_scalar<_Tp>::__value), void>::__type = void]’
+/usr/include/c++/4.8/bits/stl_algobase.h:729:14:   required from ‘void Homography::std::fill(_ForwardIterator, _ForwardIterator, const _Tp&) [with _ForwardIterator = Homography::__gnu_cxx::__normal_iterator<Homography::std::list<Homography::cv::detail::GraphEdge>*, Homography::std::vector<Homography::std::list<Homography::cv::detail::GraphEdge> > >; _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/vector.tcc:228:35:   required from ‘void Homography::std::vector<_Tp, _Alloc>::_M_fill_assign(Homography::std::size_t, const value_type&) [with _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; _Alloc = Homography::std::allocator<Homography::std::list<Homography::cv::detail::GraphEdge> >; Homography::std::size_t = long unsigned int; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/c++/4.8/bits/stl_vector.h:480:34:   required from ‘void Homography::std::vector<_Tp, _Alloc>::assign(Homography::std::vector<_Tp, _Alloc>::size_type, const value_type&) [with _Tp = Homography::std::list<Homography::cv::detail::GraphEdge>; _Alloc = Homography::std::allocator<Homography::std::list<Homography::cv::detail::GraphEdge> >; Homography::std::vector<_Tp, _Alloc>::size_type = long unsigned int; Homography::std::vector<_Tp, _Alloc>::value_type = Homography::std::list<Homography::cv::detail::GraphEdge>]’
+/usr/include/opencv2/stitching/detail/util.hpp:133:87:   required from here
+/usr/include/c++/4.8/ext/new_allocator.h:130:9: error: no matching function for call to ‘operator new(sizetype, void*)’
+       { ::new((void *)__p) _Tp(__val); }
+         ^
+/usr/include/c++/4.8/ext/new_allocator.h:130:9: note: candidate is:
+<built-in>:0:0: note: void* operator new(long unsigned int)
+<built-in>:0:0: note:   candidate expects 1 argument, 2 provided
+make: *** [src/HomographyFinder.o] Error 1
+
+19:14:52 Build Finished (took 811ms)
+

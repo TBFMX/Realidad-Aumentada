@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;NativeEglExample/jni/rossini.h&apos; to &apos;rossini.cpp&apos;" description="Rename resource &apos;rossini.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="jni/rossini.h" name="rossini.cpp" stamp="1401403717382" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;NativeEglExample/jni/rossini.cpp&apos; to &apos;rossini.h&apos;" description="Rename resource &apos;rossini.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="jni/rossini.cpp" name="rossini.h" stamp="1401460777932" updateReferences="true"/>
+</session>

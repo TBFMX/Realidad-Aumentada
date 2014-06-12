@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;FaceDetection/jni/DetectionBasedTracker_jni.cpp&apos; to &apos;DetectionBasedTracker_jni.cc&apos;" description="Rename resource &apos;DetectionBasedTracker_jni.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="jni/DetectionBasedTracker_jni.cpp" name="DetectionBasedTracker_jni.cc" stamp="1399315740747" updateReferences="true"/>
+</session>

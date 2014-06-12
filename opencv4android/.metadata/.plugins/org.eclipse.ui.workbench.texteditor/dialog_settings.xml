@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="setCamera"/>
+			<item value="onOptionsItemSelected"/>
+			<item value="view"/>
+			<item value="imageDetection"/>
+			<item value="ratio"/>
+			<item value="radio"/>
+			<item value="Byte.MAX_VALUE"/>
+			<item value="1f"/>
+		</list>
+		<list key="replacehistory">
+			<item value="1.0f"/>
+			<item value="glsurface"/>
+			<item value="gsurface"/>
+			<item value="tbf"/>
+			<item value="OrbAndroid"/>
+			<item value="FrameProcessor"/>
+			<item value="jnitester_FrameProcessor"/>
+			<item value="com_tbf_mixed_MainActivity_"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="305" key="DIALOG_WIDTH"/>
+		<item value="1|Sans|10.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="405" key="DIALOG_HEIGHT"/>
+		<item value="1323" key="DIALOG_X_ORIGIN"/>
+		<item value="507" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

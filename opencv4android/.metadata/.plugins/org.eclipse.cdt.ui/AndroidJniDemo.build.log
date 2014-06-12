@@ -1,0 +1,7 @@
+14:09:20 **** Clean-only build of configuration Default for project AndroidJniDemo ****
+/home/abel/android-ndk-r9d/ndk-build clean 
+/home/abel/android-ndk-r9d/build/core/add-application.mk:187: *** Android NDK: Aborting...    .  Stop.
+Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: /home/abel/android-ndk-r9d/jni/Android.mk    
+
+14:09:20 Build Finished (took 61ms)
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cHelpSettings>
+<project name="jniDemo">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="jniConfirmation">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="CamTest">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="OpenCV Sample - face-detection">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="Face Recognition">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="FaceTest">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="FaceDetection">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="Cartoonifier">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="SecondSight">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="Sample1Java">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="jniTester">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="FaceRecognition">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="Mixed">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="SecondSight2">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="NativeEglExample">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+<project name="GlLoader">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
+</cHelpSettings>

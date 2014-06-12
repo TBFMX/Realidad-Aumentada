@@ -1,0 +1,20 @@
+INDEX VERSION 1.126+/home/abel/workspace/android/.metadata/.plugins/org.eclipse.jdt.core
+3111496557.index
+642124715.index
+84557813.index
+2263238952.index
+3927879410.index
+2232216336.index
+2876182148.index
+4058085822.index
+4151064136.index
+2238062238.index
+411229323.index
+2490101612.index
+1529047429.index
+149558937.index
+578241539.index
+1133750237.index
+1180900656.index
+1957505326.index
+1270315800.index

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;CameraPreview&apos;&#x0A;- Original project: &apos;CameraPreview&apos;&#x0A;- Original element: &apos;OpenCV Tutorial 1 - Camera Preview.apk&apos;" description="Delete element" element1="bin/OpenCV Tutorial 1 - Camera Preview.apk" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1398895025355" subPackages="false" version="1.0"/>
+</session>

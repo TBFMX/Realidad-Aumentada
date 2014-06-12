@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;com.example.jniconfirmation&apos; to &apos;com.tbf.jniconfirmation&apos;&#x0A;- Original project: &apos;jniConfirmation&apos;&#x0A;- Original element: &apos;jniConfirmation/src/com.example.jniconfirmation&apos;&#x0A;- Renamed element: &apos;jniConfirmation/src/com.tbf.jniconfirmation&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings&#x0A;- Rename subpackages of the package" description="Rename package &apos;com.example.jniconfirmation&apos;" flags="589830" hierarchical="true" id="org.eclipse.jdt.ui.rename.package" input="/src&lt;com.example.jniconfirmation" name="com.tbf.jniconfirmation" qualified="false" references="true" stamp="1398879468189" textual="false" version="1.0"/>
+</session>

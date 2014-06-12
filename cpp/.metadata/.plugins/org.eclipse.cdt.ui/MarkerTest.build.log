@@ -1,0 +1,19 @@
+19:14:51 **** Incremental Build of configuration Debug for project MarkerTest ****
+make all 
+Building target: MarkerTest
+Invoking: GCC C++ Linker
+g++ -L/usr/lib/x86_64-linux-gnu/ -o "MarkerTest"  ./src/MarkerTest.o   -lopencv_calib3d  -lopencv_contrib  -lopencv_core -lopencv_features2d  -lopencv_flann  -lopencv_gpu  -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml  -lopencv_objdetect -lopencv_ocl  -lopencv_photo -lopencv_stitching -lopencv_superres  -lopencv_ts  -lopencv_video  -lopencv_videostab
+./src/MarkerTest.o: En la función `doomyTest()':
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:57: referencia a `HomographyFinder::HomographyFinder(cv::Mat, cv::Mat, cv::Mat)' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:59: referencia a `HomographyFinder::estimatePerspective()' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:60: referencia a `HomographyFinder::getHomographyMatrix()' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:61: referencia a `HomographyFinder::isGoodHomographyMatrix()' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:69: referencia a `HomographyFinder::setHomographyMatrix(cv::Mat)' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:76: referencia a `HomographyFinder::showMatches()' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:77: referencia a `HomographyFinder::showEstimatedPerspective()' sin definir
+/home/abel/workspace/cpp/MarkerTest/Debug/../src/MarkerTest.cpp:78: referencia a `HomographyFinder::showAugmented()' sin definir
+collect2: error: ld returned 1 exit status
+make: *** [MarkerTest] Error 1
+
+19:14:51 Build Finished (took 161ms)
+

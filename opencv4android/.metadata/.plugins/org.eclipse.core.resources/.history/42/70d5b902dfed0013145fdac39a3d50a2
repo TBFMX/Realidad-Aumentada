@@ -1,0 +1,19 @@
+package com.tbf.glsurface.filters.ar;
+
+import android.widget.VideoView;
+
+public final class myVideoView {
+	private VideoView _videoView;
+	
+	public myVideoView(VideoView mVideoView){
+		setVideoView(mVideoView);
+	}
+	
+	public void setVideoView(VideoView mVideoView){
+		_videoView = mVideoView;
+	}
+	
+	public VideoView getVideoView(){
+		return _videoView;
+	}
+}
