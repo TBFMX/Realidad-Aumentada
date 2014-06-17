@@ -1,6 +1,0 @@
-package com.tbf.glsurface.filters.ar;
-
-public static class mVideoView {
-	VideoView _videoView;
-	
-}

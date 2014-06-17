@@ -1,8 +1,6 @@
-12:35:38 **** Build of configuration Default for project NativeEglExample ****
+14:44:08 **** Build of configuration Default for project NativeEglExample ****
 ndk-build all 
-[armeabi] Compile++ thumb: mixed_sample <= code.cc
-[armeabi] SharedLibrary  : libmixed_sample.so
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-12:35:39 Build Finished (took 263ms)
+14:44:08 Build Finished (took 116ms)
 

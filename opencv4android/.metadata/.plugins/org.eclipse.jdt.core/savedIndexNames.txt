@@ -25,7 +25,6 @@ INDEX VERSION 1.126+/home/abel/workspace/opencv4android/.metadata/.plugins/org.e
 4176060926.index
 4267297555.index
 1436816887.index
-3711099482.index
 2398851997.index
 886791565.index
 3415515482.index

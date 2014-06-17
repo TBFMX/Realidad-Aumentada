@@ -1,6 +1,8 @@
-11:33:37 **** Build of configuration Default for project GlLoader ****
-ndk-build all 
-[armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
+14:56:14 **** Clean-only build of configuration Default for project GlLoader ****
+ndk-build clean 
+[armeabi] Clean          : gnustl_shared [armeabi]
+[armeabi] Clean          : gnustl_static [armeabi]
+[armeabi] Clean          : mixed_sample [armeabi]
 
-11:33:37 Build Finished (took 58ms)
+14:56:14 Build Finished (took 61ms)
 

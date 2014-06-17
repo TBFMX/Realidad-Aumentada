@@ -1,6 +1,6 @@
-11:33:42 **** Build of configuration Default for project SecondSight2 ****
+14:44:09 **** Build of configuration Default for project SecondSight2 ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-11:33:42 Build Finished (took 59ms)
+14:44:09 Build Finished (took 80ms)
 

@@ -47,11 +47,14 @@
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/gl.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glplatform.h \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdlib \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/algorithm \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/vector \
  /home/abel/workspace/opencv4android/NativeEglExample/jni/logger.h \
- /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/strings.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h \
  /home/abel/workspace/opencv4android/NativeEglExample/jni/renderer.h \
- /home/abel/workspace/opencv4android/NativeEglExample/jni/rossini2.h \
+ /home/abel/workspace/opencv4android/NativeEglExample/jni/couch.h \
  /home/abel/workspace/opencv4android/NativeEglExample/jni/rossiniColors.h
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/stdint.h:
@@ -148,14 +151,20 @@
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glplatform.h:
 
-/home/abel/workspace/opencv4android/NativeEglExample/jni/logger.h:
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdlib:
 
-/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/strings.h:
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/algorithm:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/vector:
+
+/home/abel/workspace/opencv4android/NativeEglExample/jni/logger.h:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h:
 
 /home/abel/workspace/opencv4android/NativeEglExample/jni/renderer.h:
 
-/home/abel/workspace/opencv4android/NativeEglExample/jni/rossini2.h:
+/home/abel/workspace/opencv4android/NativeEglExample/jni/couch.h:
 
 /home/abel/workspace/opencv4android/NativeEglExample/jni/rossiniColors.h:
