@@ -14,17 +14,21 @@
 // limitations under the License.
 //
 
+#include <cv.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <android/native_window.h> // requires ndk r5 or newer
 #include <EGL/egl.h> // requires ndk r5 or newer
 #include <GLES/gl.h>
-#include <EGL/egl.h> 
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>    // std::sort
 #include <vector>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <fstream>
+#include <sstream>
 
 #include "logger.h"
 #include "renderer.h"
@@ -54,6 +58,8 @@ float outColors[maxObjSize][4];
 static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 
 static GLuint texName;
+
+bool mIsTextureInitialized = false;
 
 //~ void makeCheckImage(void)
 //~ {
@@ -666,19 +672,68 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    glShadeModel(GL_FLAT);
    glEnable(GL_DEPTH_TEST);
+	//~ if(!mIsTextureInitialized){
+		//~ makeCheckImage();
+		//~ glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//~ 
+		//~ glGenTextures(1, &texName);
+		//~ glBindTexture(GL_TEXTURE_2D, texName);
+//~ 
+		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//~ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
+			//~ checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+		//~ mIsTextureInitialized =  true;
+	//~ }
+	
+if (!mIsTextureInitialized)
+	{
+		//texture image
+		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
+		//~ if (m_furnishImage.rows > 0){
+			//~ LOG_INFO("model open correctly...OK : %d, %d, %d",m_furnishImage.rows,m_furnishImage.cols,m_furnishImage.channels() );
+		//~ }else{
+			//~ LOG_INFO("texture file is not loaded");
+			//~ std::ifstream myfile("sdcard/Models/someToast.txt");
+			//~ std::string someString;
+			//~ if(myfile.is_open()){
+				//~ getline(myfile,someString);
+				//~ char *someChar = &someString[0];
+				//~ LOG_INFO("correct access %s", someChar);
+				//~ myfile.close();
+			//~ }
+		//~ }
+		cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGBA);
+		
+		glGenTextures(1, &texName);
+		glBindTexture(GL_TEXTURE_2D, texName);
 
-   makeCheckImage();
-   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		int w = m_furnishImage.cols;
+		int h = m_furnishImage.rows;
 
-   glGenTextures(1, &texName);
-   glBindTexture(GL_TEXTURE_2D, texName);
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, texName);
 
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
-		checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+		// Upload new texture data:
+		if (m_furnishImage.channels() == 3)
+		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		else if(m_furnishImage.channels() == 4)
+		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		else if (m_furnishImage.channels()==1)
+		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);
+
+		//~ const GLfloat bgTextureVertices[] = { 0, 0, w, 0, 0, h, w, h };
+		//~ const GLfloat bgTextureCoords[]   = { 1, 0, 1, 1, 0, 0, 0, 1 };			
+			
+		mIsTextureInitialized = true;
+	}	
 //~ 
  //~ // Enable texture mapping stuff
 glEnable(GL_TEXTURE_2D);
@@ -689,8 +744,9 @@ glDisableClientState(GL_COLOR_ARRAY);
 //~ glBindTexture(GL_TEXTURE_2D, [texture name]);
 
 
-    glEnableClientState(GL_NORMAL_ARRAY);
+    //~ glEnableClientState(GL_NORMAL_ARRAY);
     //~ glEnableClientState(GL_COLOR_ARRAY);
+
     glEnableClientState(GL_VERTEX_ARRAY);
 	//~ glColor4f(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -698,14 +754,16 @@ glDisableClientState(GL_COLOR_ARRAY);
     glLoadIdentity();
     //~ glPushMatrix();
     glTranslatef(0, 0, -5.0f);
+    //~ glRotatef(_angle, 0, 1, 0);
     glRotatef(_angle, 0, 1, 0);
-    glRotatef(_angle*0.25f, 1, 0, 0);
+    //~ glRotatef(_angle*0.25f, 1, 0, 0);
+    //~ glRotatef(_angle*0.25f, 1, 0, 0);
     glScalef(scale,scale,scale);
     
     GLfloat mdl[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin);
-	LOG_INFO("x=%f y=%f z=%f",cameraOrigin.x,cameraOrigin.y,cameraOrigin.z);
+	//LOG_INFO("x=%f y=%f z=%f",cameraOrigin.x,cameraOrigin.y,cameraOrigin.z);
 	//~ getFacesToCamera(couchNumVerts,cameraOrigin,couchTexCoords,COLORS,couchVerts,
 	getFacesNearToCamera(couchNumVerts,cameraOrigin,couchTexCoords,COLORS,couchVerts,
 	outTexCoords,outColors,outVertexes,&finalVertexSize);
@@ -757,10 +815,11 @@ glDisableClientState(GL_COLOR_ARRAY);
 //
 //	glEnableClientState(GL_VERTEX_ARRAY);
 //	glEnableClientState(GL_COLOR_ARRAY);
-//	glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
     //~ glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
+    //~ glDisableClientState(GL_NORMAL_ARRAY);
+    glEnable(GL_TEXTURE_2D);
 	glFlush();
 }
 

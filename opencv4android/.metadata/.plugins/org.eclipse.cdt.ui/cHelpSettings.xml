@@ -48,4 +48,7 @@
 <project name="GlLoader">
 <provider id="org.eclipse.cdt.ui.provider1"/>
 </project>
+<project name="CameraGL">
+<provider id="org.eclipse.cdt.ui.provider1"/>
+</project>
 </cHelpSettings>

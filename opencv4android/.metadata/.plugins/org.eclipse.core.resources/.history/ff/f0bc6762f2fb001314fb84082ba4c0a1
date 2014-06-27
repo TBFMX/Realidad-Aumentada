@@ -1,0 +1,31 @@
+package com.tbf.cameragl;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+
+import android.content.Context;
+import android.hardware.Camera.Size;
+import android.opengl.GLSurfaceView.Renderer;
+
+public class CameraRenderer implements Renderer {
+	 private Context context;
+	 private Size size;
+	@Override
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		// TODO Auto-generated method stub
+		Native.surfaceChanged(width,height,context.getResources().getConfiguration().orientation);
+	}
+
+	@Override
+	public void onDrawFrame(GL10 gl) {
+		// TODO Auto-generated method stub
+		Native.renderBackground();
+	}
+
+}

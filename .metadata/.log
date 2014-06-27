@@ -1131,3 +1131,23 @@ org.eclipse.core.internal.resources.ResourceException: The project description f
 
 !ENTRY com.android.ide.eclipse.adt 4 0 2014-04-22 15:13:46.489
 !MESSAGE Failed to load properties file for project 'HelloWorld'
+!SESSION 2014-06-24 10:45:55.071 -----------------------------------------------
+eclipse.buildId=4.3.2.M20140221-1700
+java.version=1.8.0_05
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=es_MX
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -data /home/abel/workspace -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-06-24 10:46:01.659
+!MESSAGE Missing node to edit!
+!SESSION 2014-06-24 10:46:20.093 -----------------------------------------------
+eclipse.buildId=4.3.2.M20140221-1700
+java.version=1.8.0_05
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=es_MX
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-06-24 10:46:26.496
+!MESSAGE Missing node to edit!

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;GlLoader/jni/jniExports.c&apos; to &apos;jniExports.cpp&apos;" description="Rename resource &apos;jniExports.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="jni/jniExports.c" name="jniExports.cpp" stamp="1403620599867" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;GlLoader/jni/NativeLibrary.c&apos; to &apos;NativeLibrary.cpp&apos;" description="Rename resource &apos;NativeLibrary.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="jni/NativeLibrary.c" name="NativeLibrary.cpp" stamp="1403620614466" updateReferences="true"/>
+</session>

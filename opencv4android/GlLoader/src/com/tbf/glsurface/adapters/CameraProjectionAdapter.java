@@ -9,8 +9,10 @@ import android.opengl.Matrix;
 
 public class CameraProjectionAdapter {
     
-    float mFOVY = 43.6f; // 30mm equivalent
-    float mFOVX = 65.4f; // 30mm equivalent
+    //float mFOVY = 43.6f; // 30mm equivalent
+    //float mFOVX = 65.4f; // 30mm equivalent
+    float mFOVY = 628.7519411113429f;
+    float mFOVX = 628.6341119951087f;
     int mHeightPx = 640;
     int mWidthPx = 480;
     float mNear = 1f;

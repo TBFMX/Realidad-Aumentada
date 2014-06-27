@@ -1,0 +1,24 @@
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := opencv-prebuilt
+LOCAL_SRC_FILES = build/libs/$(TARGET_ARCH_ABI)/libopencv_java.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/build/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include	$(CLEAR_VARS)
+
+# OpenCV
+OPENCV_CAMERA_MODULES:=on
+OPENCV_INSTALL_MODULES:=on
+OPENCV_LIB_TYPE:=STATIC
+
+include /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/OpenCV.mk
+
+LOCAL_SHARED_LIBRARIES := opencv-prebuilt
+LOCAL_MODULE    := NativeCamera
+LOCAL_CFLAGS    := -Wall
+LOCAL_SRC_FILES += CameraRenderer.cpp
+LOCAL_LDLIBS    += -llog -landroid -lEGL -lGLESv1_CM
+
+include $(BUILD_SHARED_LIBRARY)

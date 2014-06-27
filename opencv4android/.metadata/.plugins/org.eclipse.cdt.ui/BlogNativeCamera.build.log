@@ -1,0 +1,6 @@
+17:20:31 **** Auto Build of configuration Default for project BlogNativeCamera ****
+/home/abel/android-ndk-r9d/ndk-build 
+[armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
+
+17:20:31 Build Finished (took 64ms)
+
