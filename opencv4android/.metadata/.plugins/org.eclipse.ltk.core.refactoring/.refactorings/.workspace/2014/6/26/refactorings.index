@@ -1,2 +1,4 @@
 1403648796287	Delete resource 'BlogNativeCamera'
 1403649168198	Delete resource 'appcompat_v7_2'
+1403902008616	Delete resource 'CameraGL/obj/local/armeabi/objs/libopencv_java.so'
+1403902115053	Delete resource 'CameraGL/obj/local/armeabi-v7a/objs/libopencv_java.so'

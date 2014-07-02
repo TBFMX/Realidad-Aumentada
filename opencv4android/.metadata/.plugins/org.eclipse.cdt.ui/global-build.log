@@ -1,18 +1,18 @@
-11:01:17 **** Clean-only build of configuration Default for project GlLoader ****
+17:39:07 **** Clean-only build of configuration Default for project GlLoader ****
 ndk-build clean 
 [armeabi] Clean          : gnustl_shared [armeabi]
 [armeabi] Clean          : gnustl_static [armeabi]
 [armeabi] Clean          : mixed_sample [armeabi]
-11:01:17 **** Clean-only build of configuration Default for project CameraGL ****
+17:39:08 **** Clean-only build of configuration Default for project CameraGL ****
 ndk-build clean 
 [armeabi] Clean          : gnustl_shared [armeabi]
 [armeabi] Clean          : gnustl_static [armeabi]
 [armeabi] Clean          : mixed_sample [armeabi]
-11:01:23 **** Incremental Build of configuration Default for project GlLoader ****
+17:39:16 **** Incremental Build of configuration Default for project GlLoader ****
 ndk-build all 
 [armeabi] Compile++ thumb: mixed_sample <= code.cc
 [armeabi] SharedLibrary  : libmixed_sample.so
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
-11:01:23 **** Build of configuration Default for project CameraGL ****
+17:39:16 **** Build of configuration Default for project CameraGL ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so

@@ -41,6 +41,7 @@
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/asm-generic/signal.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/asm/sigcontext.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/sched.h \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/vector \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/math.h \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv/cv.h \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/core_c.h \
@@ -57,7 +58,6 @@
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstddef \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/complex \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/map \
- /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/vector \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/operations.hpp \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/limits \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/mat.hpp \
@@ -114,16 +114,26 @@
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/internal.hpp \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/highgui/highgui.hpp \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/highgui/highgui_c.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/drawer.h \
- /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv/cv.h \
- /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/native_window.h \
- /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/rect.h \
- /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h \
- /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/eglplatform.h \
- /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/fstream \
+ /home/abel/workspace/opencv4android/CameraGL/jni/ARDrawingContext.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/GeometryTypes.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/CameraCalibration.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/opencv.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/photo/photo.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/photo/photo_c.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/video/video.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/video/background_segm.hpp \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/list \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/ml/ml.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/contrib.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/retina.hpp \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/openfabmap.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/ARPipeline.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/PatternDetector.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/Pattern.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/DebugHelpers.hpp \
  /home/abel/workspace/opencv4android/CameraGL/jni/logger.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/couch.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors.h
+ /home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/jni.h:
 
@@ -207,6 +217,8 @@
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/sched.h:
 
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/vector:
+
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/math.h:
 
 /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv/cv.h:
@@ -238,8 +250,6 @@
 /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/complex:
 
 /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/map:
-
-/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/vector:
 
 /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/operations.hpp:
 
@@ -353,22 +363,42 @@
 
 /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/highgui/highgui_c.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/drawer.h:
+/home/abel/workspace/opencv4android/CameraGL/jni/ARDrawingContext.hpp:
 
-/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv/cv.h:
+/home/abel/workspace/opencv4android/CameraGL/jni/GeometryTypes.hpp:
 
-/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/native_window.h:
+/home/abel/workspace/opencv4android/CameraGL/jni/CameraCalibration.hpp:
 
-/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/rect.h:
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/opencv.hpp:
 
-/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h:
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/photo/photo.hpp:
 
-/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/eglplatform.h:
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/photo/photo_c.h:
 
-/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/fstream:
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/video/video.hpp:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/video/background_segm.hpp:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/list:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/ml/ml.hpp:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/contrib.hpp:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/retina.hpp:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/openfabmap.hpp:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/ARPipeline.hpp:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/PatternDetector.hpp:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/Pattern.hpp:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/DebugHelpers.hpp:
 
 /home/abel/workspace/opencv4android/CameraGL/jni/logger.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/couch.h:
-
-/home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors.h:
+/home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp:

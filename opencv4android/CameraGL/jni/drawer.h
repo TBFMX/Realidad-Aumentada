@@ -16,8 +16,8 @@
 
 #include "logger.h"
 
-#include "couch.h"
-#include "rossiniColors.h"
+//~ #include "couch.h"
+//~ #include "rossiniColors.h"
 #define LOG_TAG "EglSample"
 
 unsigned finalVertexSize;
@@ -32,8 +32,6 @@ float outColors[maxObjSize][4];
 //~ bool isFaceDrawn[87360];
 //~ 
 //~ static GLuint texName;
-
-bool mIsTextureInitialized = false;
 
 float _angle=0.0;
 
@@ -312,56 +310,10 @@ void scaling(float scale, float inVertexes[], float outVertexes[], unsigned vert
 	}
 }
 
-void getFurnishTexture(unsigned int texName){
-	if (!mIsTextureInitialized)
-	{
-		//texture image
-		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
-		//~ if (m_furnishImage.rows > 0){
-			//~ LOG_INFO("model open correctly...OK : %d, %d, %d",m_furnishImage.rows,m_furnishImage.cols,m_furnishImage.channels() );
-		//~ }else{
-			//~ LOG_INFO("texture file is not loaded");
-			//~ std::ifstream myfile("sdcard/Models/someToast.txt");
-			//~ std::string someString;
-			//~ if(myfile.is_open()){
-				//~ getline(myfile,someString);
-				//~ char *someChar = &someString[0];
-				//~ LOG_INFO("correct access %s", someChar);
-				//~ myfile.close();
-			//~ }
-		//~ }
-		cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGBA);
-		
-		//~ glGenTextures(1, &texName);
-		glBindTexture(GL_TEXTURE_2D, texName);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		int w = m_furnishImage.cols;
-		int h = m_furnishImage.rows;
-
-		glPixelStorei(GL_PACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D, texName);
-
-		// Upload new texture data:
-		if (m_furnishImage.channels() == 3)
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		else if(m_furnishImage.channels() == 4)
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		else if (m_furnishImage.channels()==1)
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);		
-			
-		mIsTextureInitialized = true;
-	}	
-}
-
 void drawFrame(unsigned int texName)
 {
 	//~ float scale = 10.0;
-	float scale = 500.0;
+	float scale = 1.0;
 
 	//~ float scale = 1.0;
 //~ 
@@ -380,9 +332,13 @@ glDisableClientState(GL_COLOR_ARRAY);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(0, 0, -5.0f);
+	float aspect = screenWidth / screenHeight;
+	float bt = (float) tan(45 / 2);
+	float lr = bt * aspect;
+	glFrustumf(-lr * 0.1f, lr * 0.1f, -bt * 0.1f, bt * 0.1f, 0.1f, 100.0f);
+    glTranslatef(0, 0, -1.0f);
     //~ glRotatef(_angle, 0, 1, 0);
-    glRotatef(_angle, 0, 1, 0);
+    //~ glRotatef(_angle, 0, 1, 0);
     //~ glRotatef(_angle*0.25f, 1, 0, 0);
     //~ glRotatef(_angle*0.25f, 1, 0, 0);
     //~ glScalef(scale,scale,scale);
@@ -403,7 +359,7 @@ glDisableClientState(GL_COLOR_ARRAY);
 
 	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize);
 	
-    _angle += 0.2f;
+    //~ _angle += 0.2f;
 
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays

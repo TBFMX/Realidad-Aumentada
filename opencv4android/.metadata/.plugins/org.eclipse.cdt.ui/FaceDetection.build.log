@@ -1,6 +1,6 @@
-09:23:19 **** Build of configuration Default for project FaceDetection ****
+12:57:41 **** Build of configuration Default for project FaceDetection ****
 /home/abel/android-ndk-r9d/ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-09:23:19 Build Finished (took 57ms)
+12:57:41 Build Finished (took 110ms)
 

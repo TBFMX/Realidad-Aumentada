@@ -11,7 +11,8 @@ include /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/OpenCV.mk
 
 LOCAL_MODULE    := NativeCamera
 LOCAL_CFLAGS    := -Wall
-LOCAL_SRC_FILES += CameraRenderer.cpp
+LOCAL_SRC_FILES += GeometryTypes.cpp CameraCalibration.cpp ARDrawingContext.cpp ARPipeline.cpp \
+					Pattern.cpp PatternDetector.cpp geometryStructs.cpp CameraRenderer.cpp
 LOCAL_LDLIBS    += -llog -landroid -lEGL -lGLESv1_CM
 
 include $(BUILD_SHARED_LIBRARY)

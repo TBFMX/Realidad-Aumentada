@@ -75,6 +75,7 @@ bool mIsTextureInitialized = false;
       //~ }
    //~ }
 //~ }
+
 static void makeCheckImage(void)
 {
    int i, j, a,b,c;
@@ -91,6 +92,7 @@ static void makeCheckImage(void)
       }
    }
 }
+
 //~ void makeCheckImage(void)
 //~ {
    //~ int i, j, a, b, c;
@@ -255,7 +257,7 @@ Renderer::Renderer()
     : _msg(MSG_NONE), _display(0), _surface(0), _context(0), _angle(0)
 {
     LOG_INFO("Renderer instance created");
-    pthread_mutex_init(&_mutex, 0);    
+    pthread_mutex_init(&_mutex, 0);
     return;
 }
 
@@ -280,7 +282,7 @@ void Renderer::stop()
     // send message to render thread to stop rendering
     pthread_mutex_lock(&_mutex);
     _msg = MSG_RENDER_LOOP_EXIT;
-    pthread_mutex_unlock(&_mutex);    
+    pthread_mutex_unlock(&_mutex);
 
     pthread_join(_threadId, 0);
     LOG_INFO("Renderer thread stopped");
@@ -351,7 +353,7 @@ bool Renderer::initialize()
         EGL_NONE
     };
     EGLDisplay display;
-    EGLConfig config;    
+    EGLConfig config;
     EGLint numConfigs;
     EGLint format;
     EGLSurface surface;
@@ -672,6 +674,9 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    glShadeModel(GL_FLAT);
    glEnable(GL_DEPTH_TEST);
+   
+   GLuint framebuffer = 0;
+   glGenFramebuffers(1,&framebuffer)
 	//~ if(!mIsTextureInitialized){
 		//~ makeCheckImage();
 		//~ glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

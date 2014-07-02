@@ -1,6 +1,6 @@
-11:01:23 **** Build of configuration Default for project CameraGL ****
+17:39:16 **** Build of configuration Default for project CameraGL ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-11:01:23 Build Finished (took 62ms)
+17:39:16 Build Finished (took 65ms)
 
