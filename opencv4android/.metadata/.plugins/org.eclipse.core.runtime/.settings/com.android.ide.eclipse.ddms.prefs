@@ -1,6 +1,13 @@
 ddms.logcat.auotmonitor.level=error
 ddms.logcat.automonitor.userprompt=true
 eclipse.preferences.version=1
+heapPanel.col0=249
+heapPanel.col1=57
+heapPanel.col2=98
+heapPanel.col3=98
+heapPanel.col4=98
+heapPanel.col5=98
+heapPanel.col6=706
 logcat.view.colsize.Application=181
 logcat.view.colsize.Level=24
 logcat.view.colsize.PID=60

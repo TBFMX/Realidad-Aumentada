@@ -9,8 +9,10 @@
 #include <cmath>
 #include <algorithm>    // std::sort
 #include <vector>
-#include <opencv2/core/core.hpp>
+#include <opencv/cv.h>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
 #include <fstream>
 #include <sstream>
 #include "logger.h"
@@ -22,24 +24,25 @@
 #define LOG_TAG    "CAMERA_RENDERER"
 #define LOG(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
-unsigned finalVertexSize;
-int gWidth = 1024;
-int gHeight = 768;
-
-float deltaZcamera = 0.5;
-
 float outNormals[maxObjSize*3];
 float outTexCoords[maxObjSize*2];
 float outVertexes[maxObjSize*3];
 float outColors[maxObjSize][4];
+float _angle = 0.0;
+point3 cameraOrigin;
+unsigned finalVertexSize;
+
+int gWidth = 1024;
+int gHeight = 768;
+cv::Mat rgbFrame;
+float deltaZcamera = 0.5;
+
 //~ bool isFaceDrawn[87360];
 cv::Mat m_furnishImage;
-
+bool m_isTextureInitialized = false;
+bool m_isFurnishTextureInitialized = false;
 static GLuint texName;
 
-float _angle = 0.0;
-
-point3 cameraOrigin;
 //~ 
 //~ void applyOrtho(float left, float right,float bottom, float top,float near, float far) const{
 	//~ float a = 2.0f / (right - left);
@@ -371,6 +374,90 @@ void scaling(float scale, float inVertexes[], float outVertexes[], unsigned vert
 	}
 }
 
+
+void getBackgroundTextures(int texName, int bufferIndex, cv::Mat captureBuffer[],unsigned capFrameWidth,unsigned capFrameHeight) {
+	int w = capFrameWidth;
+	int h = capFrameHeight;
+
+	if(bufferIndex > 0){
+		//~ pthread_mutex_lock(&FGmutex);
+		cvtColor(captureBuffer[(bufferIndex - 1) % 30], rgbFrame, CV_BGR2RGB);
+		//~ pthread_mutex_unlock(&FGmutex);
+		w=rgbFrame.cols;
+		h=rgbFrame.rows;
+		//LOG_INFO("w,h, channels= %d,%d, %d, %d ",w,h,rgbFrame.channels(), textureId[0]);
+		
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, texName);
+
+		if (texName != 0){
+			// Upload new texture data:
+		if (rgbFrame.channels() == 3)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, rgbFrame.data);
+		else if(rgbFrame.channels() == 4)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbFrame.data);
+		else if (rgbFrame.channels()==1)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgbFrame.data);
+		}
+		
+		if (bufferIndex==30)
+			bufferIndex = 0;
+	}
+}
+
+void getFurnishTexture(unsigned int texName){
+	if (!m_isFurnishTextureInitialized)
+	{
+		//texture image
+		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
+		cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGB);
+		
+		//~ //glGenTextures(1, &texName);
+		glBindTexture(GL_TEXTURE_2D, texName);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		int w = m_furnishImage.cols;
+		int h = m_furnishImage.rows;
+
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glBindTexture(GL_TEXTURE_2D, texName);
+
+		// Upload new texture data:
+		if (m_furnishImage.channels() == 3)
+		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		else if(m_furnishImage.channels() == 4)
+		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		else if (m_furnishImage.channels()==1)
+		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);		
+
+		m_isFurnishTextureInitialized = true;
+	}	
+}
+
+void getObjectTexture(unsigned int texName, const cv::Mat& image){
+	glBindTexture(GL_TEXTURE_2D, texName);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	int w = image.cols;
+	int h = image.rows;
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glBindTexture(GL_TEXTURE_2D, texName);
+
+	// Upload new texture data:
+	if (image.channels() == 3)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, image.data);
+	else if(m_furnishImage.channels() == 4)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data);
+	else if (image.channels()==1)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, image.data);		
+}
+
 void drawFrame()
 {
 	//~ float scale = 10.0;
@@ -501,7 +588,7 @@ void drawFurnish(unsigned int texName, int screenWidth, int screenHeight)
 	//~ float lr = bt * aspect;
 	//~ glFrustumf(-lr * 0.1f, lr * 0.1f, -bt * 0.1f, bt * 0.1f, 0.1f, 100.0f);
     const float pi = 3.1415926535897932384626433832795;
-    float fW, fH, zNear = 0.1, zFar = 100;
+    float fW, fH, zNear = 0.01, zFar = 100;
 
     //~ //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
     fH = (float) (tan( (fovY / 360) * pi ) * zNear);
@@ -513,10 +600,11 @@ void drawFurnish(unsigned int texName, int screenWidth, int screenHeight)
     //~ glPushMatrix();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -0.803407f);
-    glRotatef(_angle, 0, 1, 0);
+    //~ glTranslatef(0.0, 0.0, -0.803407f);
+    glTranslatef(0.0, 0.0, -0.8);
+    glRotatef(_angle, 0, 0, 1);
     
-    glScalef(scale,scale,scale);
+    //~ glScalef(scale,scale,scale);
     
     GLfloat mdl[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
@@ -535,7 +623,7 @@ void drawFurnish(unsigned int texName, int screenWidth, int screenHeight)
 		//~ outTexCoords[i] = couchTexCoords[i];
 	
 	// scaling the vertexes withon any help
-	//~ scaling(scale, outVertexes, outVertexes,finalVertexSize);
+	scaling(scale, outVertexes, outVertexes,finalVertexSize);
 	
 	glVertexPointer(3, GL_FLOAT, 0, outVertexes);
     glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords);

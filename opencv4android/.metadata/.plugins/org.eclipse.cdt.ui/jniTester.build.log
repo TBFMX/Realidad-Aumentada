@@ -1,6 +1,6 @@
-12:57:44 **** Build of configuration Default for project jniTester ****
+20:45:38 **** Build of configuration Default for project jniTester ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-12:57:44 Build Finished (took 59ms)
+20:45:38 Build Finished (took 60ms)
 

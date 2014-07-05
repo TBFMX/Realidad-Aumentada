@@ -21,12 +21,11 @@
 #define LOG_TAG    "CAMERA_RENDERER"
 #define LOG(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
-unsigned int textureId[2];
 cv::VideoCapture capture;
-cv::Mat rgbFrame;
 cv::Mat inframe;
 cv::Mat outframe;
-int bufferIndex;
+
+int bufferIndex = 0;
 int rgbIndex;
 static int capFrameWidth;
 static int capFrameHeight;
@@ -49,18 +48,21 @@ cv::Mat captureBuffer[30];
 cv::Mat processedBuffer[30];
 cv::Mat patternImage;
 CameraCalibration calibration;
-bool m_isTextureInitialized = false;
-bool m_isFurnishTextureInitialized = false;
+
+bool gbIsWindowUpdated = false;
+bool gbIsProcessing = false;
 
 extern "C" {
 	
-void getFurnishTexture(unsigned int);
-void getBackgroundTextures();
+
 
 void createTexture();
 void destroyTexture();
 void *frameRetriever(void*);
 
+
+ARPipeline gbPipeline;
+ARDrawingContext gbDrawingCtx;
 /**
  * Performs full detection routine on camera frame and draws the scene using drawing context.
  * In addition, this function draw overlay with debug information on top of the AR window.
@@ -68,9 +70,15 @@ void *frameRetriever(void*);
  */
 bool processFrame(const cv::Mat& cameraFrame, ARPipeline& pipeline, ARDrawingContext& drawingCtx)
 {
+	//~ cv::Mat img;
     // Clone image used for background (we will draw overlay on it)
-    cv::Mat img = cameraFrame.clone();
-
+    //~ pthread_mutex_lock(&FGmutex);
+    //~ img = cameraFrame.clone();
+    //~ pthread_mutex_unlock(&FGmutex);
+    //~ LOG_INFO("Cloning camera frame ....img w, h = %d, %d", img.cols, img.rows);
+	//~ drawingCtx.setWidth(cameraFrame.cols);
+	//~ drawingCtx.setHeight(cameraFrame.rows);
+	
     // Draw information:
     //~ if (pipeline.m_patternDetector.enableHomographyRefinement)
         //~ cv::putText(img, "Pose refinement: On   ('h' to switch off)", cv::Point(10,15), CV_FONT_HERSHEY_PLAIN, 1, CV_RGB(0,200,0));
@@ -80,86 +88,27 @@ bool processFrame(const cv::Mat& cameraFrame, ARPipeline& pipeline, ARDrawingCon
     //~ cv::putText(img, "RANSAC threshold: " + ToString(pipeline.m_patternDetector.homographyReprojectionThreshold) + "( Use'-'/'+' to adjust)", cv::Point(10, 30), CV_FONT_HERSHEY_PLAIN, 1, CV_RGB(0,200,0));
 
     // Set a new camera frame:
-    drawingCtx.updateBackground(img);
+     //~ pthread_mutex_lock(&FGmutex);
+    LOG_INFO("current buffer index %d",bufferIndex);
+    drawingCtx.updateBackground(cameraFrame);
+    //~ drawingCtx.updateBackground(img);
+     //~ pthread_mutex_unlock(&FGmutex);
 
     // Find a pattern and update it's detection status:
     drawingCtx.isPatternPresent = pipeline.processFrame(cameraFrame);
+    //~ LOG_INFO("frame processed");
 
     // Update a pattern pose:
     drawingCtx.patternPose = pipeline.getPatternLocation();
 
     // Request redraw of the window:
-    drawingCtx.updateWindow();
+    drawingCtx.updateWindow(); // callback to window draw
 
     // Read the keyboard input:
     //~ int keyCode = cv::waitKey(5); 
 
-    bool shouldQuit = false;
-    //~ if (keyCode == '+' || keyCode == '=')
-    //~ {
-        //~ pipeline.m_patternDetector.homographyReprojectionThreshold += 0.2f;
-        //~ pipeline.m_patternDetector.homographyReprojectionThreshold = std::min(10.0f, pipeline.m_patternDetector.homographyReprojectionThreshold);
-    //~ }
-    //~ else if (keyCode == '-')
-    //~ {
-        //~ pipeline.m_patternDetector.homographyReprojectionThreshold -= 0.2f;
-        //~ pipeline.m_patternDetector.homographyReprojectionThreshold = std::max(0.0f, pipeline.m_patternDetector.homographyReprojectionThreshold);
-    //~ }
-    //~ else if (keyCode == 'h')
-    //~ {
-        //~ pipeline.m_patternDetector.enableHomographyRefinement = !pipeline.m_patternDetector.enableHomographyRefinement;
-    //~ }
-    //~ else if (keyCode == 27 || keyCode == 'q')
-    //~ {
-        //~ shouldQuit = true;
-    //~ }
-
-    return shouldQuit;
+    return drawingCtx.isWindowUpdated();
 }
-
-
-/**
- * Processes a recorded video or live view from web-camera and allows you to adjust homography refinement and 
- * reprojection threshold in runtime.
- */
-void processVideo(const cv::Mat& patternImage, CameraCalibration& calibration)
-{
-    // Grab first frame to get the frame dimensions
-    cv::Mat currentFrame;
-	if(bufferIndex > 0)
-		captureBuffer[bufferIndex - 1].copyTo(currentFrame);
-	else
-		captureBuffer[29].copyTo(currentFrame);
-
-    // Check the capture succeeded:
-    if (currentFrame.empty())
-    {
-        std::cout << "Cannot open video capture device" << std::endl;
-        return;
-    }
-
-    cv::Size frameSize(currentFrame.cols, currentFrame.rows);
-
-    ARPipeline pipeline(patternImage, calibration);
-    ARDrawingContext drawingCtx("Markerless AR", frameSize, calibration);
-
-    bool shouldQuit = false;
-    do
-    {
-		if(bufferIndex > 0)
-			captureBuffer[bufferIndex - 1].copyTo(currentFrame);
-		else
-			captureBuffer[29].copyTo(currentFrame);
-        if (currentFrame.empty())
-        {
-            shouldQuit = true;
-            continue;
-        }
-
-        shouldQuit = processFrame(currentFrame, pipeline, drawingCtx);
-    } while (!shouldQuit);
-}
-
 
 /**
  * Processes single image. The processing goes in a loop.
@@ -170,7 +119,7 @@ void processSingleImage(const cv::Mat& patternImage, CameraCalibration& calibrat
 {
     cv::Size frameSize(image.cols, image.rows);
     ARPipeline pipeline(patternImage, calibration);
-    ARDrawingContext drawingCtx("Markerless AR", frameSize, calibration);
+    ARDrawingContext drawingCtx(frameSize, calibration);
 
     bool shouldQuit = false;
     do
@@ -227,6 +176,18 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	glClearDepthf(1.0f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+    //~ m_isTextureInitialized = false;
+    //~ m_isFurnishTextureInitialized = false;
+    
+    // defining ARDrawing context (inside process video)
+    gbIsWindowUpdated = false;
+	cv::Size frameSize(frameWidth, frameHeight);
+    ARPipeline  pipeline(patternImage, calibration);
+    gbPipeline = pipeline;
+    ARDrawingContext drawingCtx(frameSize, calibration);
+    gbDrawingCtx = drawingCtx;
+    gbDrawingCtx.updateFurnishImage();
+
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
@@ -237,8 +198,6 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	pthread_create(&frameGrabber, &attr, frameRetriever, NULL);
 	pthread_attr_destroy(&attr);
 	
-    m_isTextureInitialized = false;
-    m_isFurnishTextureInitialized = false;
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobject,jint width,jint height,jint orien)
@@ -270,7 +229,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
     //~ glLoadIdentity();
     //~ glFrustumf(-ratio, ratio, -1, 1, 1, 10000);	
 	LOG("Surface Changed");
-	glViewport(0, 0, width,height);
+	glViewport(0, 0, width, height);
 	if(orien==1) {
 		screenWidth = width;
 		screenHeight = height;
@@ -282,18 +241,18 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 	}
 
 
-	LOG("screenWidth = %d",screenWidth);
-	LOG("screenHeight = %d",screenHeight);
+	LOG("screenWidth = %d",width);
+	LOG("screenHeight = %d",height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	float aspect = screenWidth / screenHeight;
+	float aspect = width / height;
 	//~ float bt = (float) tan(45 / 2);
 	//~ float lr = bt * aspect;
 	//~ glFrustumf(-lr * 0.1f, lr * 0.1f, -bt * 0.1f, bt * 0.1f, 0.1f, 100.0f);
 	
-	float fovY =628.7519411113429;
+	float fovY = 628.7519411113429;
     const float pi = 3.1415926535897932384626433832795;
-    float fW, fH, zNear = 0.1, zFar = 100;
+    float fW, fH, zNear = 0.01, zFar = 100;
     fH = (float) tan( fovY / 360 * pi ) * zNear;
     fW = fH * aspect *zNear;
     glFrustumf( -fW, fW, -fH, fH, zNear, zFar );
@@ -306,148 +265,86 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 	glClearDepthf(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	createTexture();
+	if(gbIsProcessing == false){
+		//~ gbDrawingCtx.setWidth(width);
+		//~ gbDrawingCtx.setHeight(height);
+		gbDrawingCtx.createTexture();
+	}
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_releaseCamera(JNIEnv*, jobject)
 {
 	LOG("Camera Released");
 	capture.release();
-	destroyTexture();
-
-}
-
-void createTexture() {
-	// Initialize texture for background image
-	if (!m_isTextureInitialized)
-	{
-		  // we generate both textures
-		LOG("Texture Created");
-		glGenTextures(2,textureId);
-		glBindTexture(GL_TEXTURE_2D, textureId[0]);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		m_isTextureInitialized = true;
+	if(gbIsProcessing == false){
+		gbDrawingCtx.destroyTexture();
 	}
-	getFurnishTexture(textureId[1]);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void destroyTexture() {
-	LOG("Texture destroyed");
-	glDeleteTextures(2, textureId);
-	m_isTextureInitialized = false;
-	m_isFurnishTextureInitialized = false;
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jobject) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//~ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    //~ glShadeModel(GL_FLAT);
    //~ glEnable(GL_DEPTH_TEST);
-	getBackgroundTextures();
+	//~ getBackgroundTextures();
 	
 	//~ pthread_mutex_lock(&FGmutex);
-	drawBackground(textureId[0],capFrameWidth,capFrameHeight);
+	//~ drawBackground(textureId[0],capFrameWidth,capFrameHeight);
 	//~ drawBackground(textureId[1],capFrameWidth,capFrameHeight);
 	//~ glutSwapBuffers();
 	//~ drawFurnish(textureId[1],screenWidth,screenHeight);
 	//~ glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	drawFurnish(textureId[1],capFrameWidth,capFrameHeight);
+	//~ drawFurnish(textureId[1],capFrameWidth,capFrameHeight);
 	//~ for(int i =0; i < 10000; ++i);
 	//~ pthread_mutex_unlock(&FGmutex);
-	//~ glFlush();
-}
-
-void getBackgroundTextures() {
-	int w = capFrameWidth;
-	int h = capFrameHeight;
-
-	if(bufferIndex > 0){
-		pthread_mutex_lock(&FGmutex);
-		//~ cv::Mat auxCap;
-		cvtColor(captureBuffer[(bufferIndex - 1) % 30], rgbFrame, CV_BGR2RGB);
-		//~ applyCanny(&auxCap,&rgbFrame);
-		pthread_mutex_unlock(&FGmutex);
-		w=rgbFrame.cols;
-		h=rgbFrame.rows;
-		//LOG_INFO("w,h, channels= %d,%d, %d, %d ",w,h,rgbFrame.channels(), textureId[0]);
 		
-		glPixelStorei(GL_PACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D, textureId[0]);
-
-		if (textureId[0] != 0){
-			// Upload new texture data:
-		if (rgbFrame.channels() == 3)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, rgbFrame.data);
-		else if(rgbFrame.channels() == 4)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbFrame.data);
-		else if (rgbFrame.channels()==1)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgbFrame.data);
-		}
-		
-		if (bufferIndex==30)
-			bufferIndex = 0;
+	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false){
+		// pthread_mutex_lock(&FGmutex);
+		//~ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		gbDrawingCtx.draw();
+		// pthread_mutex_unlock(&FGmutex);
+		gbIsWindowUpdated = false;
 	}
-}
-
-void getFurnishTexture(unsigned int texName){
-	if (!m_isFurnishTextureInitialized)
-	{
-		//texture image
-		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
-		//~ /*if (m_furnishImage.rows > 0){
-			//~ LOG_INFO("model open correctly...OK : %d, %d, %d",m_furnishImage.rows,m_furnishImage.cols,m_furnishImage.channels() );
-		//~ }else{
-			//~ LOG_INFO("texture file is not loaded");
-			//~ std::ifstream myfile("sdcard/Models/someToast.txt");
-			//~ std::string someString;
-			//~ if(myfile.is_open()){
-				//~ getline(myfile,someString);
-				//~ char *someChar = &someString[0];
-				//~ LOG_INFO("correct access %s", someChar);
-				//~ myfile.close();
-			//~ }
-		//~ }*/
-		cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGBA);
-		
-		//~ //glGenTextures(1, &texName);
-		glBindTexture(GL_TEXTURE_2D, texName);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		int w = m_furnishImage.cols;
-		int h = m_furnishImage.rows;
-
-		glPixelStorei(GL_PACK_ALIGNMENT, 1);
-		glBindTexture(GL_TEXTURE_2D, texName);
-
-		// Upload new texture data:
-		if (m_furnishImage.channels() == 3)
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		else if(m_furnishImage.channels() == 4)
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		else if (m_furnishImage.channels()==1)
-		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_furnishImage.data);		
-
-		m_isFurnishTextureInitialized = true;
-	}	
+	//~ glFlush();
 }
 
 void *frameRetriever(void*) {
 	while (capture.isOpened()) {
 		capture.read(inframe);
 		if (!inframe.empty()) {
+			//~ LOG("Starting main thread.....");
 			capFrameWidth=inframe.cols;
 			capFrameHeight=inframe.rows;
 			pthread_mutex_lock(&FGmutex);
 			inframe.copyTo(captureBuffer[(bufferIndex++) % 30]);
 			pthread_mutex_unlock(&FGmutex);
+			//~ if(gbIsProcessing==false){
+				//~ (*gbDrawingCtx).setWidth(capFrameWidth);
+				//~ (*gbDrawingCtx).setHeight(capFrameHeight);
+			//~ }
+			if(bufferIndex == 30)
+				bufferIndex = 0;
+
 		}
-		//~ processVideo(patternImage, calibration);
+			// loosing the zero frame
+		if(bufferIndex > 0 && gbIsWindowUpdated == false && gbIsProcessing == false){
+			cv::Mat rgbFrame;
+			pthread_mutex_lock(&FGmutex);
+			cvtColor(captureBuffer[(bufferIndex - 1) % 30], rgbFrame, CV_BGR2RGB);
+
+			pthread_mutex_unlock(&FGmutex);
+			if(!rgbFrame.empty()){
+				//~ pthread_mutex_lock(&FGmutex);
+				//~ gbDrawingCtx.updateBackground(rgbFrame);
+				gbIsProcessing = true;
+				gbIsWindowUpdated = processFrame(rgbFrame, gbPipeline, gbDrawingCtx);
+				gbIsProcessing = false;
+				//~ pthread_mutex_unlock(&FGmutex);
+				
+			}
+		}		
+		
+		//~ else
+			//~ captureBuffer[29].copyTo(currentFrame);		
 	}
 	LOG("Camera Closed");
 	pthread_exit (NULL);

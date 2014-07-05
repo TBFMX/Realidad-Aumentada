@@ -1,6 +1,6 @@
-12:58:13 **** Auto Build of configuration Default for project jniDemo ****
+20:46:01 **** Auto Build of configuration Default for project jniDemo ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-12:58:13 Build Finished (took 115ms)
+20:46:01 Build Finished (took 113ms)
 

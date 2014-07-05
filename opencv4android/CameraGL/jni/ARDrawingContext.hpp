@@ -21,27 +21,29 @@
 // Standard includes:
 #include <opencv2/opencv.hpp>
 
-void ARDrawingContextDrawCallback(void* param);
-
 class ARDrawingContext
 {
 public:
-  ARDrawingContext(std::string windowName, cv::Size frameSize, const CameraCalibration& c);
-  ~ARDrawingContext();
-  
-  bool                isPatternPresent;
-  Transformation      patternPose;
+	ARDrawingContext();
+	ARDrawingContext(cv::Size frameSize, const CameraCalibration& c);
+	~ARDrawingContext();
+
+	bool                isPatternPresent;
+	Transformation      patternPose;
 
 
-  //! Set the new frame for the background
-  void updateBackground(const cv::Mat& frame);
-
-  void updateWindow();
-
+	//! Set the new frame for the background
+	void updateBackground(const cv::Mat& frame);
+	void updateFurnishImage();
+	void updateWindow();
+	//! Render entire scene in the OpenGl window
+	void draw();
+	void setHeight(unsigned);
+	void setWidth(unsigned);
+	void createTexture();
+	void destroyTexture();
+	bool isWindowUpdated();
 private:
-    friend void ARDrawingContextDrawCallback(void* param);
-    //! Render entire scene in the OpenGl window
-    void draw();
 
   //! Draws the background with video
   void drawCameraFrame();
@@ -61,14 +63,16 @@ private:
   //! Draw furnish
   void drawFurnish();
 
-private:
-  bool               m_isTextureInitialized;
+  bool               m_isBackgroundTextureInitialized;
   bool 				 m_isFurnishTextureInitialized;
-  unsigned int       m_backgroundTextureId[2];
   CameraCalibration  m_calibration;
   cv::Mat            m_backgroundImage;
   cv::Mat			 m_furnishImage;
-  std::string        m_windowName;
+  unsigned int 		 m_width;
+  unsigned int 		 m_height;
+  unsigned int 		 m_textureId[2];
+  unsigned int 		 m_isWindowUpdated;
+  //~ std::string        m_windowName;
 };
 
 #endif

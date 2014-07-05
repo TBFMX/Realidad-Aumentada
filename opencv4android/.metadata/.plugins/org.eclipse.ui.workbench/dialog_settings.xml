@@ -32,4 +32,16 @@
 			<item value="org.eclipse.ui.Basic"/>
 		</list>
 	</section>
+	<section name="ShowViewDialog">
+		<item value="395" key="DIALOG_WIDTH"/>
+		<item value="1|Sans|10.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="com.android.ide.eclipse.ddms.views.HeapView" key="ShowViewDialog.STORE_SELECTED_VIEW_ID"/>
+		<item value="430" key="DIALOG_HEIGHT"/>
+		<item value="764" key="DIALOG_X_ORIGIN"/>
+		<item value="216" key="DIALOG_Y_ORIGIN"/>
+		<list key="ShowViewDialog.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="com.android.ide.eclipse.ddms.views.category"/>
+			<item value="org.eclipse.cdt.ui.views"/>
+		</list>
+	</section>
 </section>

@@ -72,10 +72,58 @@
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/openfabmap.hpp \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/set \
+ /home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/gl.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glplatform.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h \
- /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h
+ /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h \
+ /home/abel/workspace/opencv4android/CameraGL/jni/couch2.h \
+ /home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors2.h \
+ /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h \
+ /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/eglplatform.h \
+ /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/native_window.h \
+ /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/rect.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv/cv.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/flann.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/flann_base.hpp \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cassert \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/general.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/defines.h \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/stdexcept \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/matrix.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/params.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/any.h \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/typeinfo \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/saving.h \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstring \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/nn_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/result_set.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/all_indices.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/kdtree_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/dynamic_bitset.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/dist.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/heap.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/allocator.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/random.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/kdtree_single_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/kmeans_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/logger.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/composite_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/linear_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/hierarchical_clustering_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/lsh_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/lsh_table.h \
+ /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/iomanip \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/autotuned_index.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/ground_truth.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/index_testing.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/timer.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/sampling.h \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/legacy/compat.hpp \
+ /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/internal.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/logger.h \
+ /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h
 
 /home/abel/workspace/opencv4android/CameraGL/jni/ARDrawingContext.hpp:
 
@@ -221,6 +269,8 @@
 
 /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/set:
 
+/home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp:
+
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/gl.h:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glplatform.h:
@@ -228,3 +278,97 @@
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/couch2.h:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors2.h:
+
+/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h:
+
+/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/eglplatform.h:
+
+/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/native_window.h:
+
+/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/rect.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv/cv.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/flann.hpp:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/flann_base.hpp:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cassert:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/general.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/defines.h:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/stdexcept:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/matrix.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/params.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/any.h:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/typeinfo:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/saving.h:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/cstring:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/nn_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/result_set.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/all_indices.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/kdtree_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/dynamic_bitset.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/dist.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/heap.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/allocator.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/random.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/kdtree_single_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/kmeans_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/logger.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/composite_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/linear_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/hierarchical_clustering_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/lsh_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/lsh_table.h:
+
+/home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/iomanip:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/autotuned_index.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/ground_truth.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/index_testing.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/timer.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/sampling.h:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/legacy/compat.hpp:
+
+/home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/internal.hpp:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/logger.h:
+
+/home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h:

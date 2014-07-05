@@ -48,9 +48,9 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
 	Display display = getWindowManager().getDefaultDisplay();
 
 	int maxAllowedWidth = 1920;
-	maxAllowedWidth = 1920;
+	maxAllowedWidth = 1024;
 	int maxAllowedHeight = 1536;
-	maxAllowedHeight = 1536;
+	maxAllowedHeight = 1024;
 
 	for (Object size : supportedSizes) {
 		int width = accessor.getWidth(size);
