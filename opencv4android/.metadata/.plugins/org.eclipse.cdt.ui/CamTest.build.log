@@ -1,8 +1,6 @@
-20:45:33 **** Build of configuration Default for project CamTest ****
+17:24:49 **** Build of configuration Default for project CamTest ****
 ndk-build all 
-[armeabi] Compile++ thumb: mixed_sample <= code.cc
-[armeabi] SharedLibrary  : libmixed_sample.so
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-20:45:33 Build Finished (took 323ms)
+17:24:49 Build Finished (took 61ms)
 

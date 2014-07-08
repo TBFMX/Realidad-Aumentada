@@ -42,26 +42,30 @@ public:
 	void setWidth(unsigned);
 	void createTexture();
 	void destroyTexture();
-	bool isWindowUpdated();
+	bool isWindowUpdated(); 
+	//! Draws the background with video
+	void drawCameraFrame(); 
+	//! Draws the coordinate axis 
+	void drawCoordinateAxis();
+	//! Draws the AR
+	void drawAugmentedScene();
+	
+	//! Draw furnish
+	void drawFurnish();
+	
+	bool isThereAPattern();
 private:
 
-  //! Draws the background with video
-  void drawCameraFrame();
-
-  //! Draws the AR
-  void drawAugmentedScene();
 
   //! Builds the right projection matrix from the camera calibration for AR
   void buildProjectionMatrix(const CameraCalibration& calibration, int w, int h, Matrix44& result);
   
-  //! Draws the coordinate axis 
-  void drawCoordinateAxis();
+
   
   //! Draw the cube model
   void drawCubeModel();
 
-  //! Draw furnish
-  void drawFurnish();
+
 
   bool               m_isBackgroundTextureInitialized;
   bool 				 m_isFurnishTextureInitialized;
@@ -72,6 +76,7 @@ private:
   unsigned int 		 m_height;
   unsigned int 		 m_textureId[2];
   unsigned int 		 m_isWindowUpdated;
+  bool 				 m_isPatternPresent;
   //~ std::string        m_windowName;
 };
 

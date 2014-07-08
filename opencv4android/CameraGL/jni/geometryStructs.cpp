@@ -156,7 +156,6 @@ point3 directedVector(point3 *a, point3 * b){
 	return a2b;
 }
 
-
 int intersectTriangle(point3 *orig, point3 *dir, point3 *v1, point3 *v2, point3 *v3,
 		float *t, float *u, float *v){
 	point3 e1, e2, tV, pV, qV;

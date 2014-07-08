@@ -49,10 +49,18 @@ float _angle2 = 0.0;
 point3 cameraOrigin2;
 unsigned finalVertexSize2;
 
+//~ float gW = 1024;
+//~ float gH = 768;
+//~ const GLfloat bgTextureVertices[] = { 0, 0, 0, gW, 0, 0, 0, gH, 0, gW, gH, 0, 
+		//~ 0,0,0,1,0,0, // x
+		//~ 0,0,0,0,1,0, // y
+		//~ 0,0,0,0,0,1};;
+
 ARDrawingContext::ARDrawingContext(){
 	m_isBackgroundTextureInitialized = false;
 	m_isFurnishTextureInitialized = false;
 	m_isWindowUpdated = false;
+	m_isPatternPresent = false;
 	
 	//~ m_backgroundImage;
 	//~ m_furnishImage;
@@ -76,6 +84,7 @@ ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& 
   , m_isFurnishTextureInitialized(false)
   , m_calibration(c)
   ,m_isWindowUpdated(false)
+  ,m_isPatternPresent(false)
   //~ , m_windowName(windowName)
 {
     // Create window with OpenGL support
@@ -140,6 +149,10 @@ bool ARDrawingContext::isWindowUpdated(){
 	return m_isWindowUpdated;
 }
 
+bool ARDrawingContext::isThereAPattern(){
+	return m_isPatternPresent;
+}
+
 void ARDrawingContext::createTexture() {
 	unsigned int numTextures = 2;
 	// Initialize texture for background image
@@ -154,7 +167,8 @@ void ARDrawingContext::createTexture() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		m_isBackgroundTextureInitialized = true;
 	}
-	getFurnishTexture(m_textureId[1]);
+	//~ getFurnishTexture(m_textureId[1]);
+	getObjectTexture(m_textureId[1],m_furnishImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -167,17 +181,10 @@ void ARDrawingContext::destroyTexture() {
 
 void ARDrawingContext::draw()
 {
-	//~ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//~ glShadeModel(GL_FLAT);
-	//~ glEnable(GL_DEPTH_TEST);
 	getObjectTexture(m_textureId[0],m_backgroundImage);
-	//~ getObjectTexture(m_textureId[1],m_furnishImage);
-	drawCameraFrame();                          // Render background
+	getObjectTexture(m_textureId[1],m_furnishImage);
+	drawCameraFrame();                        // Render background
 	drawAugmentedScene();                              // Draw AR
-
-	
-	//~ drawFurnish();
-	//~ glFlush();
 }
 
 // !!!!!!!!!! change BGR to RGB !!!!!!!!!!!!!!
@@ -185,10 +192,13 @@ void ARDrawingContext::drawCameraFrame()
 {
 	int w = m_width;
 	int h = m_height;
-	orthogonalStart();
-  const GLfloat bgTextureVertices[] = { 0, 0, w, 0, 0, h, w, h };
-  const GLfloat bgTextureCoords[]   = { 1, 0, 1, 1, 0, 0, 0, 1 };
-  const GLfloat proj[]              = { 0, -2.0f/w, 0, 0, -2.0f/h, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1 };
+		
+	//~ orthogonalStart();
+	
+	const GLfloat bgTextureVertices[] = { 0, 0, 0, w, 0, 0, 0, h, 0, w, h, 0 };
+	glClearColor(0,0,0,0);
+	const GLfloat bgTextureCoords[]   = { 1, 0, 1, 1, 0, 0, 0, 1 };
+	const GLfloat proj[]              = { 0, -2.0f/w, 0, 0, -2.0f/h, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1 };
 
 	//~ LOG_INFO("w,h, channels= %d,%d ",w,h);
 	glMatrixMode(GL_PROJECTION);
@@ -200,21 +210,18 @@ void ARDrawingContext::drawCameraFrame()
 	startTexture(m_textureId[0]);
 	startArrays();
 
-	glVertexPointer(2, GL_FLOAT, 0, bgTextureVertices);
+	glVertexPointer(3, GL_FLOAT, 0, bgTextureVertices);
 	glTexCoordPointer(2, GL_FLOAT, 0, bgTextureCoords);
 
 	glColor4f(1,1,1,1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin2);
+	LOG_INFO("x=%f y=%f z=%f background ",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	endArrays();
 	endTexture();
-	//~ glBindTexture(GL_TEXTURE_2D, 0);
-	orthogonalEnd();
-	
-	//~ drawBackground(m_backgroundTextureId[0],capFrameWidth,capFrameHeight);
-	//~ drawBackground(m_textureId[0],m_width,m_height);
-	//~ LOG_INFO("drawing Camera frame .....drawing camera frame");
-	//~ LOG_INFO("background size : w, h= %d, %d", m_width, m_height);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ARDrawingContext::drawAugmentedScene()
@@ -233,19 +240,36 @@ void ARDrawingContext::drawAugmentedScene()
 
   if (isPatternPresent)
   {
-    // Set the pattern transformation
+	// Set the pattern transformation
     Matrix44 glMatrix = patternPose.getMat44();
     glLoadMatrixf(reinterpret_cast<const GLfloat*>(&glMatrix.data[0]));
+	m_isPatternPresent = true;
 
     // Render model
-    drawCoordinateAxis();
+    //~ drawCoordinateAxis();
     //~ drawCubeModel();
     //~ try{
 		//~ drawFurnish();
 	//~ }
 	//~ catch(int e){
 		//~ std::cout<< "problem " << e << std::endl;
-	//~ }
+	//~ }	
+	glPushMatrix();
+	GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin2);
+	glPopMatrix();
+	
+	if(cameraOrigin2.z <= 1.0)
+		m_isPatternPresent = false;
+	else
+		LOG_INFO("Pattern is present"); 
+
+//~ 
+	//~ LOG_INFO("x=%f y=%f z=%f",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+//~ 
+  }else{
+	  m_isPatternPresent = false;
   }
 }
 
@@ -284,100 +308,83 @@ void ARDrawingContext::buildProjectionMatrix(const CameraCalibration& calibratio
 
 void ARDrawingContext::drawCoordinateAxis()
 {
-  static float lineX[] = {0,0,0,1,0,0};
-  static float lineY[] = {0,0,0,0,1,0};
-  static float lineZ[] = {0,0,0,0,0,1};
+	float scale = 1.0;
+	static float lines[] = {0,0,0,scale,0,0, // x
+							0,0,0,0,scale,0, // y
+							0,0,0,0,0,scale}; // z
 
 	GLfloat colors[] = {
+                        //~ 0.0f, 0.0f, 0.0f, 0.0f,
+                        //~ 0.0f, 0.0f, 0.0f, 0.0f,
+                        //~ 0.0f, 0.0f, 0.0f, 0.0f,
+                        //~ 0.0f, 0.0f, 0.0f, 0.0f,
+                        1.0f, 0.0f, 0.0f, 1.0f,
                         1.0f, 0.0f, 0.0f, 1.0f,
                         0.0f, 1.0f, 0.0f, 1.0f,
+                        0.0f, 1.0f, 0.0f, 1.0f,
+                        0.0f, 0.0f, 1.0f, 1.0f,
                         0.0f, 0.0f, 1.0f, 1.0f
                     };
                     
-  //~ glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-//~ glClear(GL_COLOR_BUFFER_BIT);
-//~ glShadeModel(GL_SMOOTH);
-glVertexPointer(3, GL_FLOAT, 0, lineX);
-glColorPointer(4, GL_FLOAT, 0, colors);
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_COLOR_ARRAY);
-glClear(GL_COLOR_BUFFER_BIT);
-glDrawArrays(GL_LINES, 0, 2);
-//~ glFlush();                  
-  //~ glLineWidth(2);
-//~ 
-  //~ glBegin(GL_LINES);
-//~ 
-  //~ glColor3f(1.0f, 0.0f, 0.0f);
-  //~ glVertex3fv(lineX);
-  //~ glVertex3fv(lineX + 3);
-//~ 
-  //~ glColor3f(0.0f, 1.0f, 0.0f);
-  //~ glVertex3fv(lineY);
-  //~ glVertex3fv(lineY + 3);
-//~ 
-  //~ glColor3f(0.0f, 0.0f, 1.0f);
-  //~ glVertex3fv(lineZ);
-  //~ glVertex3fv(lineZ + 3);
-//~ 
-  //~ glEnd();
+    
+	//~ glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//~ glClear(GL_COLOR_BUFFER_BIT);
+	//~ glShadeModel(GL_SMOOTH);
+	//~ glVertexPointer(3, GL_FLOAT, 0, lineX);
+	glVertexPointer(3, GL_FLOAT, 0, lines);
+	//~ glVertexPointer(3, GL_FLOAT, 0, bgTextureVertices);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	//~ glClear(GL_COLOR_BUFFER_BIT);
+	glColor4f(1.0,1.0,1.0,1.0);
+	glLineWidth(2);
+	glDrawArrays(GL_LINES, 0, 6);
+	//~ glDrawArrays(GL_LINES, 2, 4);
+	//~ glDrawArrays(GL_LINES, 4, 10);
+	
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+	//~ glFlush();                  
+	//~ glLineWidth(2);
+	//~ 
+	//~ glBegin(GL_LINES);
+	//~ 
+	//~ glColor3f(1.0f, 0.0f, 0.0f);
+	//~ glVertex3fv(lineX);
+	//~ glVertex3fv(lineX + 3);
+	//~ 
+	//~ glColor3f(0.0f, 1.0f, 0.0f);
+	//~ glVertex3fv(lineY);
+	//~ glVertex3fv(lineY + 3);
+	//~ 
+	//~ glColor3f(0.0f, 0.0f, 1.0f);
+	//~ glVertex3fv(lineZ);
+	//~ glVertex3fv(lineZ + 3);
+	//~ 
+	//~ glEnd();
 }
 
 // !!!!!!!!!!!!!!! change RGB to BGR
 void ARDrawingContext::drawFurnish()
-{
-	//~ orthogonalStart();
-	//~ drawBackground(texName, screenWidth, screenHeight);
-	//~ orthogonalEnd();
-	
-	float scale = 1.0;
+{	
+	float scale = 2.0;
 
-	//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
 	// Enable texture mapping stuff
 	startTexture(m_textureId[1]);
 	startArrays();
 
-    //~ float aspect = screenWidth / screenHeight;
-    //~ float aspect = m_width / m_height;
-    //~ LOG_INFO("aspect w, h = %d, %d",m_width,m_height);
-    //~ float fovY = 628.7519411113429;
-    //~ const float pi = 3.1415926535897932384626433832795;
-    //~ float fW, fH, zNear = 0.01, zFar = 100;
-    //~ fH = (float) tan(fovY  / 360 * pi) * zNear;
-    //~ fW = fH * aspect *zNear;
-    //~ 
-    //~ glMatrixMode(GL_PROJECTION);
-	//~ glLoadIdentity();
-	//~ 
-    //~ glFrustumf(-fW, fW, -fH, fH, zNear, zFar );
-
-    //~ glMatrixMode(GL_MODELVIEW);
-    //~ glLoadIdentity();
-    //~ glTranslatef(0.0, 0.0, -0.803407f);
-    //~ glTranslatef(0.0, 0.0, -0.8);
-    //~ glRotatef(_angle2, 0, 0, 1);
-    
-    //~ glScalef(scale,scale,scale);
-
     GLfloat mdl[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin2);
-	//~ 	//~ finalVertexSize = couchNumVerts2;
-	//~ for(unsigned int i = 0; i < maxObjSize*3; ++i)
-		//~ outVertexes[i] = couchVerts2[i];
-	//~ for(unsigned int i = 0; i < maxObjSize*2; ++i)
-		//~ outTexCoords[i] = couchTexCoords2[i];
-	LOG_INFO("x=%f y=%f z=%f, angle=%f",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z,_angle2);
+
+	LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	cameraOrigin2.x *= scale;
 	cameraOrigin2.y *= scale;
 	cameraOrigin2.z *= scale;
 	getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
 	outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
-	//~ finalVertexSize = couchNumVerts2;
-	//~ for(unsigned int i = 0; i < maxObjSize*3; ++i)
-		//~ outVertexes[i] = couchVerts2[i];
-	//~ for(unsigned int i = 0; i < maxObjSize*2; ++i)
-		//~ outTexCoords[i] = couchTexCoords2[i];
 	
 	// scaling the vertexes withon any help
 	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
@@ -387,13 +394,8 @@ void ARDrawingContext::drawFurnish()
 	
 	//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize2);
-	//~ glTranslatef(0.0, 0.0, 0.803407f);
-	//~ glRotatef(-_angle, 0, 0, 1);
-	//~ LOG_INFO("Furnish completed");
-	//~ glTranslatef(0.0, 0.0, 3.0);
+
 	endArrays();
     endTexture();
-    //~ glPopMatrix();
-     //~ _angle2 += 0.2;
 	
 }

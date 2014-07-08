@@ -1,6 +1,6 @@
-20:45:39 **** Build of configuration Default for project Sample1Java ****
+17:24:55 **** Build of configuration Default for project Sample1Java ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-20:45:39 Build Finished (took 59ms)
+17:24:55 Build Finished (took 60ms)
 
