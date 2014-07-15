@@ -1,96 +1,82 @@
 /*****************************************************************************
-*   Markerless AR desktop application.
+*   CameraCalibration.cpp
+*   Example_MarkerBasedAR
 ******************************************************************************
 *   by Khvedchenia Ievgen, 5th Dec 2012
 *   http://computer-vision-talks.com
 ******************************************************************************
-*   Ch3 of the book "Mastering OpenCV with Practical Computer Vision Projects"
+*   Ch2 of the book "Mastering OpenCV with Practical Computer Vision Projects"
 *   Copyright Packt Publishing 2012.
 *   http://www.packtpub.com/cool-projects-with-opencv/book
 *****************************************************************************/
 
-
-////////////////////////////////////////////////////////////////////
-// File includes:
 #include "CameraCalibration.hpp"
 
 CameraCalibration::CameraCalibration()
 {
-}
+  
+};
 
-CameraCalibration::CameraCalibration(float _fx, float _fy, float _cx, float _cy)
+CameraCalibration::CameraCalibration(float fx, float fy, float cx, float cy)
 {
-	set4Params(_fx,_fy,_cx,_cy);
+  for (int i=0; i<3; i++)
+    for (int j=0; j<3; j++)
+      m_intrinsic.mat[i][j] = 0;
+  
+  m_intrinsic.mat[0][0] = fx;
+  m_intrinsic.mat[1][1] = fy;
+  m_intrinsic.mat[0][2] = cx;
+  m_intrinsic.mat[1][2] = cy;
+  
+  for (int i=0; i<4; i++)
+    m_distorsion.data[i] = 0;
+};
 
-    m_distortion.create(5,1);
-    for (int i=0; i<5; i++)
-        m_distortion(i) = 0;
-}
-
-CameraCalibration::CameraCalibration(float _fx, float _fy, float _cx, float _cy, float distorsionCoeff[5])
+CameraCalibration::CameraCalibration(float fx, float fy, float cx, float cy, float distorsionCoeff[4])
 {
-	set4Params(_fx,_fy,_cx,_cy);
-	
-    m_distortion.create(5,1);
-    for (int i=0; i<5; i++)
-        m_distortion(i) = distorsionCoeff[i];
+  for (int i=0; i<3; i++)
+    for (int j=0; j<3; j++)
+      m_intrinsic.mat[i][j] = 0;
+  
+  m_intrinsic.mat[0][0] = fx;
+  m_intrinsic.mat[1][1] = fy;
+  m_intrinsic.mat[0][2] = cx;
+  m_intrinsic.mat[1][2] = cy;
+  
+  for (int i = 0; i< 4; i++)
+    m_distorsion.data[i] = distorsionCoeff[i];
+};
+
+void CameraCalibration::set4Params(float fx, float fy, float cx, float cy){
+	for (int i=0; i<3; i++)
+		for (int j=0; j<3; j++)
+			m_intrinsic.mat[i][j] = 0;
+
+	m_intrinsic.mat[0][0] = fx;
+	m_intrinsic.mat[1][1] = fy;
+	m_intrinsic.mat[0][2] = cx;
+	m_intrinsic.mat[1][2] = cy;
+
+	for (int i=0; i<4; i++)
+		m_distorsion.data[i] = 0;
 }
 
-void CameraCalibration::set4Params(float _fx, float _fy, float _cx, float _cy){
-	m_intrinsic = cv::Matx33f::zeros();
-
-    fx() = _fx;
-    fy() = _fy;
-    cx() = _cx;
-    cy() = _cy;
-}
-
-const cv::Matx33f& CameraCalibration::getIntrinsic() const
+void CameraCalibration::getMatrix34(float cparam[3][4]) const
 {
-    return m_intrinsic;
+  for (int j=0; j<3; j++)
+    for (int i=0; i<3; i++)
+      cparam[i][j] = m_intrinsic.mat[i][j];
+  
+  for (int i=0; i<4; i++)
+    cparam[3][i] = m_distorsion.data[i];
 }
 
-const cv::Mat_<float>&  CameraCalibration::getDistorsion() const
+const Matrix33& CameraCalibration::getIntrinsic() const
 {
-    return m_distortion;
+  return m_intrinsic;
 }
 
-float& CameraCalibration::fx()
+const Vector4&  CameraCalibration::getDistorsion() const
 {
-    return m_intrinsic(1,1);
-}
-
-float& CameraCalibration::fy()
-{
-    return m_intrinsic(0,0);
-}
-
-float& CameraCalibration::cx()
-{
-    return m_intrinsic(0,2);
-}
-
-float& CameraCalibration::cy()
-{
-    return m_intrinsic(1,2);
-}
-
-float CameraCalibration::fx() const
-{
-    return m_intrinsic(1,1);
-}
-
-float CameraCalibration::fy() const
-{
-    return m_intrinsic(0,0);
-}
-
-float CameraCalibration::cx() const
-{
-    return m_intrinsic(0,2);
-}
-
-float CameraCalibration::cy() const
-{
-    return m_intrinsic(1,2);
+  return m_distorsion;
 }

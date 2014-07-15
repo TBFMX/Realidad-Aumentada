@@ -11,7 +11,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
 #include "ARDrawingContext.hpp"
-#include "ARPipeline.hpp"
+#include "MarkerDetector.hpp"
 #include "DebugHelpers.hpp"
 #include "logger.h"
 #include "geometryStructs.hpp"
@@ -20,6 +20,8 @@
 // Utility for logging:
 #define LOG_TAG    "CAMERA_RENDERER"
 #define LOG(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+
+#define MAX_PERSISTANCE 60
 
 cv::VideoCapture capture;
 cv::Mat inframe;
@@ -37,6 +39,7 @@ int orientation;
 bool gbIsCaptureOpened =true;
 bool gbIsCameraTextureInitialized = false;
 unsigned int gbCameraTexture=0;
+unsigned int gbPersistance = 0;
 
 pthread_mutex_t FGmutex;
 pthread_t frameRetrieverThread;
@@ -63,7 +66,7 @@ void createTexture();
 void destroyTexture();
 void *frameRetriever(void*);
 
-ARPipeline gbPipeline;
+MarkerDetector gbMarkerDetector;
 ARDrawingContext gbDrawingCtx;
 
 void createCameraTexture() {
@@ -156,21 +159,26 @@ void drawCurrentCameraFrame(int texName, int bufferIndex, cv::Mat captureBuffer[
  * In addition, this function draw overlay with debug information on top of the AR window.
  * Returns true if processing loop should be stopped; otherwise - false.
  */
-bool processFrame(const cv::Mat& cameraFrame, ARPipeline& pipeline, ARDrawingContext& drawingCtx)
+bool processFrame(const cv::Mat& cameraFrame, MarkerDetector& markerDetector, ARDrawingContext& drawingCtx)
 {
     LOG_INFO("current buffer index %d",bufferIndex);
     drawingCtx.updateBackground(cameraFrame);
 
-	pipeline.m_patternDetector.homographyReprojectionThreshold += 0.2;
-	pipeline.m_patternDetector.homographyReprojectionThreshold = std::min(10.0f, pipeline.m_patternDetector.homographyReprojectionThreshold);
+	//~ pipeline.m_patternDetector.homographyReprojectionThreshold += 0.2;
+	//~ pipeline.m_patternDetector.homographyReprojectionThreshold = std::min(10.0f, pipeline.m_patternDetector.homographyReprojectionThreshold);
 	
     // Find a pattern and update it's detection status:
-    drawingCtx.isPatternPresent = pipeline.processFrame(cameraFrame);
+    drawingCtx.isPatternPresent = markerDetector.processFrame(cameraFrame);
     LOG_INFO("pattern testing");
 
+	std::vector<Transformation> m_transformations;
+	m_transformations = markerDetector.getTransformations();
     // Update a pattern pose:
-    drawingCtx.patternPose = pipeline.getPatternLocation();
-     LOG_INFO("pose testing");
+    //~ for( int i = 0; i < m_transformations.size(); ++i)
+		//~ drawingCtx.patternPose = m_transformations[i];
+    if(m_transformations.size() > 0)
+		drawingCtx.patternPose = m_transformations[0];
+     LOG_INFO("pose testing %d transformations", m_transformations.size());
 
     // Request redraw of the window:
     drawingCtx.updateWindow(); // callback to window draw
@@ -187,13 +195,13 @@ bool processFrame(const cv::Mat& cameraFrame, ARPipeline& pipeline, ARDrawingCon
 void processSingleImage(const cv::Mat& patternImage, CameraCalibration& calibration, const cv::Mat& image)
 {
     cv::Size frameSize(image.cols, image.rows);
-    ARPipeline pipeline(patternImage, calibration);
+    MarkerDetector markerDetector(calibration);
     ARDrawingContext drawingCtx(frameSize, calibration);
 
     bool shouldQuit = false;
     do
     {
-        shouldQuit = processFrame(image, pipeline, drawingCtx);
+        shouldQuit = processFrame(image, markerDetector, drawingCtx);
     } while (!shouldQuit);
 }
 
@@ -215,6 +223,7 @@ void applyCanny(cv::Mat *image, cv::Mat *result){
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,jint width,jint height)
 {
+	LOG_INFO("Entering");
 	// franquy parameters 640x480
 	float fx = 695.4521167717107;
 	float fy = 694.5519610122569;
@@ -237,12 +246,14 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	//~ cx=950.3227406860865;
 	//~ cy=745.1507425384597;
 	
+	
     // Change this calibration to yours:
     //~ CameraCalibration calibration(526.58037684199849f, 524.65577209994706f, 318.41744018680112f, 202.96659047014398f);
     calibration.set4Params(fx,fy,cx,cy);
-    patternImage=cv::imread("sdcard/Models/PyramidPattern.jpg");
+    //~ patternImage=cv::imread("sdcard/Models/PyramidPattern.jpg");
     
 	LOG("Camera Created");
+	//~ capture.open(CV_CAP_ANDROID + 0);
 	capture.open(CV_CAP_ANDROID + 0);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
@@ -261,11 +272,12 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
     // defining ARDrawing context (inside process video)
     gbIsWindowUpdated = false;
 	cv::Size frameSize(frameWidth, frameHeight);
-    ARPipeline  pipeline(patternImage, calibration);
-    gbPipeline = pipeline;
+    MarkerDetector  markerDetector(calibration);
+    gbMarkerDetector = markerDetector;
     ARDrawingContext drawingCtx(frameSize, calibration);
     gbDrawingCtx = drawingCtx;
     gbDrawingCtx.updateFurnishImage();
+    gbDrawingCtx.updateTigerImage();
 
 	pthread_attr_t Rattr;
 	pthread_attr_init(&Rattr);
@@ -304,10 +316,13 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 	
 	//~ float fovY = 628.7519411113429;
 	float fovY = 672.4933734804648;
+	//~ float fovX = 695.398588072418;
 	//~ float fovY = 1103.525587362546;
     const float pi = 3.1415926535897932384626433832795;
     float fW, fH, zNear = 0.01, zFar = 100;
     fH = (float) tan( fovY / 360 * pi ) * zNear;
+    
+    //~ fW = (float) tan( fovX / 360 * pi ) * zNear;
     fW = fH * aspect *zNear;
     glFrustumf( -fW, fW, -fH, fH, zNear, zFar );
 	
@@ -321,8 +336,13 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 	glDepthFunc(GL_LEQUAL);
 	if(gbIsProcessing == false){
 		gbDrawingCtx.createTexture();
+		//~ if(gbDrawingCtx.objectToDraw() == 0)
+			//~ gbDrawingCtx.setObjectToDraw(1);
+		//~ else
+			//~ gbDrawingCtx.setObjectToDraw(0);
 	}
 	createCameraTexture();
+	
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_releaseCamera(JNIEnv*, jobject)
@@ -331,15 +351,17 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_releaseCamera(JNIEnv*, jobje
 	capture.release();
 	if(gbIsProcessing == false){
 		gbDrawingCtx.destroyTexture();
-		destroyCameraTexture();
 	}
+	destroyCameraTexture();
+	gbIsCameraTextureInitialized = false;
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jobject) {
 	//~ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
-
-	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false){
+	//~ glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
+	//~ glClearColor(1,1,1,1);
+//~ 
+	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false && gbPersistance == 0){
 		pthread_mutex_lock(&FGmutex);
 		gbDrawingCtx.draw();
 		pthread_mutex_unlock(&FGmutex);
@@ -347,17 +369,23 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 	}else{
 		pthread_mutex_lock(&FGmutex);
 		if(gbDrawingCtx.isThereAPattern()){
-			gbDrawingCtx.drawCoordinateAxis();
-			gbDrawingCtx.drawFurnish();
+			//~ gbDrawingCtx.drawCameraFrame();
+			//~ gbDrawingCtx.drawCoordinateAxis();
+			//~ gbDrawingCtx.drawFurnish();
 		}else{
 			drawCurrentCameraFrame(gbCameraTexture, bufferIndex, captureBuffer);
 		}
+		//~ ++gbPersistance;
+
+		//~ if(gbPersistance > MAX_PERSISTANCE)
+			//~ gbPersistance = 0;
 		pthread_mutex_unlock(&FGmutex);
 	}
 	glFlush();
 }
 
 void *frameRetriever(void*) {
+	LOG_INFO("Enter retrieving");	
 	pthread_mutex_lock(&FGmutex);
 	gbIsCaptureOpened = true;
 	pthread_mutex_unlock(&FGmutex);
@@ -386,8 +414,8 @@ void *frameRetriever(void*) {
 	
 			//~ if(!rgbFrame.empty()){
 			gbIsProcessing = true;
-			gbIsWindowUpdated = processFrame(rgbFrame, gbPipeline, gbDrawingCtx);
-			gbIsProcessing = false;			
+			gbIsWindowUpdated = processFrame(rgbFrame, gbMarkerDetector, gbDrawingCtx);
+			gbIsProcessing = false;
 			//~ }
 		}		
 		

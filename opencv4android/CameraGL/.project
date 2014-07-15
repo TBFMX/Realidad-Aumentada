@@ -3,7 +3,6 @@
 	<name>CameraGL</name>
 	<comment></comment>
 	<projects>
-		<project>GlLoader</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

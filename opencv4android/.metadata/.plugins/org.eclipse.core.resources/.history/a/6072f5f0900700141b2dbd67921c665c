@@ -1,0 +1,5 @@
+package com.tbf.demotamarindo;
+
+public class Splashscreen extends Activity {
+
+}

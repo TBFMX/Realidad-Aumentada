@@ -1112,7 +1112,9 @@ containing a value of this type.
         public static final int ic_launcher=0x7f02005d;
         public static final int self_portrait=0x7f02005e;
         public static final int starry_night=0x7f02005f;
-        public static final int template=0x7f020060;
+        public static final int tamarindo=0x7f020060;
+        public static final int template=0x7f020061;
+        public static final int tm_launcher=0x7f020062;
     }
     public static final class id {
         public static final int HelloOpenCvView=0x7f050040;

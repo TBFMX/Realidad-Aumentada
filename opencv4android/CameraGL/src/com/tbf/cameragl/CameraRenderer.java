@@ -34,5 +34,4 @@ public class CameraRenderer implements Renderer {
 		// TODO Auto-generated method stub
 		Native.renderBackground();
 	}
-
 }

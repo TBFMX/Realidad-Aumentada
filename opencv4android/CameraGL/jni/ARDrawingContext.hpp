@@ -35,6 +35,7 @@ public:
 	//! Set the new frame for the background
 	void updateBackground(const cv::Mat& frame);
 	void updateFurnishImage();
+	void updateTigerImage();
 	void updateWindow();
 	//! Render entire scene in the OpenGl window
 	void draw();
@@ -42,7 +43,7 @@ public:
 	void setWidth(unsigned);
 	void createTexture();
 	void destroyTexture();
-	bool isWindowUpdated(); 
+	bool isWindowUpdated();
 	//! Draws the background with video
 	void drawCameraFrame(); 
 	//! Draws the coordinate axis 
@@ -53,15 +54,19 @@ public:
 	//! Draw furnish
 	void drawFurnish();
 	
+	//! Draw tiger
+	void drawTiger();
+	
 	bool isThereAPattern();
+	
+	void setObjectToDraw(int objectId);
+	int objectToDraw();
 private:
 
 
   //! Builds the right projection matrix from the camera calibration for AR
   void buildProjectionMatrix(const CameraCalibration& calibration, int w, int h, Matrix44& result);
-  
 
-  
   //! Draw the cube model
   void drawCubeModel();
 
@@ -69,14 +74,17 @@ private:
 
   bool               m_isBackgroundTextureInitialized;
   bool 				 m_isFurnishTextureInitialized;
+  bool 				 m_isTigerTextureInitialized;
   CameraCalibration  m_calibration;
   cv::Mat            m_backgroundImage;
   cv::Mat			 m_furnishImage;
+  cv::Mat 			 m_tigerImage;
   unsigned int 		 m_width;
   unsigned int 		 m_height;
-  unsigned int 		 m_textureId[2];
+  unsigned int 		 m_textureId[3];
   unsigned int 		 m_isWindowUpdated;
   bool 				 m_isPatternPresent;
+  int 				 m_objectToDraw;
   //~ std::string        m_windowName;
 };
 

@@ -17,6 +17,7 @@
 #include "geometryStructs.hpp"
 #include "couch2.h"
 #include "rossiniColors2.h"
+#include "Tiger.hpp"
 
 ////////////////////////////////////////////////////////////////////
 // Standard includes:
@@ -39,7 +40,8 @@
 	//~ LOG_INFO("furnish copied");
 	//~ m_furnishImage.copyTo(*rgbImage);
 //~ }
-#define maxObjSize2 1596
+//~ #define maxObjSize2 1596
+#define maxObjSize2 112254
 
 float outNormals2[maxObjSize2*3];
 float outTexCoords2[maxObjSize2*2];
@@ -59,8 +61,10 @@ unsigned finalVertexSize2;
 ARDrawingContext::ARDrawingContext(){
 	m_isBackgroundTextureInitialized = false;
 	m_isFurnishTextureInitialized = false;
+	m_isTigerTextureInitialized = false;
 	m_isWindowUpdated = false;
 	m_isPatternPresent = false;
+	m_objectToDraw = 0;
 	
 	//~ m_backgroundImage;
 	//~ m_furnishImage;
@@ -82,9 +86,11 @@ ARDrawingContext::ARDrawingContext(){
 ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& c)
   : m_isBackgroundTextureInitialized(false)
   , m_isFurnishTextureInitialized(false)
+  , m_isTigerTextureInitialized(false)
   , m_calibration(c)
   ,m_isWindowUpdated(false)
   ,m_isPatternPresent(false)
+  ,m_objectToDraw(0)
   //~ , m_windowName(windowName)
 {
     // Create window with OpenGL support
@@ -127,6 +133,13 @@ void ARDrawingContext::updateFurnishImage()
 	cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGB);
 }
 
+void ARDrawingContext::updateTigerImage()
+{
+	cv::Mat tiger = cv::imread("sdcard/Models/bengalTiger.jpg");
+	tiger.copyTo(m_tigerImage);
+	cvtColor(m_tigerImage,m_tigerImage,CV_BGR2RGB);
+}
+
 void ARDrawingContext::updateWindow()
 {
 	m_isWindowUpdated = true;
@@ -149,12 +162,20 @@ bool ARDrawingContext::isWindowUpdated(){
 	return m_isWindowUpdated;
 }
 
+void ARDrawingContext::setObjectToDraw(int objectId){
+	m_objectToDraw = objectId;
+}
+
+int ARDrawingContext::objectToDraw(){
+	return m_objectToDraw;
+}
+
 bool ARDrawingContext::isThereAPattern(){
 	return m_isPatternPresent;
 }
 
 void ARDrawingContext::createTexture() {
-	unsigned int numTextures = 2;
+	unsigned int numTextures = 3;
 	// Initialize texture for background image
 	if (!m_isBackgroundTextureInitialized)
 	{
@@ -169,13 +190,15 @@ void ARDrawingContext::createTexture() {
 	}
 	//~ getFurnishTexture(m_textureId[1]);
 	getObjectTexture(m_textureId[1],m_furnishImage);
+	getObjectTexture(m_textureId[2],m_tigerImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ARDrawingContext::destroyTexture() {
 	LOG("Texture destroyed");
-	glDeleteTextures(2, m_textureId);
+	glDeleteTextures(3, m_textureId);
 	m_isFurnishTextureInitialized = false;
+	m_isTigerTextureInitialized = false;
 	m_isBackgroundTextureInitialized = false;
 }
 
@@ -183,6 +206,7 @@ void ARDrawingContext::draw()
 {
 	getObjectTexture(m_textureId[0],m_backgroundImage);
 	getObjectTexture(m_textureId[1],m_furnishImage);
+	getObjectTexture(m_textureId[2],m_tigerImage);
 	drawCameraFrame();                        // Render background
 	drawAugmentedScene();                              // Draw AR
 }
@@ -226,83 +250,90 @@ void ARDrawingContext::drawCameraFrame()
 
 void ARDrawingContext::drawAugmentedScene()
 {
-  // Init augmentation projection
-  Matrix44 projectionMatrix;
-  int w = m_backgroundImage.cols;
-  int h = m_backgroundImage.rows;
-  buildProjectionMatrix(m_calibration, w, h, projectionMatrix);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadMatrixf(projectionMatrix.data);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  if (isPatternPresent)
-  {
-	// Set the pattern transformation
-    Matrix44 glMatrix = patternPose.getMat44();
-    glLoadMatrixf(reinterpret_cast<const GLfloat*>(&glMatrix.data[0]));
-	m_isPatternPresent = true;
-
-    // Render model
-    //~ drawCoordinateAxis();
-    //~ drawCubeModel();
-    //~ try{
-		//~ drawFurnish();
-	//~ }
-	//~ catch(int e){
-		//~ std::cout<< "problem " << e << std::endl;
-	//~ }	
-	glPushMatrix();
-	GLfloat mdl[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
-	getCameraOrigin(mdl,&cameraOrigin2);
-	glPopMatrix();
+	// Init augmentation projection
+	Matrix44 projectionMatrix;
+	int w = m_backgroundImage.cols;
+	int h = m_backgroundImage.rows;
+	buildProjectionMatrix(m_calibration, w, h, projectionMatrix);
 	
-	if(cameraOrigin2.z <= 1.0)
-		m_isPatternPresent = false;
-	else
-		LOG_INFO("Pattern is present"); 
+	glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
 
-//~ 
-	//~ LOG_INFO("x=%f y=%f z=%f",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
-//~ 
-  }else{
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(projectionMatrix.data);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	if (isPatternPresent)
+	{
+		// Set the pattern transformation
+		Matrix44 glMatrix = patternPose.getMat44();
+		glLoadMatrixf(reinterpret_cast<const GLfloat*>(&glMatrix.data[0]));
+		m_isPatternPresent = true;
+
+		// Render model
+		drawCoordinateAxis();
+		//~ drawCubeModel();
+		//~ try{
+			//~ drawFurnish();
+			if(m_objectToDraw == 0)
+				drawFurnish();
+			else
+				drawTiger();
+		//~ }
+		//~ catch(int e){
+			//~ std::cout<< "problem " << e << std::endl;
+		//~ }	
+		glPushMatrix();
+		GLfloat mdl[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+		getCameraOrigin(mdl,&cameraOrigin2);
+		glPopMatrix();
+
+		if(cameraOrigin2.z <= 1.0) // || cameraOrigin2.z >=10.0)
+			m_isPatternPresent = false;
+		else
+			LOG_INFO("Pattern is present"); 
+
+		//~ 
+		//~ LOG_INFO("x=%f y=%f z=%f",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+		//~ 
+	}else{
 	  m_isPatternPresent = false;
-  }
+	}
 }
 
 void ARDrawingContext::buildProjectionMatrix(const CameraCalibration& calibration, int screen_width, int screen_height, Matrix44& projectionMatrix)
 {
-  float nearPlane = 0.01f;  // Near clipping distance
-  float farPlane  = 100.0f;  // Far clipping distance
+	float nearPlane = 0.01f;  // Near clipping distance
+	float farPlane  = 100.0f;  // Far clipping distance
+	
+	Matrix33 cameraMatrix=calibration.getIntrinsic();
+    // Camera parameters
+    float f_x = cameraMatrix.data[0]; // Focal length in x axis
+    float f_y = cameraMatrix.data[4]; // Focal length in y axis (usually the same?)
+    float c_x = cameraMatrix.data[2]; // Camera primary point x
+    float c_y = cameraMatrix.data[5]; // Camera primary point y
 
-  // Camera parameters
-  float f_x = calibration.fx(); // Focal length in x axis
-  float f_y = calibration.fy(); // Focal length in y axis (usually the same?)
-  float c_x = calibration.cx(); // Camera primary point x
-  float c_y = calibration.cy(); // Camera primary point y
+	projectionMatrix.data[0] = -2.0f * f_x / screen_width;
+	projectionMatrix.data[1] = 0.0f;
+	projectionMatrix.data[2] = 0.0f;
+	projectionMatrix.data[3] = 0.0f;
 
-  projectionMatrix.data[0] = -2.0f * f_x / screen_width;
-  projectionMatrix.data[1] = 0.0f;
-  projectionMatrix.data[2] = 0.0f;
-  projectionMatrix.data[3] = 0.0f;
+	projectionMatrix.data[4] = 0.0f;
+	projectionMatrix.data[5] = 2.0f * f_y / screen_height;
+	projectionMatrix.data[6] = 0.0f;
+	projectionMatrix.data[7] = 0.0f;
 
-  projectionMatrix.data[4] = 0.0f;
-  projectionMatrix.data[5] = 2.0f * f_y / screen_height;
-  projectionMatrix.data[6] = 0.0f;
-  projectionMatrix.data[7] = 0.0f;
+	projectionMatrix.data[8] = 2.0f * c_x / screen_width - 1.0f;
+	projectionMatrix.data[9] = 2.0f * c_y / screen_height - 1.0f;
+	projectionMatrix.data[10] = -( farPlane + nearPlane) / ( farPlane - nearPlane );
+	projectionMatrix.data[11] = -1.0f;
 
-  projectionMatrix.data[8] = 2.0f * c_x / screen_width - 1.0f;
-  projectionMatrix.data[9] = 2.0f * c_y / screen_height - 1.0f;
-  projectionMatrix.data[10] = -( farPlane + nearPlane) / ( farPlane - nearPlane );
-  projectionMatrix.data[11] = -1.0f;
-
-  projectionMatrix.data[12] = 0.0f;
-  projectionMatrix.data[13] = 0.0f;
-  projectionMatrix.data[14] = -2.0f * farPlane * nearPlane / ( farPlane - nearPlane );        
-  projectionMatrix.data[15] = 0.0f;
+	projectionMatrix.data[12] = 0.0f;
+	projectionMatrix.data[13] = 0.0f;
+	projectionMatrix.data[14] = -2.0f * farPlane * nearPlane / ( farPlane - nearPlane );        
+	projectionMatrix.data[15] = 0.0f;
 }
 
 
@@ -346,51 +377,104 @@ void ARDrawingContext::drawCoordinateAxis()
 	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
-	//~ glFlush();                  
-	//~ glLineWidth(2);
-	//~ 
-	//~ glBegin(GL_LINES);
-	//~ 
-	//~ glColor3f(1.0f, 0.0f, 0.0f);
-	//~ glVertex3fv(lineX);
-	//~ glVertex3fv(lineX + 3);
-	//~ 
-	//~ glColor3f(0.0f, 1.0f, 0.0f);
-	//~ glVertex3fv(lineY);
-	//~ glVertex3fv(lineY + 3);
-	//~ 
-	//~ glColor3f(0.0f, 0.0f, 1.0f);
-	//~ glVertex3fv(lineZ);
-	//~ glVertex3fv(lineZ + 3);
-	//~ 
-	//~ glEnd();
 }
 
 // !!!!!!!!!!!!!!! change RGB to BGR
 void ARDrawingContext::drawFurnish()
 {	
-	float scale = 2.0;
+	//~ float scale = 4.0;
+	float scale = 12.0;
 
 	// Enable texture mapping stuff
 	startTexture(m_textureId[1]);
 	startArrays();
 
+	glPushMatrix();
     GLfloat mdl[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin2);
-
+	glPopMatrix();
 	LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
-	cameraOrigin2.x *= scale;
-	cameraOrigin2.y *= scale;
-	cameraOrigin2.z *= scale;
-	getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
-	outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+	
+	float distanceZC = getDistance(zeroPoint,cameraOrigin2);
+	
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+		
+	cameraOrigin2.x *= scalatorViewPoint;
+	cameraOrigin2.y *= scalatorViewPoint;
+	cameraOrigin2.z *= scalatorViewPoint;
+
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedFaces(couchNumVerts2,cameraOrigin2,couchTexCoords2,couchVerts2,
+	outTexCoords2,outVertexes2,&finalVertexSize2);
 	
 	// scaling the vertexes withon any help
 	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
 	
 	glVertexPointer(3, GL_FLOAT, 0, outVertexes2);
     glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+	
+	//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
+	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize2);
+
+	endArrays();
+    endTexture();
+	
+}
+
+void ARDrawingContext::drawTiger()
+{	
+	//~ float scale = 4.0;
+	float scale = 12.0;
+
+	// Enable texture mapping stuff
+	startTexture(m_textureId[2]);
+	startArrays();
+
+	glPushMatrix();
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin2);
+	glPopMatrix();
+	LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+	
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+	
+	float distanceZC = getDistance(zeroPoint,cameraOrigin2);
+	
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+		
+	cameraOrigin2.x *= scalatorViewPoint;
+	cameraOrigin2.y *= scalatorViewPoint;
+	cameraOrigin2.z *= scalatorViewPoint;
+
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedFaces(TigerVertices,cameraOrigin2,TigerTexels,TigerPositions,
+	outTexCoords2,outVertexes2,&finalVertexSize2);
+	
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+	
+	glVertexPointer(3, GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
 	
 	//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize2);

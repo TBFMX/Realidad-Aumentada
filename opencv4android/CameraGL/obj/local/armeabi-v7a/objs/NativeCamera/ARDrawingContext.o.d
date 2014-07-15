@@ -79,6 +79,7 @@
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h \
  /home/abel/workspace/opencv4android/CameraGL/jni/couch2.h \
  /home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors2.h \
+ /home/abel/workspace/opencv4android/CameraGL/jni/Tiger.hpp \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/eglplatform.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/native_window.h \
@@ -282,6 +283,8 @@
 /home/abel/workspace/opencv4android/CameraGL/jni/couch2.h:
 
 /home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors2.h:
+
+/home/abel/workspace/opencv4android/CameraGL/jni/Tiger.hpp:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h:
 

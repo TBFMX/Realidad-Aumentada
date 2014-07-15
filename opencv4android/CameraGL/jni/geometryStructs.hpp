@@ -1,7 +1,7 @@
 #ifndef geometryStructs_hpp
 #define geometryStructs_hpp
 
-#define EPSILON 0.000001
+#define EPSILON 1e-12
 #define maxObjSize 1596
 
 #include <GLES/gl.h>
@@ -30,6 +30,7 @@ struct face{
 	float d; // distance
 };
 
+
 void orthogonalStart();
 void orthogonalEnd();
 void startArrays();
@@ -46,4 +47,7 @@ void getCameraOrigin(GLfloat mdl[16], point3 *camera_org);
 void scaling(float scale, float inVertexes[], float outVertexes[], unsigned vertexesSize);
 void getFacesNearToCamera(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inColors[][4], float inVertexes[],
 								float outTexCoords[], float outColors[][4], float outVertexes[], unsigned *finalVertexes);
+void getAllSortedFaces(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inVertexes[],
+								float outTexCoords[], float outVertexes[], unsigned *finalVertexes);								
+float getDistance(point3 a, point3 b);
 #endif

@@ -245,7 +245,9 @@ int drawable hiro 0x7f02005c
 int drawable ic_launcher 0x7f02005d
 int drawable self_portrait 0x7f02005e
 int drawable starry_night 0x7f02005f
-int drawable template 0x7f020060
+int drawable tamarindo 0x7f020060
+int drawable template 0x7f020061
+int drawable tm_launcher 0x7f020062
 int id HelloOpenCvView 0x7f050040
 int id action_bar 0x7f05001f
 int id action_bar_activity_content 0x7f050015

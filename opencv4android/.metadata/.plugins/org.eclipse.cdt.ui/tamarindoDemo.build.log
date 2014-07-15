@@ -1,6 +1,6 @@
-17:24:55 **** Build of configuration Default for project tamarindoDemo ****
+09:17:44 **** Build of configuration Default for project tamarindoDemo ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-17:24:55 Build Finished (took 110ms)
+09:17:44 Build Finished (took 58ms)
 
