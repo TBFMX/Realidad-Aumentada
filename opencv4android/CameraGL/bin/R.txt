@@ -248,7 +248,6 @@ int id action_context_bar 0x7f050020
 int id action_menu_divider 0x7f050019
 int id action_menu_presenter 0x7f05001a
 int id action_mode_close_button 0x7f050027
-int id action_settings 0x7f050040
 int id activity_chooser_view_content 0x7f050028
 int id always 0x7f05000e
 int id any 0x7f050000
@@ -275,11 +274,13 @@ int id listMode 0x7f050004
 int id list_item 0x7f05002c
 int id middle 0x7f050015
 int id never 0x7f05000c
+int id next_model 0x7f050040
 int id none 0x7f050013
 int id normal 0x7f050003
 int id progress_circular 0x7f05001b
 int id progress_horizontal 0x7f05001c
 int id radio 0x7f050032
+int id reset 0x7f050041
 int id search_badge 0x7f050035
 int id search_bar 0x7f050034
 int id search_button 0x7f050036
@@ -343,9 +344,10 @@ int string abc_searchview_description_submit 0x7f0a0007
 int string abc_searchview_description_voice 0x7f0a0008
 int string abc_shareactionprovider_share_with 0x7f0a000c
 int string abc_shareactionprovider_share_with_application 0x7f0a000b
-int string action_settings 0x7f0a000f
 int string app_name 0x7f0a000d
 int string hello_world 0x7f0a000e
+int string next_object 0x7f0a000f
+int string reset 0x7f0a0010
 int style AppBaseTheme 0x7f0b008b
 int style AppTheme 0x7f0b008c
 int style TextAppearance_AppCompat_Base_CompactMenu_Dialog 0x7f0b0063

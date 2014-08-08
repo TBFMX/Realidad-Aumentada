@@ -33,17 +33,19 @@ public:
 
 
 	//! Set the new frame for the background
-	void updateBackground(const cv::Mat& frame);
+	void updateBackground(cv::Mat& frame);
 	void updateFurnishImage();
 	void updateTigerImage();
 	void updateWindow();
 	//! Render entire scene in the OpenGl window
 	void draw();
+	void drawPersistance();
 	void setHeight(unsigned);
 	void setWidth(unsigned);
 	void createTexture();
 	void destroyTexture();
 	bool isWindowUpdated();
+	void validatePatternPresent();
 	//! Draws the background with video
 	void drawCameraFrame(); 
 	//! Draws the coordinate axis 
@@ -51,16 +53,25 @@ public:
 	//! Draws the AR
 	void drawAugmentedScene();
 	
+	void drawAugmentedPersistance();
+	
 	//! Draw furnish
-	void drawFurnish();
+	void drawFurnish(int chosenObject);
 	
 	//! Draw tiger
-	void drawTiger();
+	void drawTiger(int chosenObject);
 	
 	bool isThereAPattern();
 	
 	void setObjectToDraw(int objectId);
 	int objectToDraw();
+	void setAngle(float angle);
+	float getAngle();
+	void setScale(float scale);
+	float getScale();
+	void setTranslate(float x,float y);
+	//~ void getTranslate(float position[2]);
+	
 private:
 
 
@@ -85,6 +96,12 @@ private:
   unsigned int 		 m_isWindowUpdated;
   bool 				 m_isPatternPresent;
   int 				 m_objectToDraw;
+  Matrix44			 m_persistentPose;
+  Matrix44			 m_persistentProjection;
+  float 			 m_angle;
+  float 			 m_scale;
+  float				 m_translateX;
+  float				 m_translateY;
   //~ std::string        m_windowName;
 };
 

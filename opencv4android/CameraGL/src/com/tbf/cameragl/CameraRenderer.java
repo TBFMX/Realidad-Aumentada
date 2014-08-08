@@ -16,6 +16,7 @@ public class CameraRenderer implements Renderer {
 		  context = c;
 		  this.size = size;
 	}
+
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// TODO Auto-generated method stub
@@ -26,12 +27,54 @@ public class CameraRenderer implements Renderer {
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		// TODO Auto-generated method stub
+//		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		Native.surfaceChanged(width,height,context.getResources().getConfiguration().orientation);
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		// TODO Auto-generated method stub
+//		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		Native.renderBackground();
+	}
+	
+	public void changeShownModel() {
+		// TODO Auto-generated method stub
+		Native.changeShownModel();
+	}
+
+	public float getAngle() {
+		// TODO Auto-generated method stub
+		return Native.getAngle();
+	}
+
+	public void setAngle(float angle) {
+		// TODO Auto-generated method stub
+		Native.setAngle(angle);
+	}
+
+	public float getWidth() {
+		// TODO Auto-generated method stub
+		return (float) size.width;
+	}
+
+	public float getHeight() {
+		// TODO Auto-generated method stub
+		return (float) size.height;
+	}
+
+	public void setScale(float scale) {
+		// TODO Auto-generated method stub
+		Native.setScale(scale);
+	}
+
+	public float getScale() {
+		// TODO Auto-generated method stub
+		return Native.getScale();
+	}
+
+	public void setTranslate(float x, float y) {
+		// TODO Auto-generated method stub
+		Native.setTranslate(x,y);
 	}
 }

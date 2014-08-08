@@ -65,6 +65,10 @@ ARDrawingContext::ARDrawingContext(){
 	m_isWindowUpdated = false;
 	m_isPatternPresent = false;
 	m_objectToDraw = 0;
+	m_angle = 0.0;
+	m_scale = 1.0;
+	m_translateX = 0;
+	m_translateY = 0;
 	
 	//~ m_backgroundImage;
 	//~ m_furnishImage;
@@ -91,6 +95,10 @@ ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& 
   ,m_isWindowUpdated(false)
   ,m_isPatternPresent(false)
   ,m_objectToDraw(0)
+  ,m_angle(0.0)
+  ,m_scale(1.0)
+  ,m_translateX(0)
+  ,m_translateY(0)
   //~ , m_windowName(windowName)
 {
     // Create window with OpenGL support
@@ -116,7 +124,7 @@ ARDrawingContext::~ARDrawingContext()
     glBindTexture(GL_TEXTURE_2D, 0); // Set the GL texture to NULL, standard cleanup
 }
 
-void ARDrawingContext::updateBackground(const cv::Mat& frame)
+void ARDrawingContext::updateBackground(cv::Mat& frame)
 {
 	//~ LOG_INFO("intenting to update background Image w,h = %d, %d", frame.cols, frame.rows);
   frame.copyTo(m_backgroundImage);
@@ -174,6 +182,41 @@ bool ARDrawingContext::isThereAPattern(){
 	return m_isPatternPresent;
 }
 
+float ARDrawingContext::getAngle(){
+	return m_angle;
+}
+
+void ARDrawingContext::setAngle(float angle){
+	if (angle > 360)
+		angle = angle - 360;
+	else if(angle < - 360)
+		angle = angle + 360;
+
+	m_angle = angle;
+}
+
+float ARDrawingContext::getScale(){
+	return m_scale;
+}
+
+void ARDrawingContext::setScale(float scale){
+	if (scale < 1.0)
+		scale = 1.0;
+	else if (scale > 15)
+		scale =  15;
+	m_scale = scale;
+}
+
+//~ void ARDrawingContext::getTranslate(float position[2]){
+	//~ position[0] = m_translate[0];
+	//~ position[1] = m_translate[1];
+//~ }
+
+void ARDrawingContext::setTranslate(float x,float y){
+	m_translateX = x;
+	m_translateY = y;
+}
+
 void ARDrawingContext::createTexture() {
 	unsigned int numTextures = 3;
 	// Initialize texture for background image
@@ -185,8 +228,9 @@ void ARDrawingContext::createTexture() {
 		glBindTexture(GL_TEXTURE_2D, m_textureId[0]);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // GL_LINEAR
 		m_isBackgroundTextureInitialized = true;
+		unsigned int m_depthRenderbuffer = 0;
 	}
 	//~ getFurnishTexture(m_textureId[1]);
 	getObjectTexture(m_textureId[1],m_furnishImage);
@@ -204,11 +248,24 @@ void ARDrawingContext::destroyTexture() {
 
 void ARDrawingContext::draw()
 {
+	//~ createTexture();
 	getObjectTexture(m_textureId[0],m_backgroundImage);
 	getObjectTexture(m_textureId[1],m_furnishImage);
 	getObjectTexture(m_textureId[2],m_tigerImage);
 	drawCameraFrame();                        // Render background
+	validatePatternPresent();
 	drawAugmentedScene();                              // Draw AR
+	//~ destroyTexture();
+}
+
+void ARDrawingContext::drawPersistance()
+{
+	//~ createTexture();
+	getObjectTexture(m_textureId[0],m_backgroundImage);
+	getObjectTexture(m_textureId[1],m_furnishImage);
+	getObjectTexture(m_textureId[2],m_tigerImage);
+	drawCameraFrame();                        // Render background
+	//~ drawPersistance();                              // Draw AR
 }
 
 // !!!!!!!!!! change BGR to RGB !!!!!!!!!!!!!!
@@ -242,66 +299,146 @@ void ARDrawingContext::drawCameraFrame()
     GLfloat mdl[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin2);
-	LOG_INFO("x=%f y=%f z=%f background ",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+	//~ LOG_INFO("x=%f y=%f z=%f background ",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	endArrays();
 	endTexture();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ARDrawingContext::drawAugmentedScene()
-{
-	// Init augmentation projection
-	Matrix44 projectionMatrix;
-	int w = m_backgroundImage.cols;
-	int h = m_backgroundImage.rows;
-	buildProjectionMatrix(m_calibration, w, h, projectionMatrix);
-	
-	glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(projectionMatrix.data);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
+void ARDrawingContext::validatePatternPresent(){
 	if (isPatternPresent)
 	{
+		Matrix44 projectionMatrix;
+		int w = m_backgroundImage.cols;
+		int h = m_backgroundImage.rows;
+		buildProjectionMatrix(m_calibration, w, h, projectionMatrix);		
 		// Set the pattern transformation
-		Matrix44 glMatrix = patternPose.getMat44();
-		glLoadMatrixf(reinterpret_cast<const GLfloat*>(&glMatrix.data[0]));
-		m_isPatternPresent = true;
-
-		// Render model
-		drawCoordinateAxis();
-		//~ drawCubeModel();
-		//~ try{
-			//~ drawFurnish();
-			if(m_objectToDraw == 0)
-				drawFurnish();
-			else
-				drawTiger();
-		//~ }
-		//~ catch(int e){
-			//~ std::cout<< "problem " << e << std::endl;
-		//~ }	
+		//~ Matrix44 glMatrix = patternPose.getMat44();
+		m_persistentProjection = projectionMatrix; // saving a copy of projection
+		m_persistentPose = patternPose.getMat44(); // saving a copy of pose
+		
 		glPushMatrix();
+		glLoadMatrixf(reinterpret_cast<const GLfloat*>(&m_persistentPose.data[0]));
 		GLfloat mdl[16];
 		glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 		getCameraOrigin(mdl,&cameraOrigin2);
 		glPopMatrix();
-
-		if(cameraOrigin2.z <= 1.0) // || cameraOrigin2.z >=10.0)
+		
+		LOG_INFO("augmented scene");
+		if(cameraOrigin2.z <= 0.5) // || cameraOrigin2.z >=10.0)
 			m_isPatternPresent = false;
 		else
-			LOG_INFO("Pattern is present"); 
+			m_isPatternPresent = true;
 
-		//~ 
-		//~ LOG_INFO("x=%f y=%f z=%f",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
-		//~ 
 	}else{
-	  m_isPatternPresent = false;
+		m_isPatternPresent = false;
 	}
 }
+
+float normaVector(point3 *aVector){
+	return sqrtf((*aVector).x * (*aVector).x + (*aVector).y * (*aVector).y);
+}
+
+float pointProduct(point3 *a,point3 *b){
+	return (*a).x * (*b).x + (*a).y * (*b).y;
+}
+
+void tabletToOpengl(point3 *fingerInTablet, point3 *fingerInOpengl, point3 *fingerOrientation, point3 *modelOrientation){
+
+	// angle between tiger and light axes
+	float divNormal = normaVector(fingerOrientation)*normaVector(modelOrientation);
+	
+	float preData =pointProduct(modelOrientation,fingerOrientation)/divNormal;
+	float theta = 0;
+	
+	if(preData > 1)
+		preData = 1.0;
+	else if (preData < -1.0)
+		preData = -1.0;
+
+	theta = acosf(preData);
+	
+	point3 positiveAngle;
+	positiveAngle.x = -(*modelOrientation).y;
+	positiveAngle.y = (*modelOrientation).x;
+	positiveAngle.z = 0;
+	if(pointProduct(fingerOrientation,&positiveAngle) > 0)
+		theta = -theta;
+
+	(*fingerInOpengl).x = (*fingerInTablet).x * cosf(theta) + (*fingerInTablet).y * sinf(theta);
+	(*fingerInOpengl).y = -(*fingerInTablet).x * sinf(theta) + (*fingerInTablet).y * cosf(theta);
+	(*fingerInOpengl).z = (*fingerInTablet).z;
+}
+
+void ARDrawingContext::drawAugmentedScene()
+{
+	// Init augmentation projection
+	glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(m_persistentProjection.data);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	
+	glLoadMatrixf(reinterpret_cast<const GLfloat*>(&m_persistentPose.data[0]));
+	
+	glPushMatrix();
+    GLfloat mdl[16];
+    point3 cameraOrigin;
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	glPopMatrix();
+	
+	point3 modelOrientation;
+	modelOrientation.x = mdl[0];
+	modelOrientation.y = mdl[1];
+	modelOrientation.z = 0;
+	// we correct the directions in order to match camera orientation
+	point3 fingerInTablet;
+	fingerInTablet.x = -m_translateX*m_scale;
+	fingerInTablet.y = -m_translateY*m_scale;
+	fingerInTablet.z = 0;
+	
+	point3 fingerInOpengl;
+	point3 fingerOrientation; // this orientation corresponds to camera orientation
+	fingerOrientation.x = 1;
+	fingerOrientation.y = 0;
+	fingerOrientation.z = 0;
+	
+	tabletToOpengl(&fingerInTablet,&fingerInOpengl,&fingerOrientation,&modelOrientation);
+	
+	glTranslatef(fingerInOpengl.x,fingerInOpengl.y,0);
+	
+	glRotatef(m_angle,0,0,1);
+	
+	drawCoordinateAxis();
+	
+	if(m_objectToDraw >= 0 && m_objectToDraw < 3)
+		drawFurnish(m_objectToDraw);
+	else
+		drawTiger(m_objectToDraw);
+}
+
+
+void ARDrawingContext::drawAugmentedPersistance()
+{
+	LOG_INFO("augmented persistance");
+	// Init augmentation projection
+	glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
+	//~ glMatrixMode(GL_MODELVIEW);
+	//~ glLoadIdentity();
+	//~ glRotatef(m_angle,0,0,1);
+	// Render model
+	drawCoordinateAxis();
+	//~ drawCubeModel();
+	//~ try{
+		//~ drawFurnish();
+	if(m_objectToDraw >= 0 && m_objectToDraw < 3)
+		drawFurnish(m_objectToDraw);
+	else
+		drawTiger(m_objectToDraw);
+}
+
 
 void ARDrawingContext::buildProjectionMatrix(const CameraCalibration& calibration, int screen_width, int screen_height, Matrix44& projectionMatrix)
 {
@@ -380,12 +517,27 @@ void ARDrawingContext::drawCoordinateAxis()
 }
 
 // !!!!!!!!!!!!!!! change RGB to BGR
-void ARDrawingContext::drawFurnish()
+void ARDrawingContext::drawFurnish(int chosenObject)
 {	
+	float shadowTuner = 1.0; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = 12.0;
+	float scale = m_scale;
+	
+	if(chosenObject == 1)
+		shadowTuner = 0.7;
+	else if(chosenObject == 2)
+		shadowTuner = 0.4;
 
 	// Enable texture mapping stuff
+	//~ glBlendFunc (GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+	
+	//~ glClearColor(0.0,0.0,0.0,0.0);
+	
+	//~ glEnable(GL_LINE_SMOOTH);
+	//~ glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+	glEnable(GL_BLEND);
+	//~ glEnable(GL_MULTISAMPLE);
+
 	startTexture(m_textureId[1]);
 	startArrays();
 
@@ -394,7 +546,7 @@ void ARDrawingContext::drawFurnish()
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin2);
 	glPopMatrix();
-	LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	
 	point3 zeroPoint;
 	zeroPoint.x = 0.0;
@@ -424,19 +576,33 @@ void ARDrawingContext::drawFurnish()
     glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
 
 	
-	//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
+	//~ glColor4f(1.0f,1.0f,1.0f,0.95f);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize2);
 
 	endArrays();
     endTexture();
-	
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ glDisable(GL_LINE_SMOOTH);
+
 }
 
-void ARDrawingContext::drawTiger()
+void ARDrawingContext::drawTiger(int chosenObject)
 {	
+	float shadowTuner = 1.0; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = 12.0;
-
+	//~ float scale = 12.0;
+	float scale = m_scale;
+	
+	if(chosenObject == 4)
+		shadowTuner = 0.7;
+	else if(chosenObject == 5)
+		shadowTuner = 0.4;
+		
+	//~ glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_BLEND);
+	//~ glEnable(GL_MULTISAMPLE);
 	// Enable texture mapping stuff
 	startTexture(m_textureId[2]);
 	startArrays();
@@ -446,7 +612,7 @@ void ARDrawingContext::drawTiger()
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin2);
 	glPopMatrix();
-	LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	
 	point3 zeroPoint;
 	zeroPoint.x = 0.0;
@@ -476,10 +642,14 @@ void ARDrawingContext::drawTiger()
     glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
 
 	
-	//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
+	//~ glColor4f(0.9f,0.9f,0.9f,1.0f);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize2);
 
 	endArrays();
     endTexture();
-	
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    
+    //~ glDisable(GL_LINE_SMOOTH);
 }

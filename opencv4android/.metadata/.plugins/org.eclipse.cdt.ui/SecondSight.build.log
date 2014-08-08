@@ -1,6 +1,6 @@
-09:17:42 **** Build of configuration Default for project SecondSight ****
+13:04:49 **** Incremental Build of configuration Default for project SecondSight ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-09:17:42 Build Finished (took 58ms)
+13:04:49 Build Finished (took 64ms)
 

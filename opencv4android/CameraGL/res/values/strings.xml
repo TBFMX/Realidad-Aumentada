@@ -3,6 +3,7 @@
 
     <string name="app_name">CameraGL</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="next_object">Settings</string>
+    <string name="reset">Reset</string>
 
 </resources>

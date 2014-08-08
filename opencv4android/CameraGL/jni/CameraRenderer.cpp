@@ -36,6 +36,7 @@ int frameHeight;
 int screenWidth;
 int screenHeight;
 int orientation;
+int gbModelId;
 bool gbIsCaptureOpened =true;
 bool gbIsCameraTextureInitialized = false;
 unsigned int gbCameraTexture=0;
@@ -159,9 +160,9 @@ void drawCurrentCameraFrame(int texName, int bufferIndex, cv::Mat captureBuffer[
  * In addition, this function draw overlay with debug information on top of the AR window.
  * Returns true if processing loop should be stopped; otherwise - false.
  */
-bool processFrame(const cv::Mat& cameraFrame, MarkerDetector& markerDetector, ARDrawingContext& drawingCtx)
+bool processFrame(cv::Mat& cameraFrame, MarkerDetector& markerDetector, ARDrawingContext& drawingCtx)
 {
-    LOG_INFO("current buffer index %d",bufferIndex);
+    //~ LOG_INFO("current buffer index %d",bufferIndex);
     drawingCtx.updateBackground(cameraFrame);
 
 	//~ pipeline.m_patternDetector.homographyReprojectionThreshold += 0.2;
@@ -169,7 +170,7 @@ bool processFrame(const cv::Mat& cameraFrame, MarkerDetector& markerDetector, AR
 	
     // Find a pattern and update it's detection status:
     drawingCtx.isPatternPresent = markerDetector.processFrame(cameraFrame);
-    LOG_INFO("pattern testing");
+    //~ LOG_INFO("pattern testing");
 
 	std::vector<Transformation> m_transformations;
 	m_transformations = markerDetector.getTransformations();
@@ -178,6 +179,7 @@ bool processFrame(const cv::Mat& cameraFrame, MarkerDetector& markerDetector, AR
 		//~ drawingCtx.patternPose = m_transformations[i];
     if(m_transformations.size() > 0)
 		drawingCtx.patternPose = m_transformations[0];
+
      LOG_INFO("pose testing %d transformations", m_transformations.size());
 
     // Request redraw of the window:
@@ -192,7 +194,7 @@ bool processFrame(const cv::Mat& cameraFrame, MarkerDetector& markerDetector, AR
  * It allows you to control the detection process by adjusting homography refinement switch and 
  * reprojection threshold in runtime.
  */
-void processSingleImage(const cv::Mat& patternImage, CameraCalibration& calibration, const cv::Mat& image)
+void processSingleImage(const cv::Mat& patternImage, CameraCalibration& calibration, cv::Mat& image)
 {
     cv::Size frameSize(image.cols, image.rows);
     MarkerDetector markerDetector(calibration);
@@ -336,10 +338,6 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 	glDepthFunc(GL_LEQUAL);
 	if(gbIsProcessing == false){
 		gbDrawingCtx.createTexture();
-		//~ if(gbDrawingCtx.objectToDraw() == 0)
-			//~ gbDrawingCtx.setObjectToDraw(1);
-		//~ else
-			//~ gbDrawingCtx.setObjectToDraw(0);
 	}
 	createCameraTexture();
 	
@@ -361,27 +359,121 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 	//~ glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
 	//~ glClearColor(1,1,1,1);
 //~ 
-	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false && gbPersistance == 0){
+	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false){
 		pthread_mutex_lock(&FGmutex);
-		gbDrawingCtx.draw();
+		// we validate if the pattern found was the best
+		gbDrawingCtx.validatePatternPresent(); 
 		pthread_mutex_unlock(&FGmutex);
 		gbIsWindowUpdated = false;
+	}
+	
+	pthread_mutex_lock(&FGmutex);
+	if(gbDrawingCtx.isThereAPattern()){
+		//~ // special code for low dispositives-----------
+		if (gbIsWindowUpdated || bufferIndex > 0){
+			cv::Mat rgbFrame;
+			//pthread_mutex_lock(&FGmutex);
+			cvtColor(captureBuffer[bufferIndex % 30], rgbFrame, CV_BGR2RGB);
+			gbDrawingCtx.updateBackground(rgbFrame);
+			//pthread_mutex_unlock(&FGmutex);
+		}
+		
+		//~ //----------------------------------------------
+		gbDrawingCtx.draw();
+		gbPersistance = 1;
 	}else{
-		pthread_mutex_lock(&FGmutex);
-		if(gbDrawingCtx.isThereAPattern()){
-			//~ gbDrawingCtx.drawCameraFrame();
-			//~ gbDrawingCtx.drawCoordinateAxis();
-			//~ gbDrawingCtx.drawFurnish();
+		if(gbPersistance > 0){
+			// special code for low dispositives---------
+			if (gbIsWindowUpdated || bufferIndex > 0){
+				cv::Mat rgbFrame;
+				//pthread_mutex_lock(&FGmutex);
+				cvtColor(captureBuffer[bufferIndex % 30], rgbFrame, CV_BGR2RGB);
+				gbDrawingCtx.updateBackground(rgbFrame);
+				//pthread_mutex_unlock(&FGmutex);
+			}
+			//-------------------------------------------
+
+			gbDrawingCtx.draw();
+			++gbPersistance;
+			LOG_INFO("persistance %d", gbPersistance);
+			if(gbPersistance > MAX_PERSISTANCE)
+				gbPersistance = 0;
+			
 		}else{
 			drawCurrentCameraFrame(gbCameraTexture, bufferIndex, captureBuffer);
 		}
-		//~ ++gbPersistance;
-
-		//~ if(gbPersistance > MAX_PERSISTANCE)
-			//~ gbPersistance = 0;
-		pthread_mutex_unlock(&FGmutex);
 	}
+	
+	pthread_mutex_unlock(&FGmutex);
+	
 	glFlush();
+}
+
+
+JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_changeShownModel(JNIEnv*, jobject){
+	pthread_mutex_lock(&FGmutex);
+	
+	switch(gbDrawingCtx.objectToDraw()){
+		case 0:
+			gbDrawingCtx.setObjectToDraw(1);
+			break;
+		case 1:
+			gbDrawingCtx.setObjectToDraw(2);
+			break;
+		case 2:
+			gbDrawingCtx.setObjectToDraw(3);
+			break;
+		case 3:
+			gbDrawingCtx.setObjectToDraw(4);
+			break;
+		case 4:
+			gbDrawingCtx.setObjectToDraw(5);
+			break;
+		case 5:
+			gbDrawingCtx.setObjectToDraw(0);
+			break;
+		default:
+			gbDrawingCtx.setObjectToDraw(0);
+			break;
+	}
+		
+	pthread_mutex_unlock(&FGmutex);
+}
+
+JNIEXPORT jfloat JNICALL Java_com_tbf_cameragl_Native_getAngle(JNIEnv*, jobject){
+	pthread_mutex_lock(&FGmutex);
+	
+	jfloat angle = gbDrawingCtx.getAngle();
+		
+	pthread_mutex_unlock(&FGmutex);
+	return angle;
+}
+
+JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_setAngle(JNIEnv*, jobject, jfloat angle){
+	pthread_mutex_lock(&FGmutex);
+	gbDrawingCtx.setAngle(angle);
+	pthread_mutex_unlock(&FGmutex);
+}
+
+JNIEXPORT jfloat JNICALL Java_com_tbf_cameragl_Native_getScale(JNIEnv*, jobject){
+	pthread_mutex_lock(&FGmutex);
+	
+	jfloat scale = gbDrawingCtx.getScale();
+		
+	pthread_mutex_unlock(&FGmutex);
+	return scale;
+}
+
+JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_setScale(JNIEnv*, jobject, jfloat scale){
+	pthread_mutex_lock(&FGmutex);
+	gbDrawingCtx.setScale(scale);
+	pthread_mutex_unlock(&FGmutex);
+}
+
+JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_setTranslate(JNIEnv*, jobject, jfloat translateX, jfloat translateY){
+	pthread_mutex_lock(&FGmutex);
+	gbDrawingCtx.setTranslate(translateX,translateY);
+	pthread_mutex_unlock(&FGmutex);
 }
 
 void *frameRetriever(void*) {
@@ -389,6 +481,8 @@ void *frameRetriever(void*) {
 	pthread_mutex_lock(&FGmutex);
 	gbIsCaptureOpened = true;
 	pthread_mutex_unlock(&FGmutex);
+	int passFrame = 6;
+	int countFrames = 0;
 	while (capture.isOpened()) {
 		capture.read(inframe);
 		if (!inframe.empty()) {
@@ -401,11 +495,13 @@ void *frameRetriever(void*) {
 			pthread_mutex_lock(&FGmutex);
 			if(bufferIndex == 30)
 				bufferIndex = 0;
-			LOG_INFO("index %d",bufferIndex);	
+			//~ LOG_INFO("index %d",bufferIndex);	
 			pthread_mutex_unlock(&FGmutex);
 		}
+		
+		// bufferIndex > 0 and pair
 			// loosing the zero frame
-		if(bufferIndex > 0 && gbIsWindowUpdated == false && gbIsProcessing == false){
+		if(bufferIndex > 0 && countFrames % passFrame == 0 && gbIsWindowUpdated == false && gbIsProcessing == false){
 			cv::Mat rgbFrame;
 			
 			pthread_mutex_lock(&FGmutex);
@@ -417,7 +513,10 @@ void *frameRetriever(void*) {
 			gbIsWindowUpdated = processFrame(rgbFrame, gbMarkerDetector, gbDrawingCtx);
 			gbIsProcessing = false;
 			//~ }
-		}		
+			countFrames = 0;
+		}
+		
+		++countFrames;
 		
 		//~ else
 			//~ captureBuffer[29].copyTo(currentFrame);

@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="mHeightPx" key="selection"/>
+		<item value="mRenderer.setAngle" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="mRenderer.setAngle"/>
+			<item value="matrix"/>
+			<item value="lastEvent"/>
+			<item value="mode"/>
+			<item value="cameraRenderer"/>
 			<item value="mHeightPx"/>
 			<item value="mDistCoeffs"/>
 			<item value="sdcard"/>
-			<item value="setCamera"/>
-			<item value="onOptionsItemSelected"/>
-			<item value="view"/>
-			<item value="imageDetection"/>
-			<item value="ratio"/>
 		</list>
 		<list key="replacehistory">
 			<item value="1.0f"/>

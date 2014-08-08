@@ -103,13 +103,17 @@ void perspectiveGL( float fovY, float aspect, float zNear, float zFar )
 }
 
 void startTexture(GLuint texName){
+	//~ glClear(GL_DEPTH_TEST);
 	// Enable texture mapping stuff
+	//~ glPushAttrib(GL_TEXTURE_BIT);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texName);
 }
 
 void endTexture(){
 	glDisable(GL_TEXTURE_2D);
+	//~ glPopAttrib(); // texture bit
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void startArrays(){
@@ -461,6 +465,66 @@ void getAllSortedFaces(unsigned vertexesSize, point3 cameraOrigin,float inTexcoo
 	*finalVertexes = 3*saved;
 }
 
+void getShadeFaces(unsigned vertexesSize, point3 lightOrigin, float inVertexes[], float outVertexes[], unsigned *finalVertexes){
+	std::vector<face> faces;
+	
+	unsigned saved = 0;
+
+	// we divide vertexes size by 3 because each face has 3 vertexes
+	for(unsigned i  = 0; i < vertexesSize/3; ++i){
+		
+		point3 vertexCoord1;
+		vertexCoord1.x = inVertexes[9*i];
+		vertexCoord1.y = inVertexes[9*i + 1];
+		vertexCoord1.z = inVertexes[9*i + 2];
+		
+		point3 vertexCoord2;
+		vertexCoord2.x = inVertexes[9*i + 3];
+		vertexCoord2.y = inVertexes[9*i + 4];
+		vertexCoord2.z = inVertexes[9*i + 5];
+		
+		point3 vertexCoord3;
+		vertexCoord3.x = inVertexes[9*i + 6];
+		vertexCoord3.y = inVertexes[9*i + 7];
+		vertexCoord3.z = inVertexes[9*i + 8];		
+
+		face currFace;
+		
+		currFace.f.p1.x = inVertexes[9*i];
+		currFace.f.p1.y = inVertexes[9*i + 1];
+		currFace.f.p1.z = inVertexes[9*i + 2];
+		currFace.f.p2.x = inVertexes[9*i + 3];
+		currFace.f.p2.y = inVertexes[9*i + 4];
+		currFace.f.p2.z = inVertexes[9*i + 5];
+		currFace.f.p3.x = inVertexes[9*i + 6];
+		currFace.f.p3.y = inVertexes[9*i + 7];
+		currFace.f.p3.z = inVertexes[9*i + 8];
+
+		faces.push_back(currFace);
+		++saved;
+	}
+	
+	std::sort(faces.begin(),faces.end(),nearCamera);
+	
+	std::vector<face>::iterator itFaces;
+	int k = 0;
+	for(itFaces = faces.begin(); itFaces < faces.end(); ++itFaces){
+		outVertexes[9*k]=(*itFaces).f.p1.x;
+		outVertexes[9*k + 1]=(*itFaces).f.p1.y;
+		outVertexes[9*k + 2]=(*itFaces).f.p1.z;
+		outVertexes[9*k + 3]=(*itFaces).f.p2.x;
+		outVertexes[9*k + 4]=(*itFaces).f.p2.y;
+		outVertexes[9*k + 5]=(*itFaces).f.p2.z;
+		outVertexes[9*k + 6]=(*itFaces).f.p3.x;
+		outVertexes[9*k + 7]=(*itFaces).f.p3.y;
+		outVertexes[9*k + 8]=(*itFaces).f.p3.z;
+		
+		++k;
+	}
+
+	*finalVertexes = 3*saved;
+}
+
 void scaling(float scale, float inVertexes[], float outVertexes[], unsigned vertexesSize){
 	for(unsigned i  = 0; i < vertexesSize*3; ++i){
 		outVertexes[i] = inVertexes[i]*scale;
@@ -507,8 +571,8 @@ void getFurnishTexture(unsigned int texName){
 		//~ //glGenTextures(1, &texName);
 		glBindTexture(GL_TEXTURE_2D, texName);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);// GL_LINEAR
 		int w = m_furnishImage.cols;
 		int h = m_furnishImage.rows;
 
@@ -533,8 +597,8 @@ void getFurnishTexture(unsigned int texName){
 void getObjectTexture(unsigned int texName, const cv::Mat& image){
 	glBindTexture(GL_TEXTURE_2D, texName);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // GL_LINEAR
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);// GL_LINEAR
 	int w = image.cols;
 	int h = image.rows;
 
@@ -547,7 +611,8 @@ void getObjectTexture(unsigned int texName, const cv::Mat& image){
 	else if(m_furnishImage.channels() == 4)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data);
 	else if (image.channels()==1)
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, image.data);		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, image.data);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void drawFrame()

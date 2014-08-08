@@ -13,10 +13,15 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 
 public class CameraPreviewer extends Activity {
 
     GLSurfaceView mView;
+    //CameraRenderer mCameraRenderer;
+    ResponsiveGLSurfaceView mCameraRenderer;
     
     @Override 
     protected void onCreate(Bundle icicle) {
@@ -36,7 +41,9 @@ public class CameraPreviewer extends Activity {
          }
         };
         Size size = calculateCameraFrameSize(sizes,new OpenCvSizeAccessor());
-        mView.setRenderer(new CameraRenderer(this,size));
+        //mCameraRenderer = new CameraRenderer(this,size);
+        mCameraRenderer = new ResponsiveGLSurfaceView(this,size);
+        mView.setRenderer(mCameraRenderer.getCameraRenderer());
         setContentView(mView);
     }
 
@@ -78,4 +85,32 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
         super.onResume();
         mView.onResume();
     }
+    
+    @Override 
+    public boolean onCreateOptionsMenu(Menu menu){
+    	getMenuInflater().inflate(R.menu.camera_previewer, menu);
+		return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.next_model:
+	    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+	    	mCameraRenderer.changeShownModel();
+	    	return true;
+	    case R.id.reset:
+		    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+		    mCameraRenderer.backToDefaults();
+		    return true;
+	    default:
+	    return super.onOptionsItemSelected(item);
+	    }
+    }
+    
+    public boolean onTouchEvent(MotionEvent event){
+    	return mCameraRenderer.onTouchEvent(event);
+    }
+    
 }

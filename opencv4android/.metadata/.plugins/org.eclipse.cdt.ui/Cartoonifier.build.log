@@ -1,6 +1,6 @@
-09:17:29 **** Build of configuration Default for project Cartoonifier ****
+09:43:49 **** Build of configuration Default for project Cartoonifier ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-09:17:29 Build Finished (took 58ms)
+09:43:49 Build Finished (took 57ms)
 
