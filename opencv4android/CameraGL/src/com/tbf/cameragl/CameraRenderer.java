@@ -77,4 +77,9 @@ public class CameraRenderer implements Renderer {
 		// TODO Auto-generated method stub
 		Native.setTranslate(x,y);
 	}
+
+	public void changeIlluminationModel() {
+		// TODO Auto-generated method stub
+		Native.changeIlluminationModel();
+	}
 }

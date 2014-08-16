@@ -22,6 +22,7 @@
 #define LOG(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 #define MAX_PERSISTANCE 60
+#define BUFFER_LEN 3
 
 cv::VideoCapture capture;
 cv::Mat inframe;
@@ -53,8 +54,8 @@ float maxAllowedHeight = 1536.0;
 
 
 //~ cv::Mat m_backgroundImage;
-cv::Mat captureBuffer[30];
-//~ cv::Mat processedBuffer[30];
+cv::Mat captureBuffer[BUFFER_LEN];
+//~ cv::Mat processedBuffer[BUFFER_LEN];
 cv::Mat patternImage;
 CameraCalibration calibration;
 
@@ -76,7 +77,7 @@ void createCameraTexture() {
 	if (!gbIsCameraTextureInitialized)
 	{
 		  // we generate both textures
-		LOG("Camera texture Created");
+		//~ LOG("Camera texture Created");
 		glGenTextures(numTextures, &gbCameraTexture);
 		glBindTexture(GL_TEXTURE_2D, gbCameraTexture);
 
@@ -88,7 +89,7 @@ void createCameraTexture() {
 }
 
 void destroyCameraTexture() {
-	LOG("Camera texture destroyed");
+	//~ LOG("Camera texture destroyed");
 	glDeleteTextures(1, &gbCameraTexture);
 	gbIsCameraTextureInitialized = false;
 }
@@ -98,7 +99,7 @@ void drawCurrentCameraFrame(int texName, int bufferIndex, cv::Mat captureBuffer[
 	if(bufferIndex > 0){
 		//~ pthread_mutex_lock(&FGmutex);
 		cv::Mat rgbCameraFrame;
-		cvtColor(captureBuffer[(bufferIndex - 1) % 30], rgbCameraFrame, CV_BGR2RGB);
+		cvtColor(captureBuffer[(bufferIndex - 1) % BUFFER_LEN], rgbCameraFrame, CV_BGR2RGB);
 		//~ pthread_mutex_unlock(&FGmutex);
 		int w=rgbCameraFrame.cols;
 		int h=rgbCameraFrame.rows;
@@ -180,11 +181,11 @@ bool processFrame(cv::Mat& cameraFrame, MarkerDetector& markerDetector, ARDrawin
     if(m_transformations.size() > 0)
 		drawingCtx.patternPose = m_transformations[0];
 
-     LOG_INFO("pose testing %d transformations", m_transformations.size());
+     //~ LOG_INFO("pose testing %d transformations", m_transformations.size());
 
     // Request redraw of the window:
     drawingCtx.updateWindow(); // callback to window draw
-	LOG_INFO("can draw");
+	//~ LOG_INFO("can draw");
     //~ return drawingCtx.isWindowUpdated(); // always true
     return true;
 }
@@ -225,7 +226,7 @@ void applyCanny(cv::Mat *image, cv::Mat *result){
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,jint width,jint height)
 {
-	LOG_INFO("Entering");
+	//~ LOG_INFO("Entering");
 	// franquy parameters 640x480
 	float fx = 695.4521167717107;
 	float fy = 694.5519610122569;
@@ -254,15 +255,15 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
     calibration.set4Params(fx,fy,cx,cy);
     //~ patternImage=cv::imread("sdcard/Models/PyramidPattern.jpg");
     
-	LOG("Camera Created");
+	//~ LOG("Camera Created");
 	//~ capture.open(CV_CAP_ANDROID + 0);
 	capture.open(CV_CAP_ANDROID + 0);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
 	frameWidth =width;
 	frameHeight = height;
-	LOG("frameWidth = %d",frameWidth);
-	LOG("frameHeight = %d",frameHeight);
+	//~ LOG("frameWidth = %d",frameWidth);
+	//~ LOG("frameHeight = %d",frameHeight);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glShadeModel(GL_SMOOTH);
 	glClearDepthf(1.0f);
@@ -278,8 +279,8 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
     gbMarkerDetector = markerDetector;
     ARDrawingContext drawingCtx(frameSize, calibration);
     gbDrawingCtx = drawingCtx;
-    gbDrawingCtx.updateFurnishImage();
-    gbDrawingCtx.updateTigerImage();
+    gbDrawingCtx.updateFurnishImage(); // defaultImage
+    //~ gbDrawingCtx.updateTigerImage();
 
 	pthread_attr_t Rattr;
 	pthread_attr_init(&Rattr);
@@ -295,7 +296,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobject,jint width,jint height,jint orien)
 {
-	LOG("Surface Changed");
+	//~ LOG("Surface Changed");
 	glViewport(0, 0, width, height);
 	if(orien==1) {
 		screenWidth = width;
@@ -307,8 +308,8 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 		orientation = 2;
 	}
 
-	LOG("screenWidth = %d",width);
-	LOG("screenHeight = %d",height);
+	//~ LOG("screenWidth = %d",width);
+	//~ LOG("screenHeight = %d",height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	float aspect = width / height;
@@ -345,7 +346,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_releaseCamera(JNIEnv*, jobject)
 {
-	LOG("Camera Released");
+	//~ LOG("Camera Released");
 	capture.release();
 	if(gbIsProcessing == false){
 		gbDrawingCtx.destroyTexture();
@@ -373,7 +374,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 		if (gbIsWindowUpdated || bufferIndex > 0){
 			cv::Mat rgbFrame;
 			//pthread_mutex_lock(&FGmutex);
-			cvtColor(captureBuffer[bufferIndex % 30], rgbFrame, CV_BGR2RGB);
+			cvtColor(captureBuffer[bufferIndex % BUFFER_LEN], rgbFrame, CV_BGR2RGB);
 			gbDrawingCtx.updateBackground(rgbFrame);
 			//pthread_mutex_unlock(&FGmutex);
 		}
@@ -387,7 +388,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 			if (gbIsWindowUpdated || bufferIndex > 0){
 				cv::Mat rgbFrame;
 				//pthread_mutex_lock(&FGmutex);
-				cvtColor(captureBuffer[bufferIndex % 30], rgbFrame, CV_BGR2RGB);
+				cvtColor(captureBuffer[bufferIndex % BUFFER_LEN], rgbFrame, CV_BGR2RGB);
 				gbDrawingCtx.updateBackground(rgbFrame);
 				//pthread_mutex_unlock(&FGmutex);
 			}
@@ -395,7 +396,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 
 			gbDrawingCtx.draw();
 			++gbPersistance;
-			LOG_INFO("persistance %d", gbPersistance);
+			//~ LOG_INFO("persistance %d", gbPersistance);
 			if(gbPersistance > MAX_PERSISTANCE)
 				gbPersistance = 0;
 			
@@ -440,6 +441,36 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_changeShownModel(JNIEnv*, jo
 	pthread_mutex_unlock(&FGmutex);
 }
 
+JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_changeIlluminationModel(JNIEnv*, jobject){
+	pthread_mutex_lock(&FGmutex);
+	
+	switch(gbDrawingCtx.illuminationToDraw()){
+		case 0:
+			gbDrawingCtx.setIlluminationToDraw(1);
+			break;
+		case 1:
+			gbDrawingCtx.setIlluminationToDraw(2);
+			break;
+		case 2:
+			gbDrawingCtx.setIlluminationToDraw(3);
+			break;
+		case 3:
+			gbDrawingCtx.setIlluminationToDraw(4);
+			break;
+		case 4:
+			gbDrawingCtx.setIlluminationToDraw(5);
+			break;
+		case 5:
+			gbDrawingCtx.setIlluminationToDraw(0);
+			break;
+		default:
+			gbDrawingCtx.setIlluminationToDraw(0);
+			break;
+	}
+		
+	pthread_mutex_unlock(&FGmutex);
+}
+
 JNIEXPORT jfloat JNICALL Java_com_tbf_cameragl_Native_getAngle(JNIEnv*, jobject){
 	pthread_mutex_lock(&FGmutex);
 	
@@ -477,7 +508,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_setTranslate(JNIEnv*, jobjec
 }
 
 void *frameRetriever(void*) {
-	LOG_INFO("Enter retrieving");	
+	//~ LOG_INFO("Enter retrieving");	
 	pthread_mutex_lock(&FGmutex);
 	gbIsCaptureOpened = true;
 	pthread_mutex_unlock(&FGmutex);
@@ -490,10 +521,10 @@ void *frameRetriever(void*) {
 			capFrameWidth=inframe.cols;
 			capFrameHeight=inframe.rows;
 			pthread_mutex_lock(&FGmutex);
-			inframe.copyTo(captureBuffer[(bufferIndex++) % 30]);
+			inframe.copyTo(captureBuffer[(bufferIndex++) % BUFFER_LEN]);
 			pthread_mutex_unlock(&FGmutex);
 			pthread_mutex_lock(&FGmutex);
-			if(bufferIndex == 30)
+			if(bufferIndex == BUFFER_LEN)
 				bufferIndex = 0;
 			//~ LOG_INFO("index %d",bufferIndex);	
 			pthread_mutex_unlock(&FGmutex);
@@ -505,7 +536,7 @@ void *frameRetriever(void*) {
 			cv::Mat rgbFrame;
 			
 			pthread_mutex_lock(&FGmutex);
-			cvtColor(captureBuffer[(bufferIndex - 1) % 30], rgbFrame, CV_BGR2RGB);
+			cvtColor(captureBuffer[(bufferIndex - 1) % BUFFER_LEN], rgbFrame, CV_BGR2RGB);
 			pthread_mutex_unlock(&FGmutex);
 	
 			//~ if(!rgbFrame.empty()){
@@ -524,7 +555,7 @@ void *frameRetriever(void*) {
 	pthread_mutex_lock(&FGmutex);
 	gbIsCaptureOpened = false;
 	pthread_mutex_unlock(&FGmutex);
-	LOG("Camera Closed");
+	//~ LOG("Camera Closed");
 	pthread_exit (NULL);
 }
 

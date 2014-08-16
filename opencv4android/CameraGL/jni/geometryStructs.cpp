@@ -253,6 +253,14 @@ void getCameraOrigin(GLfloat mdl[16], point3 *camera_org){
 
 }
 
+void getTextureBinders(int textureSize, unsigned textureNames[],int textureFirsts[],int textureCounts[],unsigned outTexBinders[]){
+	unsigned faceSize = 0;
+	// be sure that materials size and texture size are equal in original obj files
+	for(unsigned i = 0; i < textureSize; ++i)
+		for(unsigned j = textureFirsts[i]/3; j < (textureFirsts[i] + textureCounts[i])/3; ++j)
+			outTexBinders[j] = textureNames[i+1];
+}
+
 void getFacesNearToCamera(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inColors[][4], float inVertexes[],
 								float outTexCoords[], float outColors[][4], float outVertexes[], unsigned *finalVertexes){
 	std::vector<face> faces;
@@ -464,6 +472,118 @@ void getAllSortedFaces(unsigned vertexesSize, point3 cameraOrigin,float inTexcoo
 
 	*finalVertexes = 3*saved;
 }
+
+void getAllSortedFacesMT(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inVertexes[],
+						float inNormals[], float outTexCoords[], float outVertexes[], float outNormals[], unsigned *finalVertexes,
+						unsigned inTexBinder[], unsigned outTexBinder[]){
+	std::vector<face> faces;
+	
+	unsigned saved = 0;
+
+	// we divide vertex size over 3 because each face has 3 vertexes
+	for(unsigned i  = 0; i < vertexesSize/3; ++i){
+		
+		unsigned nineI = 9*i;
+		point3 vertexCoord1;
+		vertexCoord1.x = inVertexes[nineI];
+		vertexCoord1.y = inVertexes[nineI + 1];
+		vertexCoord1.z = inVertexes[nineI + 2];
+		
+		point3 vertexCoord2;
+		vertexCoord2.x = inVertexes[nineI + 3];
+		vertexCoord2.y = inVertexes[nineI + 4];
+		vertexCoord2.z = inVertexes[nineI + 5];
+		
+		point3 vertexCoord3;
+		vertexCoord3.x = inVertexes[nineI + 6];
+		vertexCoord3.y = inVertexes[nineI + 7];
+		vertexCoord3.z = inVertexes[nineI + 8];
+		
+		point3 faceCenter;
+		faceCenter.x = (vertexCoord1.x + vertexCoord2.x + vertexCoord3.x)/3.0;
+		faceCenter.y = (vertexCoord1.y + vertexCoord2.y + vertexCoord3.y)/3.0;
+		faceCenter.z = (vertexCoord1.z + vertexCoord2.z + vertexCoord3.z)/3.0;		
+
+		face currFace;
+		currFace.d = getDistance(faceCenter,cameraOrigin);
+		
+		currFace.f.p1.x = inVertexes[nineI];
+		currFace.f.p1.y = inVertexes[nineI + 1];
+		currFace.f.p1.z = inVertexes[nineI + 2];
+		currFace.f.p2.x = inVertexes[nineI + 3];
+		currFace.f.p2.y = inVertexes[nineI + 4];
+		currFace.f.p2.z = inVertexes[nineI + 5];
+		currFace.f.p3.x = inVertexes[nineI + 6];
+		currFace.f.p3.y = inVertexes[nineI + 7];
+		currFace.f.p3.z = inVertexes[nineI + 8];
+		
+		currFace.n.p1.x = inNormals[nineI];
+		currFace.n.p1.y = inNormals[nineI + 1];
+		currFace.n.p1.z = inNormals[nineI + 2];
+		currFace.n.p2.x = inNormals[nineI + 3];
+		currFace.n.p2.y = inNormals[nineI + 4];
+		currFace.n.p2.z = inNormals[nineI + 5];
+		currFace.n.p3.x = inNormals[nineI + 6];
+		currFace.n.p3.y = inNormals[nineI + 7];
+		currFace.n.p3.z = inNormals[nineI + 8];
+		
+		unsigned sixI = 6*i;
+		currFace.t.p1.x = inTexcoords[sixI];
+		currFace.t.p1.y  = inTexcoords[sixI + 1];
+		currFace.t.p1.z  = inTexcoords[sixI + 2];
+		currFace.t.p2.x  = inTexcoords[sixI + 3];
+		currFace.t.p2.y  = inTexcoords[sixI + 4];
+		currFace.t.p2.z  = inTexcoords[sixI + 5];
+		
+		currFace.textureName = inTexBinder[i]; // face size
+
+		faces.push_back(currFace);
+		++saved;
+	}
+	
+	std::sort(faces.begin(),faces.end(),nearCamera);
+	
+	std::vector<face>::iterator itFaces;
+	int k = 0;
+	for(itFaces = faces.begin(); itFaces < faces.end(); ++itFaces){
+		unsigned nineK = 9*k;
+		outVertexes[nineK]=(*itFaces).f.p1.x;
+		outVertexes[nineK + 1]=(*itFaces).f.p1.y;
+		outVertexes[nineK + 2]=(*itFaces).f.p1.z;
+		outVertexes[nineK + 3]=(*itFaces).f.p2.x;
+		outVertexes[nineK + 4]=(*itFaces).f.p2.y;
+		outVertexes[nineK + 5]=(*itFaces).f.p2.z;
+		outVertexes[nineK + 6]=(*itFaces).f.p3.x;
+		outVertexes[nineK + 7]=(*itFaces).f.p3.y;
+		outVertexes[nineK + 8]=(*itFaces).f.p3.z;
+		
+		outNormals[nineK]=(*itFaces).n.p1.x;
+		outNormals[nineK + 1]=(*itFaces).n.p1.y;
+		outNormals[nineK + 2]=(*itFaces).n.p1.z;
+		outNormals[nineK + 3]=(*itFaces).n.p2.x;
+		outNormals[nineK + 4]=(*itFaces).n.p2.y;
+		outNormals[nineK + 5]=(*itFaces).n.p2.z;
+		outNormals[nineK + 6]=(*itFaces).n.p3.x;
+		outNormals[nineK + 7]=(*itFaces).n.p3.y;
+		outNormals[nineK + 8]=(*itFaces).n.p3.z;
+		
+		unsigned sixK=6*k;
+		outTexCoords[sixK]=(*itFaces).t.p1.x;
+		outTexCoords[sixK + 1]=(*itFaces).t.p1.y;
+		outTexCoords[sixK + 2]=(*itFaces).t.p1.z;
+		outTexCoords[sixK + 3]=(*itFaces).t.p2.x;
+		outTexCoords[sixK + 4]=(*itFaces).t.p2.y;
+		outTexCoords[sixK + 5]=(*itFaces).t.p2.z;
+		
+		outTexBinder[k] = (*itFaces).textureName;
+		
+		++k;
+	}
+
+	*finalVertexes = 3*saved;
+}
+
+
 
 void getShadeFaces(unsigned vertexesSize, point3 lightOrigin, float inVertexes[], float outVertexes[], unsigned *finalVertexes){
 	std::vector<face> faces;

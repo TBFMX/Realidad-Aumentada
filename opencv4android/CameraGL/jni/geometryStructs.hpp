@@ -27,7 +27,9 @@ struct texture{
 struct face{
 	triangle f;
 	texture t;
+	triangle n;
 	float d; // distance
+	unsigned textureName;
 };
 
 
@@ -44,10 +46,14 @@ void getFurnishTexture(unsigned int);
 void getBackgroundTextures();
 void getObjectTexture(unsigned int, const cv::Mat&);
 void getCameraOrigin(GLfloat mdl[16], point3 *camera_org);
+void getTextureBinders(int textureSize, unsigned textureNames[],int textureFirsts[],int textureCounts[],unsigned outTexBinders[]);
 void scaling(float scale, float inVertexes[], float outVertexes[], unsigned vertexesSize);
 void getFacesNearToCamera(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inColors[][4], float inVertexes[],
 								float outTexCoords[], float outColors[][4], float outVertexes[], unsigned *finalVertexes);
 void getAllSortedFaces(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inVertexes[],
 								float outTexCoords[], float outVertexes[], unsigned *finalVertexes);								
+void getAllSortedFacesMT(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inVertexes[], float inNormals[],
+								float outTexCoords[], float outVertexes[], float outNormals[], unsigned *finalVertexes,
+								unsigned inTexBinder[], unsigned outTexBinder[]);								
 float getDistance(point3 a, point3 b);
 #endif

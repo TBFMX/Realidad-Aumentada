@@ -18,6 +18,8 @@
 #include "couch2.h"
 #include "rossiniColors2.h"
 #include "Tiger.hpp"
+#include "BeautifulGirl.hpp"
+#include "TrollHouse.hpp"
 
 ////////////////////////////////////////////////////////////////////
 // Standard includes:
@@ -60,11 +62,12 @@ unsigned finalVertexSize2;
 
 ARDrawingContext::ARDrawingContext(){
 	m_isBackgroundTextureInitialized = false;
-	m_isFurnishTextureInitialized = false;
-	m_isTigerTextureInitialized = false;
 	m_isWindowUpdated = false;
 	m_isPatternPresent = false;
 	m_objectToDraw = 0;
+	m_illuminationToDraw = 0;
+	m_shadowTuner = 1.0;
+	m_textureSize = 2;
 	m_angle = 0.0;
 	m_scale = 1.0;
 	m_translateX = 0;
@@ -89,12 +92,13 @@ ARDrawingContext::ARDrawingContext(){
 
 ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& c)
   : m_isBackgroundTextureInitialized(false)
-  , m_isFurnishTextureInitialized(false)
-  , m_isTigerTextureInitialized(false)
   , m_calibration(c)
   ,m_isWindowUpdated(false)
   ,m_isPatternPresent(false)
   ,m_objectToDraw(0)
+  ,m_illuminationToDraw(0)
+  ,m_shadowTuner(1.0)
+  ,m_textureSize(2)
   ,m_angle(0.0)
   ,m_scale(1.0)
   ,m_translateX(0)
@@ -136,16 +140,93 @@ void ARDrawingContext::updateBackground(cv::Mat& frame)
 
 void ARDrawingContext::updateFurnishImage()
 {
-	cv::Mat furnish = cv::imread("sdcard/Models/couch.jpg");
-	furnish.copyTo(m_furnishImage);
-	cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGB);
+	cv::Mat furnish = cv::imread("sdcard/Models/Couch/couch.jpg");
+	furnish.copyTo(m_textureImages[0]);
+	cvtColor(m_textureImages[0],m_textureImages[0],CV_BGR2RGB);
 }
 
 void ARDrawingContext::updateTigerImage()
 {
-	cv::Mat tiger = cv::imread("sdcard/Models/bengalTiger.jpg");
-	tiger.copyTo(m_tigerImage);
-	cvtColor(m_tigerImage,m_tigerImage,CV_BGR2RGB);
+	cv::Mat tiger = cv::imread("sdcard/Models/Bengal/bengalTiger.jpg");
+	tiger.copyTo(m_textureImages[0]);
+	cvtColor(m_textureImages[0],m_textureImages[0],CV_BGR2RGB);
+}
+
+void updateTextureImage(char pathToImage[],cv::Mat *outTextureImage){
+	cv::Mat readedImage = cv::imread(pathToImage);
+	readedImage.copyTo(*outTextureImage);
+	cvtColor(*outTextureImage,*outTextureImage,CV_BGR2RGB);
+}
+
+
+void ARDrawingContext::updateTrollHouseImage()
+{
+	std::string pathToTexture = "sdcard/Models/TrollHouse/road_stripe.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+	pathToTexture = "sdcard/Models/TrollHouse/door_outer.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[1]);
+	pathToTexture = "sdcard/Models/TrollHouse/door_interior.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[2]);
+	pathToTexture = "sdcard/Models/TrollHouse/grass.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[3]);
+	pathToTexture = "sdcard/Models/TrollHouse/door_garage.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[4]);
+	pathToTexture = "sdcard/Models/TrollHouse/rock.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[5]);
+	pathToTexture = "sdcard/Models/TrollHouse/sign.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[6]);
+	pathToTexture = "sdcard/Models/TrollHouse/stone_wall.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[7]);
+	pathToTexture = "sdcard/Models/TrollHouse/carpet_01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[8]);
+	pathToTexture = "sdcard/Models/TrollHouse/wood_wall.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[9]);
+	pathToTexture = "sdcard/Models/TrollHouse/brick_wall_01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[10]);
+	pathToTexture = "sdcard/Models/TrollHouse/brick_wall_02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[11]);
+	pathToTexture = "sdcard/Models/TrollHouse/cement_02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[12]);
+	pathToTexture = "sdcard/Models/TrollHouse/driveway.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[13]);
+	pathToTexture = "sdcard/Models/TrollHouse/floor_wood.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[14]);
+	pathToTexture = "sdcard/Models/TrollHouse/floor_tiles_01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[15]);
+	pathToTexture = "sdcard/Models/TrollHouse/floor_tiles_02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[16]);
+	pathToTexture = "sdcard/Models/TrollHouse/carpet_01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[17]);
+	pathToTexture = "sdcard/Models/TrollHouse/carpet_02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[18]);
+	pathToTexture = "sdcard/Models/TrollHouse/roof.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[19]);
+	pathToTexture = "sdcard/Models/TrollHouse/roof_wood.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[20]);
+	pathToTexture = "sdcard/Models/TrollHouse/wall_interior_02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[21]);
+	pathToTexture = "sdcard/Models/TrollHouse/fence_wood.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[22]);
+	pathToTexture = "sdcard/Models/TrollHouse/metal.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[23]);
+	pathToTexture = "sdcard/Models/TrollHouse/sidewalk.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[24]);
+}
+
+void ARDrawingContext::updateBeautifulGirlImage()
+{
+	std::string pathToTexture = "sdcard/Models/BeautifulGirl/12c14c70.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+	pathToTexture = "sdcard/Models/BeautifulGirl/13932ef0.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[1]);
+	pathToTexture ="sdcard/Models/BeautifulGirl/19d89130.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[2]);
+	pathToTexture ="sdcard/Models/BeautifulGirl/16cecd10.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[3]);
+	pathToTexture ="sdcard/Models/BeautifulGirl/16c2e0d0.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[4]);
+	pathToTexture ="sdcard/Models/BeautifulGirl/12dbd6d0.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[5]);
 }
 
 void ARDrawingContext::updateWindow()
@@ -172,10 +253,68 @@ bool ARDrawingContext::isWindowUpdated(){
 
 void ARDrawingContext::setObjectToDraw(int objectId){
 	m_objectToDraw = objectId;
+	destroyTexture();
+	switch(m_objectToDraw){
+		case 0:
+			m_textureSize = 2;
+			updateFurnishImage();
+			break;
+		case 1: m_textureSize = 2;
+			updateTigerImage();
+			break;
+		case 2: m_textureSize = 7;
+			updateBeautifulGirlImage();
+			break;
+		case 3: m_textureSize = 26;
+			updateTrollHouseImage();
+			break;
+		case 4: m_textureSize = 2;
+			updateFurnishImage();
+			break;
+		case 5: m_textureSize = 2;
+			updateTigerImage();
+			break;
+		default:
+			updateFurnishImage();
+			m_textureSize = 2;
+			break;
+	}
+	createTexture();
+}
+
+void ARDrawingContext::setIlluminationToDraw(int illumination){
+	m_illuminationToDraw = illumination;
+	switch(m_illuminationToDraw){
+		case 0:
+			m_shadowTuner = 1.0;
+			break;
+		case 1:
+			m_shadowTuner = 0.8;
+			break;
+		case 2:
+			m_shadowTuner = 0.6;
+			break;
+		case 3:
+			m_shadowTuner = 0.4;
+			break;
+		case 4:
+			m_shadowTuner = 0.2;
+			break;
+		case 5:
+			m_shadowTuner = 0.0;
+			break;
+		default:
+			m_shadowTuner = 1.0;
+			break;
+	}
 }
 
 int ARDrawingContext::objectToDraw(){
 	return m_objectToDraw;
+}
+
+int ARDrawingContext::illuminationToDraw(){
+	return m_illuminationToDraw;
 }
 
 bool ARDrawingContext::isThereAPattern(){
@@ -218,31 +357,28 @@ void ARDrawingContext::setTranslate(float x,float y){
 }
 
 void ARDrawingContext::createTexture() {
-	unsigned int numTextures = 3;
 	// Initialize texture for background image
 	if (!m_isBackgroundTextureInitialized)
 	{
 		  // we generate both textures
-		LOG("Texture Created");
-		glGenTextures(numTextures, m_textureId);
-		glBindTexture(GL_TEXTURE_2D, m_textureId[0]);
+		//~ LOG("Texture Created");
+		glGenTextures(m_textureSize, m_textureId);
+		//~ glBindTexture(GL_TEXTURE_2D, m_textureId[0]);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // GL_LINEAR
+		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // GL_LINEAR
 		m_isBackgroundTextureInitialized = true;
 		unsigned int m_depthRenderbuffer = 0;
 	}
 	//~ getFurnishTexture(m_textureId[1]);
-	getObjectTexture(m_textureId[1],m_furnishImage);
-	getObjectTexture(m_textureId[2],m_tigerImage);
+	//~ getObjectTexture(m_textureId[1],m_furnishImage);
+	//~ getObjectTexture(m_textureId[2],m_tigerImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ARDrawingContext::destroyTexture() {
-	LOG("Texture destroyed");
-	glDeleteTextures(3, m_textureId);
-	m_isFurnishTextureInitialized = false;
-	m_isTigerTextureInitialized = false;
+	//~ LOG("Texture destroyed");
+	glDeleteTextures(m_textureSize, m_textureId);
 	m_isBackgroundTextureInitialized = false;
 }
 
@@ -250,8 +386,8 @@ void ARDrawingContext::draw()
 {
 	//~ createTexture();
 	getObjectTexture(m_textureId[0],m_backgroundImage);
-	getObjectTexture(m_textureId[1],m_furnishImage);
-	getObjectTexture(m_textureId[2],m_tigerImage);
+	for(unsigned i = 1; i < m_textureSize; ++i)
+		getObjectTexture(m_textureId[i],m_textureImages[i-1]);
 	drawCameraFrame();                        // Render background
 	validatePatternPresent();
 	drawAugmentedScene();                              // Draw AR
@@ -262,8 +398,8 @@ void ARDrawingContext::drawPersistance()
 {
 	//~ createTexture();
 	getObjectTexture(m_textureId[0],m_backgroundImage);
-	getObjectTexture(m_textureId[1],m_furnishImage);
-	getObjectTexture(m_textureId[2],m_tigerImage);
+	for(unsigned i = 1; i < m_textureSize; ++i)
+		getObjectTexture(m_textureId[i],m_textureImages[i-1]);
 	drawCameraFrame();                        // Render background
 	//~ drawPersistance();                              // Draw AR
 }
@@ -324,7 +460,7 @@ void ARDrawingContext::validatePatternPresent(){
 		getCameraOrigin(mdl,&cameraOrigin2);
 		glPopMatrix();
 		
-		LOG_INFO("augmented scene");
+		//~ LOG_INFO("augmented scene");
 		if(cameraOrigin2.z <= 0.5) // || cameraOrigin2.z >=10.0)
 			m_isPatternPresent = false;
 		else
@@ -413,16 +549,29 @@ void ARDrawingContext::drawAugmentedScene()
 	
 	drawCoordinateAxis();
 	
-	if(m_objectToDraw >= 0 && m_objectToDraw < 3)
-		drawFurnish(m_objectToDraw);
-	else
-		drawTiger(m_objectToDraw);
+	switch(m_objectToDraw){
+		case 0: drawFurnish();
+			break;
+		case 1: drawTiger();
+			break;
+		case 2: drawBeautifulGirl();
+			break;
+		case 3: drawTrollHouse();
+			break;
+		case 4: drawFurnish();
+			break;
+		case 5: drawTiger();
+			break;
+		default:
+			drawFurnish();
+			break;
+	}
 }
 
 
 void ARDrawingContext::drawAugmentedPersistance()
 {
-	LOG_INFO("augmented persistance");
+	//~ LOG_INFO("augmented persistance");
 	// Init augmentation projection
 	glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
 	//~ glMatrixMode(GL_MODELVIEW);
@@ -433,10 +582,23 @@ void ARDrawingContext::drawAugmentedPersistance()
 	//~ drawCubeModel();
 	//~ try{
 		//~ drawFurnish();
-	if(m_objectToDraw >= 0 && m_objectToDraw < 3)
-		drawFurnish(m_objectToDraw);
-	else
-		drawTiger(m_objectToDraw);
+	switch(m_objectToDraw){
+		case 0: drawFurnish();
+			break;
+		case 1: drawTiger();
+			break;
+		case 2: drawBeautifulGirl();
+			break;
+		case 3: drawTrollHouse();
+			break;
+		case 4: drawFurnish();
+			break;
+		case 5: drawTiger();
+			break;
+		default:
+			drawFurnish();
+			break;
+	}
 }
 
 
@@ -517,16 +679,11 @@ void ARDrawingContext::drawCoordinateAxis()
 }
 
 // !!!!!!!!!!!!!!! change RGB to BGR
-void ARDrawingContext::drawFurnish(int chosenObject)
+void ARDrawingContext::drawFurnish()
 {	
-	float shadowTuner = 1.0; // values from 0.0 to 1.0
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
 	float scale = m_scale;
-	
-	if(chosenObject == 1)
-		shadowTuner = 0.7;
-	else if(chosenObject == 2)
-		shadowTuner = 0.4;
 
 	// Enable texture mapping stuff
 	//~ glBlendFunc (GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
@@ -585,26 +742,21 @@ void ARDrawingContext::drawFurnish(int chosenObject)
     //~ glDisable(GL_MULTISAMPLE);
     glDisable(GL_BLEND);
     //~ glDisable(GL_LINE_SMOOTH);
-
 }
 
-void ARDrawingContext::drawTiger(int chosenObject)
+void ARDrawingContext::drawTiger()
 {	
-	float shadowTuner = 1.0; // values from 0.0 to 1.0
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
 	//~ float scale = 12.0;
 	float scale = m_scale;
 	
-	if(chosenObject == 4)
-		shadowTuner = 0.7;
-	else if(chosenObject == 5)
-		shadowTuner = 0.4;
 		
 	//~ glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
 	//~ glEnable(GL_MULTISAMPLE);
 	// Enable texture mapping stuff
-	startTexture(m_textureId[2]);
+	startTexture(m_textureId[1]);
 	startArrays();
 
 	glPushMatrix();
@@ -653,3 +805,165 @@ void ARDrawingContext::drawTiger(int chosenObject)
     
     //~ glDisable(GL_LINE_SMOOTH);
 }
+
+void ARDrawingContext::drawBeautifulGirl(){
+	float outTexCoords2[BeautifulGirlVertexes*2];
+	float outVertexes2[BeautifulGirlVertexes*3];
+	float outNormals2[BeautifulGirlVertexes*3];
+	unsigned inTexBinder[BeautifulGirlVertexes];
+	unsigned outTexBinder[BeautifulGirlVertexes];
+	unsigned finalVertexSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ float scale = 4.0;
+	float scale = m_scale;
+	//~ glEnable(GL_LINE_SMOOTH);
+	//~ glDisable(GL_COLOR_MATERIAL);
+	//~ startBeautifulGirlLight(lPosition);
+	glEnable(GL_BLEND);
+	//~ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	getTextureBinders(BeautifulGirlMaterials, m_textureId, BeautifulGirlFirsts,BeautifulGirlCounts,inTexBinder);
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedFacesMT(BeautifulGirlVertexes,cameraOrigin,BeautifulGirlTexels,BeautifulGirlPositions,BeautifulGirlNormals,
+	outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,inTexBinder,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	for(unsigned iFace = 0; iFace < finalVertexSize2 / 3; ++iFace){
+		glBindTexture(GL_TEXTURE_2D, outTexBinder[iFace]);
+		glDrawArrays(GL_TRIANGLES, 3*iFace, 3); //each face have 3 vertexes
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ endBeautifulGirlLight();
+    //~ glDisable(GL_LINE_SMOOTH);	
+}
+
+void ARDrawingContext::drawTrollHouse()
+{
+	float outTexCoords2[TrollHouseVertexes*2];
+	float outVertexes2[TrollHouseVertexes*3];
+	float outNormals2[TrollHouseVertexes*3];
+	unsigned inTexBinder[TrollHouseVertexes];
+	unsigned outTexBinder[TrollHouseVertexes];
+	unsigned finalVertexSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ //float scale = 4.0;
+	float scale = m_scale;
+	//~ //glEnable(GL_LINE_SMOOTH);
+	//~ //glDisable(GL_COLOR_MATERIAL);
+	//~ //startTrollHouseLight(lPosition);
+	glEnable(GL_BLEND);
+	//~ //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ //glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ //glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ //LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	getTextureBinders(TrollHouseMaterials, m_textureId, TrollHouseFirsts,TrollHouseCounts,inTexBinder);
+	//~ //getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ //outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedFacesMT(TrollHouseVertexes,cameraOrigin,TrollHouseTexels,TrollHousePositions,TrollHouseNormals,
+	outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,inTexBinder,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+
+	//~ //glColor4f(0.9f,0.9f,0.9f,1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	for(unsigned iFace = 0; iFace < finalVertexSize2 / 3; ++iFace){
+		glBindTexture(GL_TEXTURE_2D, outTexBinder[iFace]);
+		glDrawArrays(GL_TRIANGLES, 3*iFace, 3); //each face have 3 vertexes
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ //glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ //endTrollHouseLight();
+    //~ //glDisable(GL_LINE_SMOOTH);
+}
+

@@ -25,4 +25,6 @@ public class Native {
 	public static native float getScale();
 
 	public static native void setTranslate(float x, float y);
+
+	public static native void changeIlluminationModel();
 }

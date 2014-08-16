@@ -4,6 +4,7 @@
     <string name="app_name">CameraGL</string>
     <string name="hello_world">Hello world!</string>
     <string name="next_object">Settings</string>
+    <string name="next_illumination">Illumination</string>
     <string name="reset">Reset</string>
 
 </resources>

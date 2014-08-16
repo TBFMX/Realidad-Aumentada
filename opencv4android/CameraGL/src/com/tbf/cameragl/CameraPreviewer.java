@@ -100,6 +100,10 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
 	    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
 	    	mCameraRenderer.changeShownModel();
 	    	return true;
+	    case R.id.next_illum:
+	    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+	    	mCameraRenderer.changeIlluminationModel();
+	    	return true;
 	    case R.id.reset:
 		    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
 		    mCameraRenderer.backToDefaults();

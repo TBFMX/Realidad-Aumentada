@@ -243,4 +243,9 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
 	    mRenderer.setTranslate(mCumulativeTranslateX + mTranslateX, mCumulativeTranslateY + mTranslateY);
 	    mRenderer.setAngle(mCumulativeAngle + mAngle);
 	}
+
+	public void changeIlluminationModel() {
+		// TODO Auto-generated method stub
+		mRenderer.changeIlluminationModel();
+	}
 }

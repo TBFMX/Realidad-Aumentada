@@ -1,9 +1,0 @@
-package com.tbf.cameragl;
-
-public interface GLSurfaceView {
-
-	public interface Renderer {
-
-	}
-
-}

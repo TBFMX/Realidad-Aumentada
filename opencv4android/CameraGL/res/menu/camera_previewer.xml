@@ -10,6 +10,12 @@
         android:showAsAction="ifRoom|withText"/>
     
     <item
+        android:id="@+id/next_illum"
+        android:orderInCategory="100"
+        android:title="@string/next_illumination"
+        android:showAsAction="ifRoom|withText"/>    
+    
+    <item
         android:id="@+id/reset"
         android:orderInCategory="100"
         android:title="@string/reset"

@@ -36,6 +36,8 @@ public:
 	void updateBackground(cv::Mat& frame);
 	void updateFurnishImage();
 	void updateTigerImage();
+	void updateTrollHouseImage();
+	void updateBeautifulGirlImage();
 	void updateWindow();
 	//! Render entire scene in the OpenGl window
 	void draw();
@@ -56,15 +58,21 @@ public:
 	void drawAugmentedPersistance();
 	
 	//! Draw furnish
-	void drawFurnish(int chosenObject);
+	void drawFurnish();
 	
 	//! Draw tiger
-	void drawTiger(int chosenObject);
+	void drawTiger();
+	
+	void drawBeautifulGirl();
+	
+	void drawTrollHouse();
 	
 	bool isThereAPattern();
 	
 	void setObjectToDraw(int objectId);
+	void setIlluminationToDraw(int illumination);
 	int objectToDraw();
+	int illuminationToDraw();
 	void setAngle(float angle);
 	float getAngle();
 	void setScale(float scale);
@@ -84,18 +92,18 @@ private:
 
 
   bool               m_isBackgroundTextureInitialized;
-  bool 				 m_isFurnishTextureInitialized;
-  bool 				 m_isTigerTextureInitialized;
   CameraCalibration  m_calibration;
   cv::Mat            m_backgroundImage;
-  cv::Mat			 m_furnishImage;
-  cv::Mat 			 m_tigerImage;
+  cv::Mat			 m_textureImages[25];
+  unsigned int 		 m_textureSize;
+  float				 m_shadowTuner;
   unsigned int 		 m_width;
   unsigned int 		 m_height;
-  unsigned int 		 m_textureId[3];
+  unsigned int 		 m_textureId[25];
   unsigned int 		 m_isWindowUpdated;
   bool 				 m_isPatternPresent;
   int 				 m_objectToDraw;
+  int 				 m_illuminationToDraw;
   Matrix44			 m_persistentPose;
   Matrix44			 m_persistentProjection;
   float 			 m_angle;
