@@ -408,7 +408,7 @@ void getFurnishTexture(unsigned int texName){
 	if (!m_isFurnishTextureInitialized)
 	{
 		//texture image
-		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
+		cv::Mat m_furnishImage = cv::imread("sdcard/Models/Couch/couch.jpg");
 		cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGB);
 		
 		//~ //glGenTextures(1, &texName);

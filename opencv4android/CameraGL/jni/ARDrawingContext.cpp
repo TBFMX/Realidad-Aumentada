@@ -86,6 +86,9 @@ ARDrawingContext::ARDrawingContext(){
 	float cy=236.0028199018263;
 	CameraCalibration calibration(fx,fy,cx,cy);
 	m_calibration = calibration;
+	
+	cv::Mat image(m_width,m_height, CV_8UC3);
+	updateBackground(image);
 	//~ cv::Mat furnishImage = cv::imread("sdcard/Models/couch.jpg");
 	//~ cvtColor(furnishImage,furnishImage,CV_BGR2RGBA);
 };
@@ -116,6 +119,8 @@ ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& 
     //~ cv::setOpenGlDrawCallback(windowName, ARDrawingContextDrawCallback, this);
     m_width = frameSize.width;
     m_height = frameSize.height;
+    cv::Mat image(m_width,m_height, CV_8UC3);
+	updateBackground(image);
     //~ if(m_furnishImage.empty()){
 		//~ cv::Mat furnishImage = cv::imread("sdcard/Models/couch.jpg");
 		//~ cvtColor(furnishImage,furnishImage,CV_BGR2RGBA);
@@ -432,9 +437,9 @@ void ARDrawingContext::drawCameraFrame()
 
 	glColor4f(1,1,1,1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    GLfloat mdl[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
-	getCameraOrigin(mdl,&cameraOrigin2);
+    //~ GLfloat mdl[16];
+	//~ glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	//~ getCameraOrigin(mdl,&cameraOrigin2);
 	//~ LOG_INFO("x=%f y=%f z=%f background ",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	endArrays();
 	endTexture();
@@ -531,8 +536,10 @@ void ARDrawingContext::drawAugmentedScene()
 	modelOrientation.z = 0;
 	// we correct the directions in order to match camera orientation
 	point3 fingerInTablet;
-	fingerInTablet.x = -m_translateX*m_scale;
-	fingerInTablet.y = -m_translateY*m_scale;
+	fingerInTablet.x = -m_translateX*10;
+	fingerInTablet.y = -m_translateY*10;
+	//~ fingerInTablet.x = -m_translateX*m_scale;
+	//~ fingerInTablet.y = -m_translateY*m_scale;
 	fingerInTablet.z = 0;
 	
 	point3 fingerInOpengl;

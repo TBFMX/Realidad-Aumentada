@@ -422,6 +422,7 @@ bool Renderer::initialize()
     glEnable(GL_CULL_FACE);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
     
     glViewport(0, 0, width, height);
 
@@ -670,13 +671,11 @@ void Renderer::drawFrame()
 
 	//~ float scale = 1.0;
 
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-   glShadeModel(GL_FLAT);
-   glEnable(GL_DEPTH_TEST);
-   
-   GLuint framebuffer = 0;
-   glGenFramebuffers(1,&framebuffer)
+
+
+   //~ GLuint framebuffer = 0;
+   //~ glGenFramebuffers(1,&framebuffer)
 	//~ if(!mIsTextureInitialized){
 		//~ makeCheckImage();
 		//~ glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -696,7 +695,7 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 if (!mIsTextureInitialized)
 	{
 		//texture image
-		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
+		cv::Mat m_furnishImage = cv::imread("sdcard/Models/Couch/couch.jpg");
 		//~ if (m_furnishImage.rows > 0){
 			//~ LOG_INFO("model open correctly...OK : %d, %d, %d",m_furnishImage.rows,m_furnishImage.cols,m_furnishImage.channels() );
 		//~ }else{
@@ -739,17 +738,21 @@ if (!mIsTextureInitialized)
 			
 		mIsTextureInitialized = true;
 	}	
-//~ 
- //~ // Enable texture mapping stuff
+
+   //~ glShadeModel(GL_SMOOTH);
+   //~ glEnable(GL_DEPTH_TEST);
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   //~ glClear(GL_DEPTH_BUFFER_BIT);
+
 glEnable(GL_TEXTURE_2D);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_COLOR_ARRAY);
+glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 //~ 
 //~ // Bind the OpenGL texture
 //~ glBindTexture(GL_TEXTURE_2D, [texture name]);
 
 
-    //~ glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
     //~ glEnableClientState(GL_COLOR_ARRAY);
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -758,16 +761,22 @@ glDisableClientState(GL_COLOR_ARRAY);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     //~ glPushMatrix();
+   
     glTranslatef(0, 0, -5.0f);
-    //~ glRotatef(_angle, 0, 1, 0);
-    glRotatef(_angle, 0, 1, 0);
-    //~ glRotatef(_angle*0.25f, 1, 0, 0);
-    //~ glRotatef(_angle*0.25f, 1, 0, 0);
-    glScalef(scale,scale,scale);
     
+    glRotatef(_angle, 0, 1, 0);
+    
+    glScalef(scale,scale,scale);
+    //~ glRotatef(_angle, 0, 1, 0);
+    
+    //~ glRotatef(_angle*0.25f, 1, 0, 0);
+    //~ glRotatef(_angle*0.25f, 1, 0, 0);
+    
+    glPushMatrix();
     GLfloat mdl[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
 	//LOG_INFO("x=%f y=%f z=%f",cameraOrigin.x,cameraOrigin.y,cameraOrigin.z);
 	//~ getFacesToCamera(couchNumVerts,cameraOrigin,couchTexCoords,COLORS,couchVerts,
 	getFacesNearToCamera(couchNumVerts,cameraOrigin,couchTexCoords,COLORS,couchVerts,
@@ -791,39 +800,23 @@ glDisableClientState(GL_COLOR_ARRAY);
 //~ glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords);
 	//~ glColorPointer(4, GL_FLOAT, 0, outColors);
     //~ glVertexPointer(3, GL_FLOAT, 0, rossiniVerts);
-    glVertexPointer(3, GL_FLOAT, 0, outVertexes);
-
-	glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords);
-
-	//~ glFrontFace(GL_CW);
 	
-    //~ finalVertexSize = rossiniNumVerts;
+    glVertexPointer(3, GL_FLOAT, 0, outVertexes);
+	glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords);
+    //~ glVertexPointer(3, GL_FLOAT, 0, couchVerts);
+    //~ glNormalPointer(3,GL_FLOAT,couchNormals);
+	//~ glTexCoordPointer(2, GL_FLOAT, 0, couchTexCoords);
 
-	glDrawArrays(GL_TRIANGLES, 0, finalVertexSize);
 
-    //~ glDrawArrays(GL_TRIANGLES, 0, finalVertexSize);
+    glDrawArrays(GL_TRIANGLES, 0, finalVertexSize);
     
-    //~ glDrawArrays(GL_TRIANGLES, 0, rossiniNumVerts);
-    //~ glDrawArrays(GL_TRIANGLES, finalVertexSize, rossiniNumVerts);
-
-
-	//~ glPopMatrix();
-    //~ glDrawElements(GL_TRIANGLES, 0, rossiniNumVerts);
-    //~ glDrawArrays(GL_LINES, 0, rossiniNumVerts);
 
     _angle += 0.2f;
 
-//	// set input data to arrays
-//	glVertexPointer(3, GL_FLOAT, 0, rossiniVerts);
-//	glNormalPointer(GL_FLOAT, 0, rossiniNormals);
-//	glTexCoordPointer(2, GL_FLOAT, 0, rossiniTexCoords);
-//
-//	glEnableClientState(GL_VERTEX_ARRAY);
-//	glEnableClientState(GL_COLOR_ARRAY);
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
     //~ glDisableClientState(GL_COLOR_ARRAY);
-    //~ glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
     glEnable(GL_TEXTURE_2D);
 	glFlush();
 }

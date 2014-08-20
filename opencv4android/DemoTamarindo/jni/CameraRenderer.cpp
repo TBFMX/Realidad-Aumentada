@@ -242,9 +242,11 @@ JNIEXPORT void JNICALL Java_com_tbf_demotamarindo_Native_initCamera(JNIEnv*, job
     // Change this calibration to yours:
     //~ CameraCalibration calibration(526.58037684199849f, 524.65577209994706f, 318.41744018680112f, 202.96659047014398f);
     calibration.set4Params(fx,fy,cx,cy);
-    patternImage=cv::imread("sdcard/Models/PyramidPattern.jpg");
+    //~ patternImage=cv::imread("sdcard/Models/PyramidPattern.jpg");
+    patternImage=cv::imread("sdcard/Models/visuartech.jpg");
     
 	LOG("Camera Created");
+	//~ capture.open(CV_CAP_ANDROID + 0);
 	//~ capture.open(CV_CAP_ANDROID + 0);
 	capture.open(CV_CAP_ANDROID + 0);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);

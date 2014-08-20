@@ -12,7 +12,7 @@ import org.opencv.core.Size;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -47,16 +47,17 @@ public class CameraPreviewer extends Activity {
         setContentView(mView);
     }
 
-@SuppressWarnings("deprecation")
+
 protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAccessor accessor) {
 	int calcWidth = Integer.MAX_VALUE;
 	int calcHeight = Integer.MAX_VALUE;
 
-	Display display = getWindowManager().getDefaultDisplay();
-
-	int maxAllowedWidth = 1920;
+	//Display display = getWindowManager().getDefaultDisplay();
+	DisplayMetrics display = this.getResources().getDisplayMetrics();
+	
+	int maxAllowedWidth = 1024;
 	maxAllowedWidth = 1024;
-	int maxAllowedHeight = 1536;
+	int maxAllowedHeight = 1024;
 	maxAllowedHeight = 1024;
 
 	for (Object size : supportedSizes) {
@@ -66,7 +67,7 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
 		if (width <= maxAllowedWidth && height <= maxAllowedHeight) {
 			if ( width <= calcWidth
 					&& width >= (maxAllowedWidth/2)
-					&& (display.getWidth() % width ==0||display.getHeight() % height==0)
+					&& (display.widthPixels % width ==0||display.heightPixels % height==0)
 			){
 				calcWidth = (int) width;
 				calcHeight = (int) height;

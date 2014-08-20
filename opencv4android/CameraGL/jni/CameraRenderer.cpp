@@ -104,18 +104,21 @@ void drawCurrentCameraFrame(int texName, int bufferIndex, cv::Mat captureBuffer[
 		int w=rgbCameraFrame.cols;
 		int h=rgbCameraFrame.rows;
 		//LOG_INFO("w,h, channels= %d,%d, %d, %d ",w,h,rgbFrame.channels(), textureId[0]);
-		
+			cv::Size size(640,480);//the dst image size,e.g.100x100
+			cv::Mat dst;//dst image
+			resize(rgbCameraFrame,dst,size);//resize image
+			
 		glPixelStorei(GL_PACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texName);
 
 		if (texName != 0){
 			// Upload new texture data:
-		if (rgbCameraFrame.channels() == 3)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, rgbCameraFrame.data);
-		else if(rgbCameraFrame.channels() == 4)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbCameraFrame.data);
-		else if (rgbCameraFrame.channels()==1)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgbCameraFrame.data);
+		if (dst.channels() == 3)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,640, 480, 0, GL_RGB, GL_UNSIGNED_BYTE, dst.data);
+		else if(dst.channels() == 4)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,640, 480, 0, GL_RGBA, GL_UNSIGNED_BYTE, dst.data);
+		else if (dst.channels()==1)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 640, 480, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, dst.data);
 		}
 		
 		//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
@@ -169,8 +172,16 @@ bool processFrame(cv::Mat& cameraFrame, MarkerDetector& markerDetector, ARDrawin
 	//~ pipeline.m_patternDetector.homographyReprojectionThreshold += 0.2;
 	//~ pipeline.m_patternDetector.homographyReprojectionThreshold = std::min(10.0f, pipeline.m_patternDetector.homographyReprojectionThreshold);
 	
+	cv::Size size(640,480);//the dst image size,e.g.100x100
+	cv::Mat dst;//dst image
+	resize(cameraFrame,dst,size);//resize image
+	
+	//~ drawingCtx.updateBackground(cameraFrame);
+	//~ drawingCtx.updateBackground(dst);
+	
     // Find a pattern and update it's detection status:
-    drawingCtx.isPatternPresent = markerDetector.processFrame(cameraFrame);
+    //~ drawingCtx.isPatternPresent = markerDetector.processFrame(cameraFrame);
+    drawingCtx.isPatternPresent = markerDetector.processFrame(dst);
     //~ LOG_INFO("pattern testing");
 
 	std::vector<Transformation> m_transformations;
@@ -228,21 +239,21 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 {
 	//~ LOG_INFO("Entering");
 	// franquy parameters 640x480
-	float fx = 695.4521167717107;
-	float fy = 694.5519610122569;
-	float cx = 337.2059936807979;
-	float cy = 231.1645822893514;
+	//~ float fx = 695.4521167717107;
+	//~ float fy = 694.5519610122569;
+	//~ float cx = 337.2059936807979;
+	//~ float cy = 231.1645822893514;
 	
 	// tablet parameters 640x480
-	fx=628.6341119951087;
-	fy=628.7519411113429;
-	cx=325.3443919995285;
-	cy=236.0028199018263;
+	float fx=628.6341119951087;
+	float fy=628.7519411113429;
+	float cx=325.3443919995285;
+	float cy=236.0028199018263;
 	// tablet parameters 1024x768
-	fx=695.398588072418;
-	fy=672.4933734804648;
-	cx=448.2380923498616;
-	cy=261.186397004368;
+	//~ fx=695.398588072418;
+	//~ fy=672.4933734804648;
+	//~ cx=448.2380923498616;
+	//~ cy=261.186397004368;
 	//~ // tablet parameters 2048x1536
 	//~ fx=1194.514196322121;
 	//~ fy=1103.525587362546;
@@ -363,7 +374,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false){
 		pthread_mutex_lock(&FGmutex);
 		// we validate if the pattern found was the best
-		gbDrawingCtx.validatePatternPresent(); 
+		gbDrawingCtx.validatePatternPresent();
 		pthread_mutex_unlock(&FGmutex);
 		gbIsWindowUpdated = false;
 	}

@@ -1,17 +1,13 @@
 package com.tbf.cameragl;
 
+import java.lang.Math;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
 import org.opencv.core.Size;
-
 import android.content.Context;
-import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
-import android.util.FloatMath;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 public class ResponsiveGLSurfaceView extends GLSurfaceView {
 
@@ -39,9 +35,8 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
     private float d = 0f;
     private float newRot = 0f;
     private float[] lastEvent = null;
-    private boolean isNewDrag = false;
-
-	public ResponsiveGLSurfaceView(Context context,Size size) {
+    
+    public ResponsiveGLSurfaceView(Context context,Size size) {
 		super(context);
 		mRenderer = new CameraRenderer(context, size);
 		setRenderer(mRenderer);
@@ -56,7 +51,6 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
                 start.set(event.getX(), event.getY());
                 mode = DRAG;
                 lastEvent = null;
-                isNewDrag = true;
                 mCumulativeTranslateX = mCumulativeTranslateX + mTranslateX;
                 mCumulativeTranslateY = mCumulativeTranslateY + mTranslateY;
                 //Toast.makeText(getContext(), "down action", Toast.LENGTH_SHORT).show();;
@@ -64,7 +58,9 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
             case MotionEvent.ACTION_POINTER_DOWN:
                 oldDist = spacing(event);
                 mCumulativeScale = mCumulativeScale * mScale;
-                if (oldDist > 10f) {
+                if(mCumulativeScale < 1.0)
+                	mCumulativeScale = (float) 1.0;
+                if (oldDist > 40f) {
                     //savedMatrix.set(matrix);
                     //midPoint(mid, event);
                     mode = ZOOM;
@@ -76,6 +72,10 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
                 lastEvent[3] = event.getY(1);
                 d = rotation(event);
                 mCumulativeAngle = mCumulativeAngle + mAngle;
+                if(mCumulativeAngle > 360)
+                	mCumulativeAngle = mCumulativeAngle - 360;
+                else if(mCumulativeAngle < -360)
+                	mCumulativeAngle = mCumulativeAngle + 360;
                 //d = rotationDirection(event);
                 break;
             case MotionEvent.ACTION_UP:
@@ -100,11 +100,11 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
                     
                 } else if (mode == ZOOM) {
                     float newDist = spacing(event);
-                    if (newDist > 10f) {
+                    if (newDist > 40f) {
                         //matrix.set(savedMatrix);
                         mScale = (newDist / oldDist);
                         //matrix.postScale(scale, scale, mid.x, mid.y);
-                        mRenderer.setScale(mCumulativeScale*mScale);
+                        mRenderer.setScale(mCumulativeScale * mScale);
                         //String aScale = "scale " + mRenderer.getScale();
                         //Toast.makeText(getContext(), aScale, Toast.LENGTH_SHORT).show();
                     }
@@ -134,16 +134,7 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
     private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
-    }
-
-    /**
-* Calculate the mid point of the first two fingers
-*/
-    private void midPoint(PointF point, MotionEvent event) {
-        float x = event.getX(0) + event.getX(1);
-        float y = event.getY(0) + event.getY(1);
-        point.set(x / 2, y / 2);
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     /**
@@ -161,54 +152,7 @@ public class ResponsiveGLSurfaceView extends GLSurfaceView {
         return (float) Math.toDegrees(radians);
     }
     
-    private float rotationDirection(MotionEvent event) {
-        double x0 = event.getX(0);
-        double x1 = event.getX(1);
-        double y0 = event.getY(0);
-        double y1 = event.getY(1);
-        float height = mRenderer.getHeight();
-        float width = mRenderer.getWidth();
-        float midX = width/2;
-        float midY = height/2;
-        float degrees = 0;
-        // right rotation
-//        if(x1 < midX){
-//        	if(y1 < midY){
-//        		if(y0 < midY )
-//        			degrees = (float )(90.0 * (x1 - x0) / width); // negative
-//        		else if(y0 > midY)
-//        			degrees = (float )(90.0 * (y1 - y0) / height); // positive		
-//        	}else if(y1 > midY){
-//        		if(x0 < midX )
-//        			degrees = (float )(90.0 * (y1 - y0) / height); // positive
-//        		else if(x0 > midX)
-//        			degrees = (float )(90.0 * (x1 - x0) / width); // negative
-//        	}
-//        } else if(x1 > midX){
-//        	if(y1 < midY){
-//        		if(y0 > midY)
-//        			degrees = (float )(90.0 * (y1 - y0) / height); // negative
-//        		else if(x0 < midX)
-//        			degrees = (float )(90.0 * (x0 - x1) / width);  // positive      			
-//        	}else if(y1 > midY){
-//        		if(x0 < midX )
-//        			degrees = (float )(90.0 * (x0 - x1) / width);
-//        		else if(x0 > midX)
-//        			degrees = (float )(90.0 * (y0 - y1) / height); 
-//        	}       	
-//        }
-        
-        if(x1 > midX || x0 > midX)
-        	degrees = 1;
-        else if (x1 < midX || x0 < midX)
-        	degrees = -1;
-        	
-        String aAngle = "degrees " + degrees;
-        Toast.makeText(getContext(), aAngle, Toast.LENGTH_SHORT).show();
-        return degrees;
-    }
-	
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		mRenderer.onSurfaceCreated(gl, config);
 	}
 

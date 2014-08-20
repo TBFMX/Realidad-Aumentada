@@ -1,8 +1,8 @@
-/home/abel/workspace/opencv4android/CameraGL/obj/local/armeabi-v7a/objs/NativeCamera/ARDrawingContext.o: \
- /home/abel/workspace/opencv4android/CameraGL/jni/ARDrawingContext.cpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/ARDrawingContext.hpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/GeometryTypes.hpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/CameraCalibration.hpp \
+/home/abel/workspace/opencv4android/DemoTamarindo/obj/local/armeabi-v7a/objs/NativeCamera/ARDrawingContext.o: \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/ARDrawingContext.cpp \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/ARDrawingContext.hpp \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/GeometryTypes.hpp \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/CameraCalibration.hpp \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/opencv.hpp \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/core_c.h \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/types_c.h \
@@ -72,13 +72,13 @@
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/openfabmap.hpp \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/set \
- /home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/geometryStructs.hpp \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/gl.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glplatform.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/KHR/khrplatform.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/couch2.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors2.h \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/couch2.h \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/rossiniColors2.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/eglplatform.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/native_window.h \
@@ -122,14 +122,14 @@
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/flann/sampling.h \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/legacy/compat.hpp \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/internal.hpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/logger.h \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/logger.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h
 
-/home/abel/workspace/opencv4android/CameraGL/jni/ARDrawingContext.hpp:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/ARDrawingContext.hpp:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/GeometryTypes.hpp:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/GeometryTypes.hpp:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/CameraCalibration.hpp:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/CameraCalibration.hpp:
 
 /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/opencv.hpp:
 
@@ -269,7 +269,7 @@
 
 /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/set:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/geometryStructs.hpp:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/gl.h:
 
@@ -279,9 +279,9 @@
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/couch2.h:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/couch2.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors2.h:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/rossiniColors2.h:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/EGL/egl.h:
 
@@ -369,6 +369,6 @@
 
 /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/core/internal.hpp:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/logger.h:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/logger.h:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h:

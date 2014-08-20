@@ -434,7 +434,7 @@ void renderVideoFrame(float projection[], float pose[])
 	if (!mIsTextureInitialized)
 	{
 		//texture image
-		cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
+		cv::Mat m_furnishImage = cv::imread("sdcard/Models/Couch/couch.jpg");
 
 		cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGBA);
 		

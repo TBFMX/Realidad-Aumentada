@@ -1,5 +1,5 @@
-/home/abel/workspace/opencv4android/CameraGL/obj/local/armeabi-v7a/objs/NativeCamera/geometryStructs.o: \
- /home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.cpp \
+/home/abel/workspace/opencv4android/DemoTamarindo/obj/local/armeabi-v7a/objs/NativeCamera/geometryStructs.o: \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/geometryStructs.cpp \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/stdint.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/sys/_types.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/machine/_types.h \
@@ -114,12 +114,12 @@
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/highgui/highgui.hpp \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/highgui/highgui_c.h \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/fstream \
- /home/abel/workspace/opencv4android/CameraGL/jni/logger.h \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/logger.h \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/geometryStructs.hpp \
  /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/couch.h \
- /home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors.h
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/couch.h \
+ /home/abel/workspace/opencv4android/DemoTamarindo/jni/rossiniColors.h
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/stdint.h:
 
@@ -349,14 +349,14 @@
 
 /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/fstream:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/logger.h:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/logger.h:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/android/log.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/geometryStructs.hpp:
 
 /home/abel/android-ndk-r9d/platforms/android-19/arch-arm/usr/include/GLES/glext.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/couch.h:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/couch.h:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/rossiniColors.h:
+/home/abel/workspace/opencv4android/DemoTamarindo/jni/rossiniColors.h:

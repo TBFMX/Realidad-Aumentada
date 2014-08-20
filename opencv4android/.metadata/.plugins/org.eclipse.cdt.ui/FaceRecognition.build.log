@@ -1,6 +1,6 @@
-17:34:52 **** Build of configuration Default for project FaceRecognition ****
+09:06:41 **** Build of configuration Default for project FaceRecognition ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-17:34:52 Build Finished (took 61ms)
+09:06:41 Build Finished (took 57ms)
 

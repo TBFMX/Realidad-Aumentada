@@ -34,7 +34,7 @@
 #define LOG(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 //~ void getImageFromPath(cv::Mat *rgbImage){
-	//~ cv::Mat m_furnishImage = cv::imread("sdcard/Models/couch.jpg");
+	//~ cv::Mat m_furnishImage = cv::imread("sdcard/Models/Couch/couch.jpg");
 	//~ cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGB);
 	//~ LOG_INFO("furnish copied");
 	//~ m_furnishImage.copyTo(*rgbImage);
@@ -75,7 +75,7 @@ ARDrawingContext::ARDrawingContext(){
 	float cy=236.0028199018263;
 	CameraCalibration calibration(fx,fy,cx,cy);
 	m_calibration = calibration;
-	//~ cv::Mat furnishImage = cv::imread("sdcard/Models/couch.jpg");
+	//~ cv::Mat furnishImage = cv::imread("sdcard/Models/Couch/couch.jpg");
 	//~ cvtColor(furnishImage,furnishImage,CV_BGR2RGBA);
 };
 
@@ -99,7 +99,7 @@ ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& 
     m_width = frameSize.width;
     m_height = frameSize.height;
     //~ if(m_furnishImage.empty()){
-		//~ cv::Mat furnishImage = cv::imread("sdcard/Models/couch.jpg");
+		//~ cv::Mat furnishImage = cv::imread("sdcard/Models/Couch/couch.jpg");
 		//~ cvtColor(furnishImage,furnishImage,CV_BGR2RGBA);
 	//~ }
 }
@@ -122,7 +122,7 @@ void ARDrawingContext::updateBackground(const cv::Mat& frame)
 
 void ARDrawingContext::updateFurnishImage()
 {
-	cv::Mat furnish = cv::imread("sdcard/Models/couch.jpg");
+	cv::Mat furnish = cv::imread("sdcard/Models/Couch/couch.jpg");
 	furnish.copyTo(m_furnishImage);
 	cvtColor(m_furnishImage,m_furnishImage,CV_BGR2RGB);
 }

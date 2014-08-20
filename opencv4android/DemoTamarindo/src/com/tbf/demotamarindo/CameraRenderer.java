@@ -32,7 +32,7 @@ public class CameraRenderer implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		// TODO Auto-generated method stub
-		Native.renderFurnish();
+		//Native.renderFurnish();
 		Native.renderBackground();
 		
 	}
