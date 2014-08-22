@@ -346,8 +346,8 @@ float ARDrawingContext::getScale(){
 void ARDrawingContext::setScale(float scale){
 	if (scale < 1.0)
 		scale = 1.0;
-	else if (scale > 15)
-		scale =  15;
+	else if (scale > 30)
+		scale =  30;
 	m_scale = scale;
 }
 
@@ -373,7 +373,7 @@ void ARDrawingContext::createTexture() {
 		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // GL_LINEAR
 		m_isBackgroundTextureInitialized = true;
-		unsigned int m_depthRenderbuffer = 0;
+		//~ unsigned int m_depthRenderbuffer = 0;
 	}
 	//~ getFurnishTexture(m_textureId[1]);
 	//~ getObjectTexture(m_textureId[1],m_furnishImage);
@@ -526,7 +526,7 @@ void ARDrawingContext::drawAugmentedScene()
 	
 	glPushMatrix();
     GLfloat mdl[16];
-    point3 cameraOrigin;
+    //~ point3 cameraOrigin;
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
 	glPopMatrix();
 	

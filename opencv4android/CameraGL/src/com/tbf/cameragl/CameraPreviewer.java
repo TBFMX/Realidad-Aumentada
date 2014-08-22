@@ -19,9 +19,9 @@ import android.view.MotionEvent;
 
 public class CameraPreviewer extends Activity {
 
-    GLSurfaceView mView;
-    //CameraRenderer mCameraRenderer;
-    ResponsiveGLSurfaceView mCameraRenderer;
+    GLSurfaceView mGLView;
+    CameraRenderer mCameraRenderer;
+    ResponsiveSurfaceView mResponsiveView;
     
     @Override 
     protected void onCreate(Bundle icicle) {
@@ -32,7 +32,7 @@ public class CameraPreviewer extends Activity {
         List<Size> sizes = mCamera.getSupportedPreviewSizes();
         mCamera.release();
  
-        mView = new GLSurfaceView(getApplication()){
+        mGLView = new GLSurfaceView(getApplication()){
          @Override
          public void onPause() {
           // TODO Auto-generated method stub
@@ -41,10 +41,11 @@ public class CameraPreviewer extends Activity {
          }
         };
         Size size = calculateCameraFrameSize(sizes,new OpenCvSizeAccessor());
-        //mCameraRenderer = new CameraRenderer(this,size);
-        mCameraRenderer = new ResponsiveGLSurfaceView(this,size);
-        mView.setRenderer(mCameraRenderer.getCameraRenderer());
-        setContentView(mView);
+        mCameraRenderer = new CameraRenderer(this,size);
+        //mCameraRenderer = new ResponsiveGLSurfaceView(this,size);
+        mGLView.setRenderer(mCameraRenderer);
+        setContentView(mGLView);
+        mResponsiveView = new ResponsiveSurfaceView(this,size);
     }
 
 
@@ -79,12 +80,12 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
 }
     @Override protected void onPause() {
         super.onPause();
-        mView.onPause();
+        mGLView.onPause();
     }
 
     @Override protected void onResume() {
         super.onResume();
-        mView.onResume();
+        mGLView.onResume();
     }
     
     @Override 
@@ -99,15 +100,15 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
 	    switch (item.getItemId()) {
 	    case R.id.next_model:
 	    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
-	    	mCameraRenderer.changeShownModel();
+	    	mResponsiveView.changeShownModel();
 	    	return true;
 	    case R.id.next_illum:
 	    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
-	    	mCameraRenderer.changeIlluminationModel();
+	    	mResponsiveView.changeIlluminationModel();
 	    	return true;
 	    case R.id.reset:
 		    //this.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
-		    mCameraRenderer.backToDefaults();
+	    	mResponsiveView.backToDefaults();
 		    return true;
 	    default:
 	    return super.onOptionsItemSelected(item);
@@ -115,7 +116,7 @@ protected Size calculateCameraFrameSize( List<Size> supportedSizes, ListItemAcce
     }
     
     public boolean onTouchEvent(MotionEvent event){
-    	return mCameraRenderer.onTouchEvent(event);
+    	return mResponsiveView.onTouchEvent(event);
     }
     
 }

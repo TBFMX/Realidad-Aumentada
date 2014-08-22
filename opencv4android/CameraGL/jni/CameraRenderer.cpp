@@ -22,14 +22,14 @@
 #define LOG(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 #define MAX_PERSISTANCE 60
-#define BUFFER_LEN 3
 
 cv::VideoCapture capture;
 cv::Mat inframe;
 cv::Mat outframe;
+cv::Mat gbBufferA;
+cv::Mat gbBufferB;
+cv::Mat gbBufferC;
 
-int bufferIndex = 0;
-int rgbIndex;
 static int capFrameWidth;
 static int capFrameHeight;
 int frameWidth;
@@ -39,22 +39,30 @@ int screenHeight;
 int orientation;
 int gbModelId;
 bool gbIsCaptureOpened =true;
+bool gbCanProcessFrame = false;
 bool gbIsCameraTextureInitialized = false;
+bool gbDrawOnBufferA = false; // for camera drawing
+bool gbDrawOnBufferB = false; // for camera drawing
+bool gbDrawOnBufferC = false; // for frame processing
+bool gbCopyFromBufferA = false;
+bool gbCopyFromBufferB = false;
+bool gbCopyFromBufferC = false;
 unsigned int gbCameraTexture=0;
 unsigned int gbPersistance = 0;
 
 pthread_mutex_t FGmutex;
 pthread_t frameRetrieverThread;
+pthread_t frameProcessorThread;
 //~ pthread_attr_t attr;
 
 struct sched_param Rparam;
+struct sched_param Pparam;
 
 float maxAllowedWidth = 1920.0;
 float maxAllowedHeight = 1536.0;
 
 
 //~ cv::Mat m_backgroundImage;
-cv::Mat captureBuffer[BUFFER_LEN];
 //~ cv::Mat processedBuffer[BUFFER_LEN];
 cv::Mat patternImage;
 CameraCalibration calibration;
@@ -67,6 +75,7 @@ extern "C" {
 void createTexture();
 void destroyTexture();
 void *frameRetriever(void*);
+void *frameProcessor(void*);
 
 MarkerDetector gbMarkerDetector;
 ARDrawingContext gbDrawingCtx;
@@ -81,8 +90,8 @@ void createCameraTexture() {
 		glGenTextures(numTextures, &gbCameraTexture);
 		glBindTexture(GL_TEXTURE_2D, gbCameraTexture);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		gbIsCameraTextureInitialized = true;
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -94,31 +103,33 @@ void destroyCameraTexture() {
 	gbIsCameraTextureInitialized = false;
 }
 
-void drawCurrentCameraFrame(int texName, int bufferIndex, cv::Mat captureBuffer[]) {
+void drawCurrentCameraFrame(int texName, cv::Mat captureBuffer) {
 
-	if(bufferIndex > 0){
+	//~ if(copyFromBuffer){
 		//~ pthread_mutex_lock(&FGmutex);
 		cv::Mat rgbCameraFrame;
-		cvtColor(captureBuffer[(bufferIndex - 1) % BUFFER_LEN], rgbCameraFrame, CV_BGR2RGB);
+		cvtColor(captureBuffer, rgbCameraFrame, CV_BGR2RGB);
 		//~ pthread_mutex_unlock(&FGmutex);
 		int w=rgbCameraFrame.cols;
 		int h=rgbCameraFrame.rows;
 		//LOG_INFO("w,h, channels= %d,%d, %d, %d ",w,h,rgbFrame.channels(), textureId[0]);
-			cv::Size size(640,480);//the dst image size,e.g.100x100
-			cv::Mat dst;//dst image
-			resize(rgbCameraFrame,dst,size);//resize image
+		//~ int w2= 640;
+		//~ int h2= 480;
+			//~ cv::Size size(w2,h2);//the dst image size,e.g.100x100
+			//~ cv::Mat dst;//dst image
+			//~ resize(rgbCameraFrame,dst,size);//resize image
 			
 		glPixelStorei(GL_PACK_ALIGNMENT, 1);
 		glBindTexture(GL_TEXTURE_2D, texName);
 
 		if (texName != 0){
 			// Upload new texture data:
-		if (dst.channels() == 3)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,640, 480, 0, GL_RGB, GL_UNSIGNED_BYTE, dst.data);
-		else if(dst.channels() == 4)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,640, 480, 0, GL_RGBA, GL_UNSIGNED_BYTE, dst.data);
-		else if (dst.channels()==1)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 640, 480, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, dst.data);
+		if (rgbCameraFrame.channels() == 3)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, rgbCameraFrame.data);
+		else if(rgbCameraFrame.channels() == 4)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbCameraFrame.data);
+		else if (rgbCameraFrame.channels()==1)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgbCameraFrame.data);
 		}
 		
 		//~ glColor4f(1.0f,1.0f,1.0f,1.0f);
@@ -156,7 +167,7 @@ void drawCurrentCameraFrame(int texName, int bufferIndex, cv::Mat captureBuffer[
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisable(GL_TEXTURE_2D);	
 	
-	}
+	//~ }
 }
 
 /**
@@ -172,16 +183,16 @@ bool processFrame(cv::Mat& cameraFrame, MarkerDetector& markerDetector, ARDrawin
 	//~ pipeline.m_patternDetector.homographyReprojectionThreshold += 0.2;
 	//~ pipeline.m_patternDetector.homographyReprojectionThreshold = std::min(10.0f, pipeline.m_patternDetector.homographyReprojectionThreshold);
 	
-	cv::Size size(640,480);//the dst image size,e.g.100x100
-	cv::Mat dst;//dst image
-	resize(cameraFrame,dst,size);//resize image
+	//~ cv::Size size(cameraFrame.cols/2,cameraFrame.rows/2);//the dst image size,e.g.100x100
+	//~ cv::Mat dst;//dst image
+	//~ resize(cameraFrame,dst,size);//resize image
 	
 	//~ drawingCtx.updateBackground(cameraFrame);
 	//~ drawingCtx.updateBackground(dst);
 	
     // Find a pattern and update it's detection status:
-    //~ drawingCtx.isPatternPresent = markerDetector.processFrame(cameraFrame);
-    drawingCtx.isPatternPresent = markerDetector.processFrame(dst);
+    drawingCtx.isPatternPresent = markerDetector.processFrame(cameraFrame);
+    //~ drawingCtx.isPatternPresent = markerDetector.processFrame(dst);
     //~ LOG_INFO("pattern testing");
 
 	std::vector<Transformation> m_transformations;
@@ -249,11 +260,11 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	float fy=628.7519411113429;
 	float cx=325.3443919995285;
 	float cy=236.0028199018263;
-	// tablet parameters 1024x768
-	//~ fx=695.398588072418;
-	//~ fy=672.4933734804648;
-	//~ cx=448.2380923498616;
-	//~ cy=261.186397004368;
+	//~ // tablet parameters 1024x768
+	fx=695.398588072418;
+	fy=672.4933734804648;
+	cx=448.2380923498616;
+	cy=261.186397004368;
 	//~ // tablet parameters 2048x1536
 	//~ fx=1194.514196322121;
 	//~ fy=1103.525587362546;
@@ -271,7 +282,7 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	capture.open(CV_CAP_ANDROID + 0);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
-	frameWidth =width;
+	frameWidth = width;
 	frameHeight = height;
 	//~ LOG("frameWidth = %d",frameWidth);
 	//~ LOG("frameHeight = %d",frameHeight);
@@ -303,6 +314,16 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	pthread_create(&frameRetrieverThread, &Rattr, frameRetriever, NULL);
 	pthread_attr_destroy(&Rattr);
 	
+	pthread_attr_t Pattr;
+	pthread_attr_init(&Pattr);
+	pthread_attr_setdetachstate(&Pattr, PTHREAD_CREATE_DETACHED);
+	pthread_attr_setschedpolicy(&Pattr, SCHED_FIFO);
+	memset(&Pparam, 0, sizeof(Pparam));
+	Pparam.sched_priority = 100;
+	pthread_attr_setschedparam(&Pattr, &Pparam);
+	pthread_create(&frameProcessorThread, &Pattr, frameProcessor, NULL);
+	pthread_attr_destroy(&Pattr);
+	
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobject,jint width,jint height,jint orien)
@@ -332,7 +353,8 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_surfaceChanged(JNIEnv*, jobj
 	float fovY = 672.4933734804648;
 	//~ float fovX = 695.398588072418;
 	//~ float fovY = 1103.525587362546;
-    const float pi = 3.1415926535897932384626433832795;
+    //~ const float pi = 3.1415926535897932384626433832795;
+    const float pi = 3.14159;
     float fW, fH, zNear = 0.01, zFar = 100;
     fH = (float) tan( fovY / 360 * pi ) * zNear;
     
@@ -364,6 +386,10 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_releaseCamera(JNIEnv*, jobje
 	}
 	destroyCameraTexture();
 	gbIsCameraTextureInitialized = false;
+	gbCopyFromBufferA = false;
+	gbCopyFromBufferB = false;
+	gbDrawOnBufferA = false;
+	gbDrawOnBufferB = false;
 }
 
 JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jobject) {
@@ -371,52 +397,117 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 	//~ glClear(GL_DEPTH_BUFFER_BIT); // this is the trickiest command
 	//~ glClearColor(1,1,1,1);
 //~ 
-	if(bufferIndex > 0 && gbIsWindowUpdated == true && gbIsProcessing == false){
+	pthread_mutex_lock(&FGmutex);
+	bool copyFromBufferC = gbCopyFromBufferC;
+	bool isWindowUpdated = gbIsWindowUpdated;
+	bool isProcessing = gbIsProcessing;
+	pthread_mutex_unlock(&FGmutex);
+	if(copyFromBufferC && isWindowUpdated == true && isProcessing == false){
 		pthread_mutex_lock(&FGmutex);
 		// we validate if the pattern found was the best
 		gbDrawingCtx.validatePatternPresent();
-		pthread_mutex_unlock(&FGmutex);
 		gbIsWindowUpdated = false;
+		pthread_mutex_unlock(&FGmutex);
 	}
 	
 	pthread_mutex_lock(&FGmutex);
-	if(gbDrawingCtx.isThereAPattern()){
+	bool isThereAPattern = gbDrawingCtx.isThereAPattern();
+	//~ if(isThereAPattern)
+		//~ LOG_INFO("is a pattern %b", isThereAPattern);
+	pthread_mutex_unlock(&FGmutex);
+	if(isThereAPattern){
+		pthread_mutex_lock(&FGmutex);
+		copyFromBufferC = gbCopyFromBufferC;
+		isWindowUpdated = gbIsWindowUpdated;
+		pthread_mutex_unlock(&FGmutex);		
 		//~ // special code for low dispositives-----------
-		if (gbIsWindowUpdated || bufferIndex > 0){
+		if (isWindowUpdated || copyFromBufferC){
 			cv::Mat rgbFrame;
-			//pthread_mutex_lock(&FGmutex);
-			cvtColor(captureBuffer[bufferIndex % BUFFER_LEN], rgbFrame, CV_BGR2RGB);
+			pthread_mutex_lock(&FGmutex);
+			copyFromBufferC = gbCopyFromBufferC;
+			pthread_mutex_unlock(&FGmutex);
+			if(copyFromBufferC){
+				pthread_mutex_lock(&FGmutex);
+				gbDrawOnBufferC = false;
+				cvtColor(gbBufferC, rgbFrame, CV_BGR2RGB);
+				gbDrawOnBufferC = true;
+				pthread_mutex_unlock(&FGmutex);
+			}
+			//~ pthread_mutex_lock(&FGmutex);
 			gbDrawingCtx.updateBackground(rgbFrame);
-			//pthread_mutex_unlock(&FGmutex);
+			//~ pthread_mutex_unlock(&FGmutex);
 		}
 		
-		//~ //----------------------------------------------
+		//----------------------------------------------
+		//~ pthread_mutex_lock(&FGmutex);
 		gbDrawingCtx.draw();
+		//~ pthread_mutex_unlock(&FGmutex);
 		gbPersistance = 1;
 	}else{
 		if(gbPersistance > 0){
+			pthread_mutex_lock(&FGmutex);
+			bool copyFromBufferA = gbCopyFromBufferA;
+			bool copyFromBufferB = gbCopyFromBufferB;
+			isWindowUpdated = gbIsWindowUpdated;
+			pthread_mutex_unlock(&FGmutex);
 			// special code for low dispositives---------
-			if (gbIsWindowUpdated || bufferIndex > 0){
+			if (isWindowUpdated || (copyFromBufferA || copyFromBufferB)){
 				cv::Mat rgbFrame;
-				//pthread_mutex_lock(&FGmutex);
-				cvtColor(captureBuffer[bufferIndex % BUFFER_LEN], rgbFrame, CV_BGR2RGB);
-				gbDrawingCtx.updateBackground(rgbFrame);
-				//pthread_mutex_unlock(&FGmutex);
+				if(copyFromBufferA){
+					pthread_mutex_lock(&FGmutex);
+					gbDrawOnBufferA = false;
+					gbDrawOnBufferB = true;
+					gbBufferA.copyTo(rgbFrame);
+					gbDrawingCtx.updateBackground(rgbFrame);
+					gbDrawOnBufferA = true;
+					pthread_mutex_unlock(&FGmutex);
+				}else if(copyFromBufferB){
+					pthread_mutex_lock(&FGmutex);
+					gbDrawOnBufferB = false;
+					gbDrawOnBufferA = true;
+					gbBufferB.copyTo(rgbFrame);
+					gbDrawingCtx.updateBackground(rgbFrame);
+					gbDrawOnBufferB = true;
+					pthread_mutex_unlock(&FGmutex);
+				}
+					
+				//~ pthread_mutex_lock(&FGmutex);
+				
+				//~ pthread_mutex_unlock(&FGmutex);
 			}
 			//-------------------------------------------
-
+			//~ pthread_mutex_lock(&FGmutex);
 			gbDrawingCtx.draw();
+			//~ pthread_mutex_unlock(&FGmutex);
 			++gbPersistance;
 			//~ LOG_INFO("persistance %d", gbPersistance);
 			if(gbPersistance > MAX_PERSISTANCE)
 				gbPersistance = 0;
-			
 		}else{
-			drawCurrentCameraFrame(gbCameraTexture, bufferIndex, captureBuffer);
+			cv::Mat buffer;
+			pthread_mutex_lock(&FGmutex);
+			bool copyFromBufferA = gbCopyFromBufferA;
+			bool copyFromBufferB = gbCopyFromBufferB;
+			pthread_mutex_unlock(&FGmutex);			
+			if(copyFromBufferA){
+				pthread_mutex_lock(&FGmutex);
+				gbDrawOnBufferA = false;
+				gbDrawOnBufferB = true;
+				gbBufferA.copyTo(buffer);
+				gbDrawOnBufferA = true;
+				pthread_mutex_unlock(&FGmutex);
+				drawCurrentCameraFrame(gbCameraTexture, buffer);
+			}else if(copyFromBufferB){
+				pthread_mutex_lock(&FGmutex);
+				gbDrawOnBufferB = false;
+				gbDrawOnBufferA = true;
+				gbBufferB.copyTo(buffer);
+				gbDrawOnBufferB = true;
+				pthread_mutex_unlock(&FGmutex);
+				drawCurrentCameraFrame(gbCameraTexture, buffer);
+			}
 		}
 	}
-	
-	pthread_mutex_unlock(&FGmutex);
 	
 	glFlush();
 }
@@ -522,9 +613,14 @@ void *frameRetriever(void*) {
 	//~ LOG_INFO("Enter retrieving");	
 	pthread_mutex_lock(&FGmutex);
 	gbIsCaptureOpened = true;
+	gbDrawOnBufferA = true;
+	gbDrawOnBufferC = true;
+	gbCanProcessFrame = true;
+	gbIsProcessing = false;
 	pthread_mutex_unlock(&FGmutex);
-	int passFrame = 6;
+	int passFrame = 12;
 	int countFrames = 0;
+	
 	while (capture.isOpened()) {
 		capture.read(inframe);
 		if (!inframe.empty()) {
@@ -532,41 +628,85 @@ void *frameRetriever(void*) {
 			capFrameWidth=inframe.cols;
 			capFrameHeight=inframe.rows;
 			pthread_mutex_lock(&FGmutex);
-			inframe.copyTo(captureBuffer[(bufferIndex++) % BUFFER_LEN]);
-			pthread_mutex_unlock(&FGmutex);
-			pthread_mutex_lock(&FGmutex);
-			if(bufferIndex == BUFFER_LEN)
-				bufferIndex = 0;
-			//~ LOG_INFO("index %d",bufferIndex);	
+			if(gbDrawOnBufferA){
+				gbCopyFromBufferA = false;
+				inframe.copyTo(gbBufferA);
+				gbCopyFromBufferA = true;
+			}else if(gbDrawOnBufferB){
+				gbCopyFromBufferB = false;
+				inframe.copyTo(gbBufferB);
+				gbCopyFromBufferB = true;
+			}
 			pthread_mutex_unlock(&FGmutex);
 		}
-		
-		// bufferIndex > 0 and pair
-			// loosing the zero frame
-		if(bufferIndex > 0 && countFrames % passFrame == 0 && gbIsWindowUpdated == false && gbIsProcessing == false){
-			cv::Mat rgbFrame;
-			
-			pthread_mutex_lock(&FGmutex);
-			cvtColor(captureBuffer[(bufferIndex - 1) % BUFFER_LEN], rgbFrame, CV_BGR2RGB);
-			pthread_mutex_unlock(&FGmutex);
-	
-			//~ if(!rgbFrame.empty()){
-			gbIsProcessing = true;
-			gbIsWindowUpdated = processFrame(rgbFrame, gbMarkerDetector, gbDrawingCtx);
-			gbIsProcessing = false;
-			//~ }
-			countFrames = 0;
-		}
-		
+
 		++countFrames;
-		
-		//~ else
-			//~ captureBuffer[29].copyTo(currentFrame);
+		if(countFrames % passFrame == 0){
+			countFrames = 0;
+			pthread_mutex_lock(&FGmutex);
+			if(!gbIsProcessing){
+				gbCopyFromBufferC = false;
+				if(gbCopyFromBufferA){
+					gbBufferA.copyTo(gbBufferC);
+					gbCopyFromBufferC = true;
+				}else if(gbCopyFromBufferB){
+					gbBufferB.copyTo(gbBufferC);
+					gbCopyFromBufferC = true;
+				}
+				gbCanProcessFrame = true;
+			}
+			pthread_mutex_unlock(&FGmutex);
+		}
 	}
 	pthread_mutex_lock(&FGmutex);
 	gbIsCaptureOpened = false;
 	pthread_mutex_unlock(&FGmutex);
 	//~ LOG("Camera Closed");
+	pthread_exit (NULL);
+}
+
+void *frameProcessor(void*) {
+	bool isCaptureOpened = true;
+	bool canProcessFrame = false;
+	bool copyFromBufferC = false;
+	bool isWindowUpdated = false;
+	bool isProcessing = false;
+	while(isCaptureOpened){
+		pthread_mutex_lock(&FGmutex);
+		canProcessFrame = gbCanProcessFrame;
+		pthread_mutex_unlock(&FGmutex);
+		if(canProcessFrame){
+			pthread_mutex_lock(&FGmutex);
+			copyFromBufferC = gbCopyFromBufferC;
+			isWindowUpdated = gbIsWindowUpdated;
+			isProcessing = gbIsProcessing;
+			pthread_mutex_unlock(&FGmutex);
+			if(copyFromBufferC && isWindowUpdated == false && isProcessing == false){
+				cv::Mat rgbFrame;
+				
+				if(copyFromBufferC){
+					pthread_mutex_lock(&FGmutex);
+					gbDrawOnBufferC = false;
+					cvtColor(gbBufferC, rgbFrame, CV_BGR2RGB);
+					gbDrawOnBufferC = true;
+					pthread_mutex_unlock(&FGmutex);
+				}
+				pthread_mutex_lock(&FGmutex);
+				gbIsProcessing = true;
+				pthread_mutex_unlock(&FGmutex);
+				bool isWindowUpdated = processFrame(rgbFrame, gbMarkerDetector, gbDrawingCtx);
+				pthread_mutex_lock(&FGmutex);
+				gbIsWindowUpdated = isWindowUpdated;
+				gbCanProcessFrame = false;
+				gbIsProcessing = false;
+				//~ gbDrawOnBufferC = true;
+				pthread_mutex_unlock(&FGmutex);
+			}
+		}
+		pthread_mutex_lock(&FGmutex);
+		isCaptureOpened = gbIsCaptureOpened;
+		pthread_mutex_unlock(&FGmutex);
+	}
 	pthread_exit (NULL);
 }
 

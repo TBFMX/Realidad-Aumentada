@@ -1,8 +1,8 @@
-10:46:45 **** Incremental Build of configuration Default for project GlLoader ****
+19:42:49 **** Incremental Build of configuration Default for project GlLoader ****
 ndk-build all 
 [armeabi] Compile++ thumb: mixed_sample <= code.cc
 [armeabi] SharedLibrary  : libmixed_sample.so
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-10:46:46 Build Finished (took 263ms)
+19:42:49 Build Finished (took 265ms)
 

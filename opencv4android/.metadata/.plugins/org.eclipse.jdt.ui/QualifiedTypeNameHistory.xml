@@ -12,7 +12,6 @@
 <fullyQualifiedTypeName name="android.graphics.Bitmap"/>
 <fullyQualifiedTypeName name="android.view.View.OnTouchListener"/>
 <fullyQualifiedTypeName name="android.view.SurfaceHolder"/>
-<fullyQualifiedTypeName name="android.view.SurfaceView"/>
 <fullyQualifiedTypeName name="org.opencv.android.CvCameraViewListener"/>
 <fullyQualifiedTypeName name="org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2"/>
 <fullyQualifiedTypeName name="org.opencv.android.BaseLoaderCallback"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="android.graphics.PointF"/>
 <fullyQualifiedTypeName name="android.util.FloatMath"/>
 <fullyQualifiedTypeName name="android.graphics.Matrix"/>
+<fullyQualifiedTypeName name="android.view.SurfaceView"/>
 </qualifiedTypeNameHistroy>
