@@ -1,6 +1,6 @@
-17:35:24 **** Build of configuration Default for project jniConfirmation ****
+09:11:28 **** Build of configuration Default for project jniConfirmation ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-17:35:24 Build Finished (took 61ms)
+09:11:28 Build Finished (took 59ms)
 

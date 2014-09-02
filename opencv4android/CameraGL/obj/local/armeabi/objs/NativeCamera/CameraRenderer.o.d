@@ -128,9 +128,8 @@
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/retina.hpp \
  /home/abel/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/include/valarray \
  /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/openfabmap.hpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/ARPipeline.hpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/PatternDetector.hpp \
- /home/abel/workspace/opencv4android/CameraGL/jni/Pattern.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/MarkerDetector.hpp \
+ /home/abel/workspace/opencv4android/CameraGL/jni/Marker.hpp \
  /home/abel/workspace/opencv4android/CameraGL/jni/DebugHelpers.hpp \
  /home/abel/workspace/opencv4android/CameraGL/jni/logger.h \
  /home/abel/workspace/opencv4android/CameraGL/jni/geometryStructs.hpp
@@ -391,11 +390,9 @@
 
 /home/abel/workspace/OpenCV-2.4.9-android-sdk/sdk/native/jni/include/opencv2/contrib/openfabmap.hpp:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/ARPipeline.hpp:
+/home/abel/workspace/opencv4android/CameraGL/jni/MarkerDetector.hpp:
 
-/home/abel/workspace/opencv4android/CameraGL/jni/PatternDetector.hpp:
-
-/home/abel/workspace/opencv4android/CameraGL/jni/Pattern.hpp:
+/home/abel/workspace/opencv4android/CameraGL/jni/Marker.hpp:
 
 /home/abel/workspace/opencv4android/CameraGL/jni/DebugHelpers.hpp:
 

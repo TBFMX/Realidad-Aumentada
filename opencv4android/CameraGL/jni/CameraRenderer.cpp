@@ -103,12 +103,15 @@ void destroyCameraTexture() {
 	gbIsCameraTextureInitialized = false;
 }
 
-void drawCurrentCameraFrame(int texName, cv::Mat captureBuffer) {
+void drawCurrentCameraFrame(int texName, cv::Mat rgbCameraFrame) {
 
 	//~ if(copyFromBuffer){
 		//~ pthread_mutex_lock(&FGmutex);
-		cv::Mat rgbCameraFrame;
-		cvtColor(captureBuffer, rgbCameraFrame, CV_BGR2RGB);
+		// This lines create a copy
+		// cv::Mat rgbCameraFrame;
+		// cvtColor(captureBuffer, rgbCameraFrame, CV_BGR2RGB);
+		// captureBuffer.copyTo(rgbCameraFrame);
+		
 		//~ pthread_mutex_unlock(&FGmutex);
 		int w=rgbCameraFrame.cols;
 		int h=rgbCameraFrame.rows;
@@ -301,7 +304,8 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
     gbMarkerDetector = markerDetector;
     ARDrawingContext drawingCtx(frameSize, calibration);
     gbDrawingCtx = drawingCtx;
-    gbDrawingCtx.updateFurnishImage(); // defaultImage
+    gbDrawingCtx.updateDefaultImage(); // defaultImage
+    //~ gbDrawingCtx.updateFurnishImage(); // defaultImage
     //~ gbDrawingCtx.updateTigerImage();
 
 	pthread_attr_t Rattr;
@@ -429,7 +433,8 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_renderBackground(JNIEnv*, jo
 			if(copyFromBufferC){
 				pthread_mutex_lock(&FGmutex);
 				gbDrawOnBufferC = false;
-				cvtColor(gbBufferC, rgbFrame, CV_BGR2RGB);
+				//~ cvtColor(gbBufferC, rgbFrame, CV_BGR2RGB);
+				gbBufferC.copyTo(rgbFrame);
 				gbDrawOnBufferC = true;
 				pthread_mutex_unlock(&FGmutex);
 			}
@@ -630,11 +635,13 @@ void *frameRetriever(void*) {
 			pthread_mutex_lock(&FGmutex);
 			if(gbDrawOnBufferA){
 				gbCopyFromBufferA = false;
-				inframe.copyTo(gbBufferA);
+				//~ inframe.copyTo(gbBufferA);
+				cvtColor(inframe, gbBufferA, CV_BGR2RGB);
 				gbCopyFromBufferA = true;
 			}else if(gbDrawOnBufferB){
 				gbCopyFromBufferB = false;
-				inframe.copyTo(gbBufferB);
+				//~ inframe.copyTo(gbBufferB);
+				cvtColor(inframe, gbBufferB, CV_BGR2RGB);
 				gbCopyFromBufferB = true;
 			}
 			pthread_mutex_unlock(&FGmutex);
@@ -687,7 +694,8 @@ void *frameProcessor(void*) {
 				if(copyFromBufferC){
 					pthread_mutex_lock(&FGmutex);
 					gbDrawOnBufferC = false;
-					cvtColor(gbBufferC, rgbFrame, CV_BGR2RGB);
+					//~ cvtColor(gbBufferC, rgbFrame, CV_BGR2RGB);
+					gbBufferC.copyTo(rgbFrame);
 					gbDrawOnBufferC = true;
 					pthread_mutex_unlock(&FGmutex);
 				}

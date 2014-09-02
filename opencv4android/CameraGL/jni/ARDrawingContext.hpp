@@ -35,9 +35,15 @@ public:
 	//! Set the new frame for the background
 	void updateBackground(cv::Mat& frame);
 	void updateFurnishImage();
+	void updateDefaultImage();
 	void updateTigerImage();
 	void updateTrollHouseImage();
 	void updateBeautifulGirlImage();
+	void updateCouch2Image();
+	void updateOldTelevisionImage();
+	void updateBedsideTableAImage();
+	void updateHousePlantImage();
+	void updateSodaCanImage();
 	void updateWindow();
 	//! Render entire scene in the OpenGl window
 	void draw();
@@ -49,7 +55,7 @@ public:
 	bool isWindowUpdated();
 	void validatePatternPresent();
 	//! Draws the background with video
-	void drawCameraFrame(); 
+	void drawCameraFrame();
 	//! Draws the coordinate axis 
 	void drawCoordinateAxis();
 	//! Draws the AR
@@ -60,12 +66,24 @@ public:
 	//! Draw furnish
 	void drawFurnish();
 	
+	void drawDefaultObject();
+	
 	//! Draw tiger
 	void drawTiger();
 	
 	void drawBeautifulGirl();
 	
 	void drawTrollHouse();
+	
+	void drawOldTelevision();
+	
+	void drawCouch2();
+	
+	void drawHousePlant();
+	
+	void drawBedsideTableA();
+	
+	void drawSodaCan();
 	
 	bool isThereAPattern();
 	
@@ -88,8 +106,6 @@ private:
 
   //! Draw the cube model
   void drawCubeModel();
-
-
 
   bool               m_isBackgroundTextureInitialized;
   CameraCalibration  m_calibration;

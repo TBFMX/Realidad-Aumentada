@@ -132,6 +132,10 @@ bool nearCamera(face a, face b){
 	return a.d > b.d;
 };
 
+bool nearCameraVector(vectorFace a, vectorFace b){
+	return a.d > b.d;
+}; 
+
 float getDistance(point3 a, point3 b){
 	return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y) + (a.z - b.z) * (a.z - b.z));
 }
@@ -259,6 +263,13 @@ void getTextureBinders(int textureSize, unsigned textureNames[],int textureFirst
 	for(unsigned i = 0; i < textureSize; ++i)
 		for(unsigned j = textureFirsts[i]/3; j < (textureFirsts[i] + textureCounts[i])/3; ++j)
 			outTexBinders[j] = textureNames[i+1];
+}
+
+void getVectorTextureBinders(int bindersSize, int firstTexture, unsigned textureNames[], unsigned inTexBinders[],unsigned outTexBinders[]){
+	unsigned faceSize = 0;
+	// be sure that materials size and texture size are equal in original obj files
+	for(unsigned i = 0; i < bindersSize; ++i)
+		outTexBinders[i] = textureNames[firstTexture + inTexBinders[i] + 1];
 }
 
 void getFacesNearToCamera(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inColors[][4], float inVertexes[],
@@ -583,6 +594,188 @@ void getAllSortedFacesMT(unsigned vertexesSize, point3 cameraOrigin,float inTexc
 	*finalVertexes = 3*saved;
 }
 
+void getAllSortedVectorFacesMT(unsigned faceSize, unsigned vertexByFaceSizes[], unsigned outVertexByFaces[] ,point3 cameraOrigin,float inTexcoords[], float inVertexes[],
+						float inNormals[], float outTexCoords[], float outVertexes[], float outNormals[], unsigned *finalVertexes, unsigned *finalFaces,
+						unsigned inTexBinder[], unsigned outTexBinder[]){
+	std::vector<vectorFace> faces;
+	
+	unsigned saved = 0;
+	
+	// define and initialize accumulated face counter
+	unsigned accumulatedFaces = 0;
+	// we divide vertex size over 3 because each face has 3 vertexes
+	for(unsigned i  = 0; i < faceSize; ++i){
+		
+		unsigned polygonSize = vertexByFaceSizes[i];
+		
+		point3 facePolygon[polygonSize];
+		for(unsigned j = 0; j < polygonSize; ++j){
+			point3 position;
+			position.x = inVertexes[3*(accumulatedFaces + j) ];
+			position.y = inVertexes[3*(accumulatedFaces + j) + 1];
+			position.z = inVertexes[3*(accumulatedFaces + j) + 2];
+			facePolygon[j]=position;
+		}
+		
+		point3 faceCenter;
+		faceCenter.x = 0;
+		faceCenter.y = 0;
+		faceCenter.z = 0;
+		for(unsigned j = 0; j < polygonSize; ++j){
+			faceCenter.x += facePolygon[j].x;
+			faceCenter.y += facePolygon[j].y;
+			faceCenter.z += facePolygon[j].z;
+		}
+		faceCenter.x /= polygonSize;
+		faceCenter.y /= polygonSize;
+		faceCenter.z /= polygonSize;
+		
+		vectorFace currFace;
+		currFace.d = getDistance(faceCenter,cameraOrigin);
+		
+		for(unsigned j = 0; j < polygonSize; ++j){
+			currFace.f.push_back(facePolygon[j]);
+			point3 normal;
+			normal.x = inNormals[3*(accumulatedFaces + j) ];
+			normal.y = inNormals[3*(accumulatedFaces + j) + 1];
+			normal.z = inNormals[3*(accumulatedFaces + j) + 2];
+			currFace.n.push_back(normal);
+			point2 texel;
+			texel.x = inTexcoords[2*(accumulatedFaces + j) ];
+			texel.y = inTexcoords[2*(accumulatedFaces + j) + 1];
+			currFace.t.push_back(texel);
+		}
+		
+		currFace.vertexSize = polygonSize;
+		
+		currFace.textureName = inTexBinder[i]; // face size
+
+		faces.push_back(currFace);
+		
+		accumulatedFaces += polygonSize;
+		++saved;
+	}
+	
+	std::sort(faces.begin(),faces.end(),nearCameraVector);
+	
+	std::vector<vectorFace>::iterator itFaces;
+	
+	// initialize accumulated face counter
+	accumulatedFaces = 0;
+	unsigned k = 0;
+	for(itFaces = faces.begin(); itFaces < faces.end(); ++itFaces){
+		unsigned polygonSize = (*itFaces).vertexSize;
+		
+		for(unsigned j = 0; j < polygonSize; ++j){
+			outVertexes[3*(accumulatedFaces + j)]=(*itFaces).f[j].x;
+			outVertexes[3*(accumulatedFaces + j) + 1]=(*itFaces).f[j].y;
+			outVertexes[3*(accumulatedFaces + j) + 2]=(*itFaces).f[j].z;
+			
+			outNormals[3*(accumulatedFaces + j)]=(*itFaces).n[j].x;
+			outNormals[3*(accumulatedFaces + j) + 1]=(*itFaces).n[j].y;
+			outNormals[3*(accumulatedFaces + j) + 2]=(*itFaces).n[j].z;
+			
+			outTexCoords[2*(accumulatedFaces + j)]=(*itFaces).t[j].x;
+			outTexCoords[2*(accumulatedFaces + j) + 1]=(*itFaces).t[j].y;
+		}
+		outVertexByFaces[k]=polygonSize;
+		outTexBinder[k] = (*itFaces).textureName;
+		accumulatedFaces += polygonSize;
+		++k;
+	}
+	*finalVertexes = accumulatedFaces;
+	*finalFaces = saved;
+}
+
+void getAllSortedFacesMTNoNormals(unsigned vertexesSize, point3 cameraOrigin,float inTexcoords[], float inVertexes[],
+					   float outTexCoords[], float outVertexes[], unsigned *finalVertexes,
+						unsigned inTexBinder[], unsigned outTexBinder[]){
+	std::vector<face> faces;
+	
+	unsigned saved = 0;
+
+	// we divide vertex size over 3 because each face has 3 vertexes
+	for(unsigned i  = 0; i < vertexesSize/3; ++i){
+		
+		unsigned nineI = 9*i;
+		point3 vertexCoord1;
+		vertexCoord1.x = inVertexes[nineI];
+		vertexCoord1.y = inVertexes[nineI + 1];
+		vertexCoord1.z = inVertexes[nineI + 2];
+		
+		point3 vertexCoord2;
+		vertexCoord2.x = inVertexes[nineI + 3];
+		vertexCoord2.y = inVertexes[nineI + 4];
+		vertexCoord2.z = inVertexes[nineI + 5];
+		
+		point3 vertexCoord3;
+		vertexCoord3.x = inVertexes[nineI + 6];
+		vertexCoord3.y = inVertexes[nineI + 7];
+		vertexCoord3.z = inVertexes[nineI + 8];
+		
+		point3 faceCenter;
+		faceCenter.x = (vertexCoord1.x + vertexCoord2.x + vertexCoord3.x)/3.0;
+		faceCenter.y = (vertexCoord1.y + vertexCoord2.y + vertexCoord3.y)/3.0;
+		faceCenter.z = (vertexCoord1.z + vertexCoord2.z + vertexCoord3.z)/3.0;		
+
+		face currFace;
+		currFace.d = getDistance(faceCenter,cameraOrigin);
+		
+		currFace.f.p1.x = inVertexes[nineI];
+		currFace.f.p1.y = inVertexes[nineI + 1];
+		currFace.f.p1.z = inVertexes[nineI + 2];
+		currFace.f.p2.x = inVertexes[nineI + 3];
+		currFace.f.p2.y = inVertexes[nineI + 4];
+		currFace.f.p2.z = inVertexes[nineI + 5];
+		currFace.f.p3.x = inVertexes[nineI + 6];
+		currFace.f.p3.y = inVertexes[nineI + 7];
+		currFace.f.p3.z = inVertexes[nineI + 8];
+		
+		unsigned sixI = 6*i;
+		currFace.t.p1.x = inTexcoords[sixI];
+		currFace.t.p1.y  = inTexcoords[sixI + 1];
+		currFace.t.p1.z  = inTexcoords[sixI + 2];
+		currFace.t.p2.x  = inTexcoords[sixI + 3];
+		currFace.t.p2.y  = inTexcoords[sixI + 4];
+		currFace.t.p2.z  = inTexcoords[sixI + 5];
+		
+		currFace.textureName = inTexBinder[i]; // face size
+
+		faces.push_back(currFace);
+		++saved;
+	}
+	
+	std::sort(faces.begin(),faces.end(),nearCamera);
+	
+	std::vector<face>::iterator itFaces;
+	int k = 0;
+	for(itFaces = faces.begin(); itFaces < faces.end(); ++itFaces){
+		unsigned nineK = 9*k;
+		outVertexes[nineK]=(*itFaces).f.p1.x;
+		outVertexes[nineK + 1]=(*itFaces).f.p1.y;
+		outVertexes[nineK + 2]=(*itFaces).f.p1.z;
+		outVertexes[nineK + 3]=(*itFaces).f.p2.x;
+		outVertexes[nineK + 4]=(*itFaces).f.p2.y;
+		outVertexes[nineK + 5]=(*itFaces).f.p2.z;
+		outVertexes[nineK + 6]=(*itFaces).f.p3.x;
+		outVertexes[nineK + 7]=(*itFaces).f.p3.y;
+		outVertexes[nineK + 8]=(*itFaces).f.p3.z;
+		
+		unsigned sixK=6*k;
+		outTexCoords[sixK]=(*itFaces).t.p1.x;
+		outTexCoords[sixK + 1]=(*itFaces).t.p1.y;
+		outTexCoords[sixK + 2]=(*itFaces).t.p1.z;
+		outTexCoords[sixK + 3]=(*itFaces).t.p2.x;
+		outTexCoords[sixK + 4]=(*itFaces).t.p2.y;
+		outTexCoords[sixK + 5]=(*itFaces).t.p2.z;
+		
+		outTexBinder[k] = (*itFaces).textureName;
+		
+		++k;
+	}
+
+	*finalVertexes = 3*saved;
+}
 
 
 void getShadeFaces(unsigned vertexesSize, point3 lightOrigin, float inVertexes[], float outVertexes[], unsigned *finalVertexes){
@@ -591,22 +784,7 @@ void getShadeFaces(unsigned vertexesSize, point3 lightOrigin, float inVertexes[]
 	unsigned saved = 0;
 
 	// we divide vertexes size by 3 because each face has 3 vertexes
-	for(unsigned i  = 0; i < vertexesSize/3; ++i){
-		
-		point3 vertexCoord1;
-		vertexCoord1.x = inVertexes[9*i];
-		vertexCoord1.y = inVertexes[9*i + 1];
-		vertexCoord1.z = inVertexes[9*i + 2];
-		
-		point3 vertexCoord2;
-		vertexCoord2.x = inVertexes[9*i + 3];
-		vertexCoord2.y = inVertexes[9*i + 4];
-		vertexCoord2.z = inVertexes[9*i + 5];
-		
-		point3 vertexCoord3;
-		vertexCoord3.x = inVertexes[9*i + 6];
-		vertexCoord3.y = inVertexes[9*i + 7];
-		vertexCoord3.z = inVertexes[9*i + 8];		
+	for(unsigned i  = 0; i < vertexesSize/3; ++i){		
 
 		face currFace;
 		

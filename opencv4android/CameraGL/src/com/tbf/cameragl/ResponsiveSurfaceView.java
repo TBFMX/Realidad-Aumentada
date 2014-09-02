@@ -154,7 +154,7 @@ public class ResponsiveSurfaceView extends SurfaceView {
 	public void backToDefaults() {
 	    mAngle = 0;
 	    mCumulativeAngle = 0;
-	    mScale = 1;
+	    mScale = 12;
 	    mCumulativeScale = 1;
 	    mTranslateX = 0;
 	    mTranslateY = 0;

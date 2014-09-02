@@ -20,6 +20,11 @@
 #include "Tiger.hpp"
 #include "BeautifulGirl.hpp"
 #include "TrollHouse.hpp"
+#include "Couch2.hpp"
+#include "OldTelevision.hpp"
+#include "BedsideTableA.hpp"
+#include "HousePlant.hpp"
+#include "SodaCan.hpp"
 
 ////////////////////////////////////////////////////////////////////
 // Standard includes:
@@ -44,14 +49,14 @@
 //~ }
 //~ #define maxObjSize2 1596
 #define maxObjSize2 112254
-
+//~ 
 float outNormals2[maxObjSize2*3];
 float outTexCoords2[maxObjSize2*2];
 float outVertexes2[maxObjSize2*3];
 float outColors2[maxObjSize2][4];
-float _angle2 = 0.0;
-point3 cameraOrigin2;
-unsigned finalVertexSize2;
+//~ float _angle2 = 0.0;
+//~ point3 cameraOrigin2;
+//~ unsigned finalVertexSize2;
 
 //~ float gW = 1024;
 //~ float gH = 768;
@@ -125,6 +130,7 @@ ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& 
 		//~ cv::Mat furnishImage = cv::imread("sdcard/Models/couch.jpg");
 		//~ cvtColor(furnishImage,furnishImage,CV_BGR2RGBA);
 	//~ }
+	
 }
 
 ARDrawingContext::~ARDrawingContext()
@@ -163,6 +169,13 @@ void updateTextureImage(char pathToImage[],cv::Mat *outTextureImage){
 	cvtColor(*outTextureImage,*outTextureImage,CV_BGR2RGB);
 }
 
+void ARDrawingContext::updateDefaultImage(){
+	updateBedsideTableAImage();
+}
+
+void ARDrawingContext::drawDefaultObject(){
+	drawBedsideTableA();
+}
 
 void ARDrawingContext::updateTrollHouseImage()
 {
@@ -234,6 +247,62 @@ void ARDrawingContext::updateBeautifulGirlImage()
 	updateTextureImage(&pathToTexture[0],&m_textureImages[5]);
 }
 
+void ARDrawingContext::updateCouch2Image()
+{
+	std::string pathToTexture = "sdcard/Models/Couch2/Couch2.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+}
+
+void ARDrawingContext::updateOldTelevisionImage()
+{
+	std::string pathToTexture = "sdcard/Models/OldTelevision/TestPatern01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+	pathToTexture = "sdcard/Models/OldTelevision/Wood01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[1]);
+	pathToTexture = "sdcard/Models/OldTelevision/OldTelly01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[2]);
+	pathToTexture = "sdcard/Models/OldTelevision/Controls01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[3]);
+	pathToTexture = "sdcard/Models/OldTelevision/OldTelly02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[4]);
+	pathToTexture = "sdcard/Models/OldTelevision/skinB.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[5]);
+	pathToTexture = "sdcard/Models/OldTelevision/Stone_Vein_Gray.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[6]);
+	pathToTexture = "sdcard/Models/OldTelevision/Retro_TV_Guide1955_2.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[7]);
+	pathToTexture = "sdcard/Models/OldTelevision/TVG02.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[8]);
+	pathToTexture = "sdcard/Models/OldTelevision/TVG01.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[9]);
+	pathToTexture = "sdcard/Models/OldTelevision/RetroTV_Guide_1967a.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[10]);
+}
+
+void ARDrawingContext::updateBedsideTableAImage()
+{
+	std::string pathToTexture = "sdcard/Models/BedsideTable/skinA.jpg";
+	//~ std::string pathToTexture = "sdcard/Models/BedsideTable/skinB.jpg";
+	//~ std::string pathToTexture = "sdcard/Models/BedsideTable/skinD.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+}
+
+void ARDrawingContext::updateHousePlantImage()
+{
+	std::string pathToTexture = "sdcard/Models/HousePlant/skinB.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+	pathToTexture = "sdcard/Models/HousePlant/leaf.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[1]);
+}
+
+void ARDrawingContext::updateSodaCanImage()
+{
+	std::string pathToTexture = "sdcard/Models/SodaCan/Metal.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[0]);
+	pathToTexture = "sdcard/Models/SodaCan/MD_CR.jpg";
+	updateTextureImage(&pathToTexture[0],&m_textureImages[1]);
+}
+
 void ARDrawingContext::updateWindow()
 {
 	m_isWindowUpdated = true;
@@ -243,7 +312,7 @@ void ARDrawingContext::updateWindow()
 
 void ARDrawingContext::setWidth(unsigned _width){
 	m_width = _width;
-	//~ LOG_INFO("updating width to %d", m_width);
+	//~ LOGoutTexCoords_INFO("updating width to %d", m_width);
 }
 
 void ARDrawingContext::setHeight(unsigned _height){
@@ -262,26 +331,33 @@ void ARDrawingContext::setObjectToDraw(int objectId){
 	switch(m_objectToDraw){
 		case 0:
 			m_textureSize = 2;
-			updateFurnishImage();
+			//~ updateFurnishImage();
+			updateBedsideTableAImage();
 			break;
 		case 1: m_textureSize = 2;
-			updateTigerImage();
+			//~ updateTigerImage();
+			updateCouch2Image();
 			break;
 		case 2: m_textureSize = 7;
 			updateBeautifulGirlImage();
 			break;
-		case 3: m_textureSize = 26;
-			updateTrollHouseImage();
+		case 3:
+			m_textureSize = 3;
+			updateSodaCanImage();
+			//~ m_textureSize = 26;
+			//~ updateTrollHouseImage();
 			break;
 		case 4: m_textureSize = 2;
 			updateFurnishImage();
 			break;
-		case 5: m_textureSize = 2;
-			updateTigerImage();
+		case 5: m_textureSize = 12;
+			updateOldTelevisionImage();
+		//~ m_textureSize = 2;
+			//~ updateTigerImage();
 			break;
 		default:
-			updateFurnishImage();
 			m_textureSize = 2;
+			updateDefaultImage();
 			break;
 	}
 	createTexture();
@@ -346,8 +422,8 @@ float ARDrawingContext::getScale(){
 void ARDrawingContext::setScale(float scale){
 	if (scale < 1.0)
 		scale = 1.0;
-	else if (scale > 30)
-		scale =  30;
+	else if (scale > 50)
+		scale =  50;
 	m_scale = scale;
 }
 
@@ -402,6 +478,7 @@ void ARDrawingContext::draw()
 void ARDrawingContext::drawPersistance()
 {
 	//~ createTexture();
+
 	getObjectTexture(m_textureId[0],m_backgroundImage);
 	for(unsigned i = 1; i < m_textureSize; ++i)
 		getObjectTexture(m_textureId[i],m_textureImages[i-1]);
@@ -461,12 +538,13 @@ void ARDrawingContext::validatePatternPresent(){
 		glPushMatrix();
 		glLoadMatrixf(reinterpret_cast<const GLfloat*>(&m_persistentPose.data[0]));
 		GLfloat mdl[16];
+		point3 cameraOrigin;
 		glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
-		getCameraOrigin(mdl,&cameraOrigin2);
+		getCameraOrigin(mdl,&cameraOrigin);
 		glPopMatrix();
 		
 		//~ LOG_INFO("augmented scene");
-		if(cameraOrigin2.z <= 0.5) // || cameraOrigin2.z >=10.0)
+		if(cameraOrigin.z <= 0.5) // || cameraOrigin2.z >=10.0)
 			m_isPatternPresent = false;
 		else
 			m_isPatternPresent = true;
@@ -557,20 +635,23 @@ void ARDrawingContext::drawAugmentedScene()
 	drawCoordinateAxis();
 	
 	switch(m_objectToDraw){
-		case 0: drawFurnish();
+		case 0: drawBedsideTableA();
+		//~ drawFurnish();
 			break;
-		case 1: drawTiger();
+		case 1: drawCouch2();
 			break;
 		case 2: drawBeautifulGirl();
 			break;
-		case 3: drawTrollHouse();
+		case 3: drawSodaCan();
+			//~ drawTrollHouse();
 			break;
 		case 4: drawFurnish();
 			break;
-		case 5: drawTiger();
+		case 5:	drawOldTelevision();
+			//~ drawTiger();
 			break;
 		default:
-			drawFurnish();
+			drawDefaultObject();
 			break;
 	}
 }
@@ -590,20 +671,26 @@ void ARDrawingContext::drawAugmentedPersistance()
 	//~ try{
 		//~ drawFurnish();
 	switch(m_objectToDraw){
-		case 0: drawFurnish();
+		case 0:
+			drawBedsideTableA();
+			//~ drawFurnish();
 			break;
-		case 1: drawTiger();
+		case 1: drawCouch2();
 			break;
 		case 2: drawBeautifulGirl();
 			break;
-		case 3: drawTrollHouse();
+		case 3: drawSodaCan();
+				//~ drawTrollHouse();
 			break;
 		case 4: drawFurnish();
 			break;
-		case 5: drawTiger();
+		case 5:
+			drawOldTelevision();
+				//~ drawTiger();
 			break;
 		default:
-			drawFurnish();
+			drawDefaultObject();
+			//~ drawFurnish();
 			break;
 	}
 }
@@ -688,6 +775,10 @@ void ARDrawingContext::drawCoordinateAxis()
 // !!!!!!!!!!!!!!! change RGB to BGR
 void ARDrawingContext::drawFurnish()
 {	
+	unsigned finalVertexSize2;
+	//~ float outNormals2[couchNumVerts2 *3];
+	float outTexCoords2[couchNumVerts2 *2];
+	float outVertexes2[couchNumVerts2 *3];
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
 	float scale = m_scale;
@@ -707,8 +798,9 @@ void ARDrawingContext::drawFurnish()
 
 	glPushMatrix();
     GLfloat mdl[16];
+    point3 cameraOrigin;
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
-	getCameraOrigin(mdl,&cameraOrigin2);
+	getCameraOrigin(mdl,&cameraOrigin);
 	glPopMatrix();
 	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	
@@ -717,20 +809,20 @@ void ARDrawingContext::drawFurnish()
 	zeroPoint.y = 0.0;
 	zeroPoint.z = 0.0;
 	
-	float distanceZC = getDistance(zeroPoint,cameraOrigin2);
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
 	
 	float scalatorViewPoint = 1.0;
 	float perfectViewPoint = 1.0;
 	if(distanceZC > 0)
 		scalatorViewPoint = perfectViewPoint/distanceZC;
 		
-	cameraOrigin2.x *= scalatorViewPoint;
-	cameraOrigin2.y *= scalatorViewPoint;
-	cameraOrigin2.z *= scalatorViewPoint;
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
 
 	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
 	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
-	getAllSortedFaces(couchNumVerts2,cameraOrigin2,couchTexCoords2,couchVerts2,
+	getAllSortedFaces(couchNumVerts2,cameraOrigin,couchTexCoords2,couchVerts2,
 	outTexCoords2,outVertexes2,&finalVertexSize2);
 	
 	// scaling the vertexes withon any help
@@ -753,9 +845,13 @@ void ARDrawingContext::drawFurnish()
 
 void ARDrawingContext::drawTiger()
 {	
+	
+	//~ float outNormals2[TigerVertices *3];
+	//~ float outTexCoords2[TigerVertices *2];
+	//~ float outVertexes2[TigerVertices *3];
+	unsigned finalVertexSize2;
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	//~ float scale = 12.0;
 	float scale = m_scale;
 	
 		
@@ -768,8 +864,9 @@ void ARDrawingContext::drawTiger()
 
 	glPushMatrix();
     GLfloat mdl[16];
+    point3 cameraOrigin;
 	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
-	getCameraOrigin(mdl,&cameraOrigin2);
+	getCameraOrigin(mdl,&cameraOrigin);
 	glPopMatrix();
 	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
 	
@@ -778,23 +875,23 @@ void ARDrawingContext::drawTiger()
 	zeroPoint.y = 0.0;
 	zeroPoint.z = 0.0;
 	
-	float distanceZC = getDistance(zeroPoint,cameraOrigin2);
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
 	
 	float scalatorViewPoint = 1.0;
 	float perfectViewPoint = 1.0;
 	if(distanceZC > 0)
 		scalatorViewPoint = perfectViewPoint/distanceZC;
 		
-	cameraOrigin2.x *= scalatorViewPoint;
-	cameraOrigin2.y *= scalatorViewPoint;
-	cameraOrigin2.z *= scalatorViewPoint;
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
 
 	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
 	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
-	getAllSortedFaces(TigerVertices,cameraOrigin2,TigerTexels,TigerPositions,
+	getAllSortedFaces(TigerVertices,cameraOrigin,TigerTexels,TigerPositions,
 	outTexCoords2,outVertexes2,&finalVertexSize2);
 	
-	// scaling the vertexes withon any help
+	// scaling the vertexes without any help
 	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
 	
 	glVertexPointer(3, GL_FLOAT, 0, outVertexes2);
@@ -863,7 +960,7 @@ void ARDrawingContext::drawBeautifulGirl(){
 
 	getTextureBinders(BeautifulGirlMaterials, m_textureId, BeautifulGirlFirsts,BeautifulGirlCounts,inTexBinder);
 	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
-	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	//~ out823TexCoords2,outColors2,outVertexes2,&finalVertexSize2);
 	getAllSortedFacesMT(BeautifulGirlVertexes,cameraOrigin,BeautifulGirlTexels,BeautifulGirlPositions,BeautifulGirlNormals,
 	outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,inTexBinder,outTexBinder);
 
@@ -876,7 +973,7 @@ void ARDrawingContext::drawBeautifulGirl(){
 
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
-	//we divide vertex size over 3 because each face have 3 vertexes
+	//we di823vide vertex size over 3 because each face have 3 vertexes
 	for(unsigned iFace = 0; iFace < finalVertexSize2 / 3; ++iFace){
 		glBindTexture(GL_TEXTURE_2D, outTexBinder[iFace]);
 		glDrawArrays(GL_TRIANGLES, 3*iFace, 3); //each face have 3 vertexes
@@ -974,3 +1071,433 @@ void ARDrawingContext::drawTrollHouse()
     //~ //glDisable(GL_LINE_SMOOTH);
 }
 
+void ARDrawingContext::drawCouch2()
+{
+	float outTexCoords2[Couch2Vertexes*2];
+	float outVertexes2[Couch2Vertexes*3];
+	//float outNormals2[Couch2Vertexes*3];
+	unsigned inTexBinder[Couch2Vertexes];
+	unsigned outTexBinder[Couch2Vertexes];
+	unsigned finalVertexSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ //float scale = 4.0;
+	float scale = m_scale;
+	//~ //glEnable(GL_LINE_SMOOTH);
+	//~ //glDisable(GL_COLOR_MATERIAL);
+	//~ //startCouch2Light(lPosition);
+	glEnable(GL_BLEND);
+	//~ //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ //glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ //glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	//~ glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ //LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	getTextureBinders(Couch2Materials, m_textureId, Couch2Firsts,Couch2Counts,inTexBinder);
+	//~ //getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ //outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedFacesMTNoNormals(Couch2Vertexes,cameraOrigin,Couch2Texels,Couch2Positions,
+	outTexCoords2,outVertexes2,&finalVertexSize2,inTexBinder,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	//~ glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+
+	//~ //glColor4f(0.9f,0.9f,0.9f,1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	for(unsigned iFace = 0; iFace < finalVertexSize2 / 3; ++iFace){
+		glBindTexture(GL_TEXTURE_2D, outTexBinder[iFace]);
+		glDrawArrays(GL_TRIANGLES, 3*iFace, 3); //each face have 3 vertexes
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	//~ glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ //glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ //endCouch2Light();
+    //~ //glDisable(GL_LINE_SMOOTH);
+}
+
+void ARDrawingContext::drawOldTelevision()
+{
+	float outTexCoords2[OldTelevisionVertexes*2];
+	float outVertexes2[OldTelevisionVertexes*3];
+	float outNormals2[OldTelevisionVertexes*3];
+	unsigned outFaceSizes2[OldTelevisionFaces];
+	
+	unsigned outTexBinder[OldTelevisionFaces];
+	unsigned finalVertexSize2;
+	unsigned finalFaceSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ float scale = 4.0;
+	float scale = m_scale;
+	//~ glEnable(GL_LINE_SMOOTH);
+	//~ glDisable(GL_COLOR_MATERIAL);
+	//~ startOldTelevisionLight(lPosition);
+	glEnable(GL_BLEND);
+	//~ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	//~ getVectorTextureBinders(OldTelevisionFaces, 0, m_textureId, OldTelevisionFaceMaterial,inTexBinder);
+	//~ getTextureBinders(OldTelevisionMaterials, m_textureId, OldTelevisionFirsts,OldTelevisionCounts,inTexBinder);
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedVectorFacesMT(OldTelevisionFaces,OldTelevisionFaceSizes,outFaceSizes2,cameraOrigin,OldTelevisionTexels,
+		OldTelevisionPositions,OldTelevisionNormals,outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,&finalFaceSize2,
+		OldTelevisionFaceMaterial,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	unsigned accumulatedFaces = 0;
+	for(unsigned iFace = 0; iFace < finalFaceSize2; ++iFace){
+		unsigned polygonSize = outFaceSizes2[iFace];
+		glBindTexture(GL_TEXTURE_2D, m_textureId[outTexBinder[iFace] + 1]);
+		glDrawArrays(GL_TRIANGLE_FAN, accumulatedFaces, polygonSize); //each face have 3 vertexes
+		accumulatedFaces += polygonSize;
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ endOldTelevisionLight();
+    //~ glDisable(GL_LINE_SMOOTH);
+}
+
+void ARDrawingContext::drawBedsideTableA()
+{
+	float outTexCoords2[BedsideTableAVertexes*2];
+	float outVertexes2[BedsideTableAVertexes*3];
+	float outNormals2[BedsideTableAVertexes*3];
+	unsigned outFaceSizes2[BedsideTableAFaces];
+	
+	//~ unsigned inTexBinder[BedsideT(unsigned int, unsigned int*, unsigned int*, point3, flableAVertexes];
+	unsigned outTexBinder[BedsideTableAFaces];
+	unsigned finalVertexSize2;
+	unsigned finalFaceSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ float scale = 4.0;
+	float scale = m_scale;
+	//~ glEnable(GL_LINE_SMOOTH);
+	//~ glDisable(GL_COLOR_MATERIAL);
+	//~ startBedsideTableALight(lPosition);
+	glEnable(GL_BLEND);
+	//~ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	//~ getTextureBinders(BedsideTableAMaterials, m_textureId, BedsideTableAFirsts,BedsideTableACounts,inTexBinder);
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedVectorFacesMT(BedsideTableAFaces,BedsideTableAFaceSizes,outFaceSizes2,cameraOrigin,BedsideTableATexels,
+		BedsideTableAPositions,BedsideTableANormals,outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,&finalFaceSize2,
+		BedsideTableAFaceMaterial,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	unsigned accumulatedFaces = 0;
+	for(unsigned iFace = 0; iFace < finalFaceSize2; ++iFace){
+		unsigned polygonSize = outFaceSizes2[iFace];
+		glBindTexture(GL_TEXTURE_2D, m_textureId[outTexBinder[iFace] + 1]);
+		glDrawArrays(GL_TRIANGLES, accumulatedFaces, polygonSize); //each face have 3 vertexes
+		accumulatedFaces += polygonSize;
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ endBedsideTableALight();
+    //~ glDisable(GL_LINE_SMOOTH);
+}
+
+
+void ARDrawingContext::drawSodaCan()
+{
+	float outTexCoords2[SodaCanVertexes*2];
+	float outVertexes2[SodaCanVertexes*3];
+	float outNormals2[SodaCanVertexes*3];
+	unsigned outFaceSizes2[SodaCanFaces];
+	
+	//~ unsigned inTexBinder[BedsideT(unsigned int, unsigned int*, unsigned int*, point3, flableAVertexes];
+	unsigned outTexBinder[SodaCanFaces];
+	unsigned finalVertexSize2;
+	unsigned finalFaceSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ float scale = 4.0;
+	float scale = m_scale;
+	//~ glEnable(GL_LINE_SMOOTH);
+	//~ glDisable(GL_COLOR_MATERIAL);
+	//~ startSodaCanLight(lPosition);
+	glEnable(GL_BLEND);
+	//~ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	//~ getTextureBinders(SodaCanMaterials, m_textureId, SodaCanFirsts,SodaCanCounts,inTexBinder);
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedVectorFacesMT(SodaCanFaces,SodaCanFaceSizes,outFaceSizes2,cameraOrigin,SodaCanTexels,
+		SodaCanPositions,SodaCanNormals,outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,&finalFaceSize2,
+		SodaCanFaceMaterial,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	unsigned accumulatedFaces = 0;
+	for(unsigned iFace = 0; iFace < finalFaceSize2; ++iFace){
+		unsigned polygonSize = outFaceSizes2[iFace];
+		glBindTexture(GL_TEXTURE_2D, m_textureId[outTexBinder[iFace] + 1]);
+		glDrawArrays(GL_TRIANGLE_FAN, accumulatedFaces, polygonSize); //each face have 3 vertexes
+		accumulatedFaces += polygonSize;
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ endSodaCanLight();
+    //~ glDisable(GL_LINE_SMOOTH);
+}
+
+void ARDrawingContext::drawHousePlant()
+{
+	float outTexCoords2[HousePlantVertexes*2];
+	float outVertexes2[HousePlantVertexes*3];
+	float outNormals2[HousePlantVertexes*3];
+	unsigned outFaceSizes2[HousePlantFaces];
+	
+	//~ unsigned inTexBinder[BedsideT(unsigned int, unsigned int*, unsigned int*, point3, flableAVertexes];
+	unsigned outTexBinder[HousePlantFaces];
+	unsigned finalVertexSize2;
+	unsigned finalFaceSize2;
+		
+	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
+	//~ float scale = 4.0;
+	float scale = m_scale;
+	//~ glEnable(GL_LINE_SMOOTH);
+	//~ glDisable(GL_COLOR_MATERIAL);
+	//~ startHousePlantLight(lPosition);
+	glEnable(GL_BLEND);
+	//~ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_DST_ALPHA,GL_ONE_MINUS_DST_ALPHA);
+	//~ glBlendFunc(GL_SRC_COLOR,GL_SRC_COLOR);
+	//~ glEnable(GL_MULTISAMPLE);
+	// Enable texture mapping stuff
+
+	glEnableClientState(GL_NORMAL_ARRAY);
+	startArrays();
+
+	glPushMatrix();
+	point3 cameraOrigin;
+    GLfloat mdl[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, mdl);
+	getCameraOrigin(mdl,&cameraOrigin);
+	glPopMatrix();
+	//~ LOG_INFO("x=%f y=%f z=%f, furnish",cameraOrigin2.x,cameraOrigin2.y,cameraOrigin2.z);
+
+	point3 zeroPoint;
+	zeroPoint.x = 0.0;
+	zeroPoint.y = 0.0;
+	zeroPoint.z = 0.0;
+
+	float distanceZC = getDistance(zeroPoint,cameraOrigin);
+
+	float scalatorViewPoint = 1.0;
+	float perfectViewPoint = 1.0;
+	if(distanceZC > 0)
+		scalatorViewPoint = perfectViewPoint/distanceZC;
+
+	cameraOrigin.x *= scalatorViewPoint;
+	cameraOrigin.y *= scalatorViewPoint;
+	cameraOrigin.z *= scalatorViewPoint;
+
+	//~ getTextureBinders(HousePlantMaterials, m_textureId, HousePlantFirsts,HousePlantCounts,inTexBinder);
+	//~ getFacesNearToCamera(couchNumVerts2,cameraOrigin2,couchTexCoords2,COLORS2,couchVerts2,
+	//~ outTexCoords2,outColors2,outVertexes2,&finalVertexSize2);
+	getAllSortedVectorFacesMT(HousePlantFaces,HousePlantFaceSizes,outFaceSizes2,cameraOrigin,HousePlantTexels,
+		HousePlantPositions,HousePlantNormals,outTexCoords2,outVertexes2,outNormals2,&finalVertexSize2,&finalFaceSize2,
+		HousePlantFaceMaterial,outTexBinder);
+
+	// scaling the vertexes withon any help
+	scaling(scale, outVertexes2, outVertexes2,finalVertexSize2);
+
+	glNormalPointer(GL_FLOAT,0,outNormals2);
+	glVertexPointer(3,GL_FLOAT, 0, outVertexes2);
+    glTexCoordPointer(2, GL_FLOAT, 0, outTexCoords2);
+
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(shadowTuner,shadowTuner,shadowTuner,1.0f);
+	//we divide vertex size over 3 because each face have 3 vertexes
+	unsigned accumulatedFaces = 0;
+	for(unsigned iFace = 0; iFace < finalFaceSize2; ++iFace){
+		unsigned polygonSize = outFaceSizes2[iFace];
+		glBindTexture(GL_TEXTURE_2D, m_textureId[outTexBinder[iFace]]);
+		glDrawArrays(GL_TRIANGLE_FAN, accumulatedFaces, polygonSize); //each face have 3 vertexes
+		accumulatedFaces += polygonSize;
+	}
+	glDisable(GL_TEXTURE_2D);
+
+	endArrays();
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+    //~ glDisable(GL_MULTISAMPLE);
+    glDisable(GL_BLEND);
+    //~ endHousePlantLight();
+    //~ glDisable(GL_LINE_SMOOTH);
+}
