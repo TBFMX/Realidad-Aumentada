@@ -74,7 +74,7 @@ ARDrawingContext::ARDrawingContext(){
 	m_shadowTuner = 1.0;
 	m_textureSize = 2;
 	m_angle = 0.0;
-	m_scale = 1.0;
+	m_scale = 10.0;
 	m_translateX = 0;
 	m_translateY = 0;
 	
@@ -89,6 +89,12 @@ ARDrawingContext::ARDrawingContext(){
 	float fy=628.7519411113429;
 	float cx=325.3443919995285;
 	float cy=236.0028199018263;
+	// 1024x768
+	fx=695.398588072418;
+	fy=672.4933734804648;
+	cx=448.2380923498616;
+	cy=261.186397004368;
+	
 	CameraCalibration calibration(fx,fy,cx,cy);
 	m_calibration = calibration;
 	
@@ -108,7 +114,7 @@ ARDrawingContext::ARDrawingContext(cv::Size frameSize, const CameraCalibration& 
   ,m_shadowTuner(1.0)
   ,m_textureSize(2)
   ,m_angle(0.0)
-  ,m_scale(1.0)
+  ,m_scale(10.0)
   ,m_translateX(0)
   ,m_translateY(0)
   //~ , m_windowName(windowName)
@@ -781,7 +787,7 @@ void ARDrawingContext::drawFurnish()
 	float outVertexes2[couchNumVerts2 *3];
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = m_scale;
+	float scale = m_scale*0.7;
 
 	// Enable texture mapping stuff
 	//~ glBlendFunc (GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
@@ -920,7 +926,7 @@ void ARDrawingContext::drawBeautifulGirl(){
 		
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = m_scale;
+	float scale = m_scale*1.1;
 	//~ glEnable(GL_LINE_SMOOTH);
 	//~ glDisable(GL_COLOR_MATERIAL);
 	//~ startBeautifulGirlLight(lPosition);
@@ -1082,7 +1088,7 @@ void ARDrawingContext::drawCouch2()
 		
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ //float scale = 4.0;
-	float scale = m_scale;
+	float scale = m_scale*0.7;
 	//~ //glEnable(GL_LINE_SMOOTH);
 	//~ //glDisable(GL_COLOR_MATERIAL);
 	//~ //startCouch2Light(lPosition);
@@ -1166,7 +1172,7 @@ void ARDrawingContext::drawOldTelevision()
 		
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = m_scale;
+	float scale = m_scale*0.5;
 	//~ glEnable(GL_LINE_SMOOTH);
 	//~ glDisable(GL_COLOR_MATERIAL);
 	//~ startOldTelevisionLight(lPosition);
@@ -1254,7 +1260,7 @@ void ARDrawingContext::drawBedsideTableA()
 		
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = m_scale;
+	float scale = m_scale*0.3;
 	//~ glEnable(GL_LINE_SMOOTH);
 	//~ glDisable(GL_COLOR_MATERIAL);
 	//~ startBedsideTableALight(lPosition);
@@ -1342,7 +1348,7 @@ void ARDrawingContext::drawSodaCan()
 		
 	float shadowTuner = m_shadowTuner; // values from 0.0 to 1.0
 	//~ float scale = 4.0;
-	float scale = m_scale;
+	float scale = m_scale*0.1;
 	//~ glEnable(GL_LINE_SMOOTH);
 	//~ glDisable(GL_COLOR_MATERIAL);
 	//~ startSodaCanLight(lPosition);

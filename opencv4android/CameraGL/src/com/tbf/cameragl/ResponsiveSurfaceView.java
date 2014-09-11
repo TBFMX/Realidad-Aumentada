@@ -15,7 +15,7 @@ public class ResponsiveSurfaceView extends SurfaceView {
     //private Matrix savedMatrix = new Matrix();
     private float mAngle = 0;
     private float mCumulativeAngle = 0;
-    private float mScale = 1;
+    private float mScale = 10;
     private float mCumulativeScale = 1;
     private float mTranslateX = 0;
     private float mTranslateY = 0;
@@ -154,7 +154,7 @@ public class ResponsiveSurfaceView extends SurfaceView {
 	public void backToDefaults() {
 	    mAngle = 0;
 	    mCumulativeAngle = 0;
-	    mScale = 12;
+	    mScale = 10;
 	    mCumulativeScale = 1;
 	    mTranslateX = 0;
 	    mTranslateY = 0;

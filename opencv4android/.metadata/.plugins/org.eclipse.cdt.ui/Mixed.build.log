@@ -1,6 +1,6 @@
-09:11:25 **** Build of configuration Default for project Mixed ****
+11:51:16 **** Build of configuration Default for project Mixed ****
 ndk-build all 
 [armeabi] Install        : libmixed_sample.so => libs/armeabi/libmixed_sample.so
 
-09:11:25 Build Finished (took 59ms)
+11:51:16 Build Finished (took 62ms)
 

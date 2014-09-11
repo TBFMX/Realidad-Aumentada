@@ -264,9 +264,11 @@ JNIEXPORT void JNICALL Java_com_tbf_cameragl_Native_initCamera(JNIEnv*, jobject,
 	float cx=325.3443919995285;
 	float cy=236.0028199018263;
 	//~ // tablet parameters 1024x768
-	fx=695.398588072418;
+	//~ fx=695.398588072418;
+	fx=672.398588072418;
 	fy=672.4933734804648;
-	cx=448.2380923498616;
+	//~ cx=448.2380923498616;
+	cx=498.2380923498616;
 	cy=261.186397004368;
 	//~ // tablet parameters 2048x1536
 	//~ fx=1194.514196322121;
